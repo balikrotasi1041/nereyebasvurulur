@@ -1,18 +1,27 @@
 # Nereye Başvurulur?
 
-Türkiye'de bir sorun, bildirim, şikâyet, itiraz veya başvuru için doğru kuruma giden yolu sadeleştiren yönlendirme motoru.
+Türkiye'de resmî, kamusal ve idari bir sorun, bildirim, şikâyet, itiraz veya başvuru için doğru kuruma giden yolu sadeleştiren yönlendirme motoru.
+
+## Kapsam
+
+Platform yalnızca kamu/resmî süreçleri kapsar. Genel özel şirket, tüketici, kargo, e-ticaret, özel işveren veya salt özel hukuk uyuşmazlıkları kapsam dışıdır.
+
+İstisna: elektrik, su, doğalgaz, telefon/elektronik haberleşme gibi kamu hizmeti niteliğindeki temel altyapının belirli bölgelerde fiilî işletmecisi olan kuruluşlar, yalnızca ilgili resmî başvuru zincirindeki rolleri ölçüsünde gösterilebilir.
+
+Detay: `SCOPE.md`.
 
 ## Ürün yaklaşımı
 
 Site bir makale arşivi değil, karar ağacı tabanlı bir **başvuru rotası** ürünü olarak tasarlanır:
 
-1. Kullanıcı sorununu doğal dille yazar.
-2. Gerekliyse birkaç ayırıcı soru sorulur.
-3. Konuma ve yetkiye göre doğru kurum belirlenir.
-4. İlk başvuru kanalı gösterilir.
-5. Gerekli belge / bilgi listesi verilir.
-6. Sonuç alınamazsa ikinci ve üçüncü adım gösterilir.
-7. Her rota resmî kaynak ve son doğrulama tarihiyle yayınlanır.
+1. Kullanıcı resmî/kamusal işlem türünü seçer veya sorununu doğal dille yazar.
+2. İlk seçime göre yalnızca ilgili sonraki kriterler gösterilir.
+3. Gerekliyse birkaç ayırıcı soru sorulur.
+4. Konuma ve mevzuattaki yetkiye göre doğru kamu kurumu veya istisnai temel hizmet sağlayıcısı belirlenir.
+5. İlk resmî başvuru kanalı gösterilir.
+6. Gerekli belge / bilgi listesi verilir.
+7. Sonuç alınamazsa mevzuattaki ikinci ve üçüncü başvuru/itiraz adımı gösterilir.
+8. Her rota resmî kaynak ve son doğrulama tarihiyle yayınlanır.
 
 ## Teknik mimari
 
