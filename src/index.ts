@@ -1,5 +1,25 @@
 import { countLeaves, countLinkedLeaves, menuTree, publishedRoutes, routeBySlug, routes } from "./data";
-import { renderDashboard, renderDataPage, renderHome, renderNotFound, renderRoute, renderSearch } from "./ui";
+import {
+  militaryBranchByPath,
+  militaryBranchPath,
+  militaryBranches,
+  militaryProvinceBySlug,
+  militaryProvinces,
+  searchMilitaryBranches,
+  uniqueMilitaryBranchCount
+} from "./military-branches";
+import {
+  renderDashboard,
+  renderDataPage,
+  renderHome,
+  renderMilitaryBranch,
+  renderMilitaryBranchAdmin,
+  renderMilitaryBranchDirectory,
+  renderMilitaryProvince,
+  renderNotFound,
+  renderRoute,
+  renderSearch
+} from "./ui";
 
 type Env = {
   ADMIN_USERNAME?: string;
@@ -125,9 +145,13 @@ function latestVerifiedDate(): string {
 
 function sitemap(): string {
   const homeDate = latestVerifiedDate();
+  const militaryDate = militaryBranches[0]?.lastVerified || homeDate;
   const entries = [
     `<url><loc>${SITE_ORIGIN}/</loc><lastmod>${xmlEscape(homeDate)}</lastmod></url>`,
-    ...publishedRoutes.map(route => `<url><loc>${SITE_ORIGIN}/konu/${xmlEscape(route.slug)}/</loc><lastmod>${xmlEscape(route.lastVerified)}</lastmod></url>`)
+    ...publishedRoutes.map(route => `<url><loc>${SITE_ORIGIN}/konu/${xmlEscape(route.slug)}/</loc><lastmod>${xmlEscape(route.lastVerified)}</lastmod></url>`),
+    `<url><loc>${SITE_ORIGIN}/askerlik-subeleri/</loc><lastmod>${xmlEscape(militaryDate)}</lastmod></url>`,
+    ...militaryProvinces.map(province => `<url><loc>${SITE_ORIGIN}/askerlik-subeleri/${xmlEscape(province.slug)}/</loc><lastmod>${xmlEscape(militaryDate)}</lastmod></url>`),
+    ...militaryBranches.map(record => `<url><loc>${SITE_ORIGIN}${xmlEscape(militaryBranchPath(record))}</loc><lastmod>${xmlEscape(record.lastVerified)}</lastmod></url>`)
   ];
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries.join("")}</urlset>`;
 }
@@ -143,7 +167,11 @@ function stats() {
     localCheck: routes.filter(route => route.verificationStatus === "local-check").length,
     needsReview: routes.filter(route => route.verificationStatus === "needs-review").length,
     sources: routes.reduce((sum, route) => sum + route.sources.length, 0),
-    highRisk: routes.filter(route => route.freshnessRisk === "high").length
+    highRisk: routes.filter(route => route.freshnessRisk === "high").length,
+    militaryProvinces: militaryProvinces.length,
+    militaryDistrictPages: militaryBranches.length,
+    militaryPhysicalBranches: uniqueMilitaryBranchCount,
+    militaryLastVerified: militaryBranches[0]?.lastVerified || ""
   };
 }
 
@@ -180,16 +208,33 @@ export default {
     }
 
     if (path === "/health") {
-      return new Response(JSON.stringify({ status: "ok", release: "v2-search-engine-ready", publicLaunch: true, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, ...stats() }), {
+      return new Response(JSON.stringify({ status: "ok", release: "v3-military-branch-directory", publicLaunch: true, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, ...stats() }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
       });
     }
 
-    if (path === "/") return html(renderHome(menuTree, publishedRoutes.length));
+    if (path === "/") return html(renderHome(menuTree, publishedRoutes.length, militaryBranches.length, uniqueMilitaryBranchCount));
 
     if (path === "/ara" || path === "/ara/") {
       const query = (url.searchParams.get("q") || "").slice(0, 160);
-      return html(renderSearch(query, searchRoutes(query)));
+      return html(renderSearch(query, searchRoutes(query), searchMilitaryBranches(query)));
+    }
+
+    if (path === "/askerlik-subeleri" || path === "/askerlik-subeleri/") {
+      return html(renderMilitaryBranchDirectory(militaryProvinces, militaryBranches.length, uniqueMilitaryBranchCount));
+    }
+
+    const militaryDetailMatch = path.match(/^\/askerlik-subeleri\/([^/]+)\/([^/]+)\/?$/);
+    if (militaryDetailMatch) {
+      const record = militaryBranchByPath.get(`${militaryDetailMatch[1]}/${militaryDetailMatch[2]}`);
+      const province = militaryProvinceBySlug.get(militaryDetailMatch[1]);
+      return record && province ? html(renderMilitaryBranch(record, province)) : html(renderNotFound(), 404);
+    }
+
+    const militaryProvinceMatch = path.match(/^\/askerlik-subeleri\/([^/]+)\/?$/);
+    if (militaryProvinceMatch) {
+      const province = militaryProvinceBySlug.get(militaryProvinceMatch[1]);
+      return province ? html(renderMilitaryProvince(province)) : html(renderNotFound(), 404);
     }
 
     if (path.startsWith("/konu/")) {
@@ -210,8 +255,12 @@ export default {
       return html(renderDataPage(routes), 200, true);
     }
 
+    if (path === "/admin/askerlik-subeleri" || path === "/admin/askerlik-subeleri/") {
+      return html(renderMilitaryBranchAdmin(militaryBranches), 200, true);
+    }
+
     if (path === "/admin/api/data") {
-      return new Response(JSON.stringify({ generatedAt: new Date().toISOString(), stats: stats(), menuTree, routes }, null, 2), {
+      return new Response(JSON.stringify({ generatedAt: new Date().toISOString(), stats: stats(), menuTree, routes, militaryBranches }, null, 2), {
         headers: securityHeaders(new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": "private, no-store" }), true)
       });
     }

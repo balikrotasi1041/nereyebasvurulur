@@ -83,3 +83,13 @@ Bir rota `Doğrulandı` olarak yayımlanmadan önce en az:
 - güven seviyesi
 
 kayıtlı olmalıdır.
+
+## 8. Askerlik şubesi konum kayıtları
+
+Askerlik şubesi sayfalarında il ve ilçe envanteri İçişleri Bakanlığının Valilikler ve Kaymakamlıklar kaydından, sorumlu şube adı ile adres/telefon/e-posta bilgileri MSB Askeralma Genel Müdürlüğünün resmî “Askerlik Şubeleri İletişim Bilgileri” aramasından alınır.
+
+- Her ilçe için MSB sisteminin döndürdüğü sorumlu şube gösterilir; her ilçede ayrı fiziksel şube varmış gibi ifade kullanılmaz.
+- MSB sonucu alınamayan ilçe kesin iletişim sayfası olarak yayımlanmaz.
+- Yol tarifi bağlantısı, MSB'nin yayımladığı şube adı ve yazışma adresini harita uygulamasına hedef olarak aktarır; doğrulanmamış enlem/boylam tahmini saklanmaz.
+- Her kayıtta resmî sorguda kullanılan il/ilçe değeri ve son doğrulama tarihi tutulur.
+- Adres ve telefon değişebileceği için kayıtlar yüksek güncellik ihtiyacıyla periyodik olarak yeniden üretilir ve veri bütünlüğü testinden geçirilir.

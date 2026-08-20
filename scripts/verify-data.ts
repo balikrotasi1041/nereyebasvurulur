@@ -1,10 +1,13 @@
 import { countLeaves, countLinkedLeaves, menuTree, publishedRoutes, routes } from "../src/data";
+import { militaryBranchByPath, militaryBranchPath, militaryBranches, militaryProvinces, uniqueMilitaryBranchCount } from "../src/military-branches";
 
 function assert(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
 const expectedLeaves = 226;
+const expectedMilitaryDistrictPages = 973;
+const expectedPhysicalMilitaryBranches = 397;
 const publishedSlugs = new Set(publishedRoutes.map(route => route.slug));
 const pathKeys = new Set(routes.map(route => route.pathKey));
 const slugs = new Set(routes.map(route => route.slug));
@@ -44,6 +47,26 @@ for (const route of routes) {
   }
 }
 
+assert(militaryBranches.length === expectedMilitaryDistrictPages, `Askerlik şubesi ilçe sayfası sayısı ${expectedMilitaryDistrictPages} değil.`);
+assert(militaryProvinces.length === 81, "Askerlik şubesi dizini 81 ilin tamamını kapsamıyor.");
+assert(militaryBranchByPath.size === militaryBranches.length, "Askerlik şubesi sayfa yolları benzersiz değil.");
+assert(new Set(militaryBranches.map(record => record.slug)).size === militaryBranches.length, "Askerlik şubesi slug değerleri benzersiz değil.");
+assert(uniqueMilitaryBranchCount === expectedPhysicalMilitaryBranches, `Farklı fiziksel askerlik şubesi sayısı ${expectedPhysicalMilitaryBranches} değil.`);
+
+for (const record of militaryBranches) {
+  assert(record.province && record.district && record.branchName, `Şube kimliği eksik: ${record.slug}`);
+  assert(record.address && record.phone && record.email, `Şube iletişim alanı eksik: ${record.slug}`);
+  assert(record.officialProvince && record.officialDistrict && record.lookupDistrict, `MSB sorgu izi eksik: ${record.slug}`);
+  assert(record.lastVerified === "2026-08-21", `Şube doğrulama tarihi beklenenden farklı: ${record.slug}`);
+  assert(/^(?:\d{10}|0\d{10})$/.test(record.phone.replace(/\D/g, "")), `Şube telefonu Türkiye sabit hat biçiminde değil: ${record.slug}`);
+  const source = new URL(record.officialSourceUrl);
+  assert(source.protocol === "https:" && source.hostname === "www.msb.gov.tr", `Şube resmî kaynağı MSB değil: ${record.slug}`);
+  const directions = new URL(record.directionsUrl);
+  assert(directions.protocol === "https:" && directions.hostname === "www.google.com" && directions.pathname === "/maps/dir/", `Yol tarifi hedefi geçersiz: ${record.slug}`);
+  assert(directions.searchParams.get("destination")?.includes(record.address), `Yol tarifi resmî adresi içermiyor: ${record.slug}`);
+  assert(militaryBranchPath(record).startsWith("/askerlik-subeleri/") && militaryBranchPath(record).endsWith("/"), `Şube sayfa yolu geçersiz: ${record.slug}`);
+}
+
 const report = {
   leaves: expectedLeaves,
   inventoryRecords: routes.length,
@@ -53,7 +76,11 @@ const report = {
   needsReview: routes.filter(route => route.verificationStatus === "needs-review").length,
   officialSourceLinks: routes.reduce((total, route) => total + route.sources.length, 0),
   highFreshnessRisk: routes.filter(route => route.freshnessRisk === "high").length,
-  lastVerified: Array.from(new Set(routes.map(route => route.lastVerified)))
+  lastVerified: Array.from(new Set(routes.map(route => route.lastVerified))),
+  militaryProvinces: militaryProvinces.length,
+  militaryDistrictPages: militaryBranches.length,
+  militaryPhysicalBranches: uniqueMilitaryBranchCount,
+  militaryLastVerified: Array.from(new Set(militaryBranches.map(record => record.lastVerified)))
 };
 
 console.log(JSON.stringify(report, null, 2));

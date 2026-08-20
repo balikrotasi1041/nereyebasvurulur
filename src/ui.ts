@@ -1,4 +1,5 @@
 import type { MenuNode, RouteRecord } from "./data";
+import { militaryBranchPath, type MilitaryBranchRecord, type MilitaryProvince } from "./military-branches";
 
 const styles = `
 :root{
@@ -23,6 +24,7 @@ header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);posi
 .nav{display:flex;gap:6px;align-items:center}
 .nav a{font-size:.88rem;color:#526174;padding:10px 11px;border-radius:10px;min-height:42px;display:inline-flex;align-items:center}
 .nav a:hover{background:#f3f5f8}
+.mobile-label{display:none}
 
 .hero{padding:46px 0 22px}
 .kicker{color:var(--blue);font-size:.78rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase}
@@ -92,6 +94,37 @@ h1{font-size:clamp(2.15rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.052em;m
 .meta b{display:block;margin-bottom:4px}
 .meta small{color:var(--muted);line-height:1.45}
 
+.branch-cta{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:16px;padding:17px 18px;border:1px solid #bfd0f5;background:var(--soft);border-radius:15px;color:var(--blue2)}
+.branch-cta strong{display:block;font-size:1rem;margin-bottom:4px}
+.branch-cta span{display:block;color:#526174;font-size:.88rem;line-height:1.45}
+.province-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.province-card{display:block;border:1px solid var(--line);background:#fff;border-radius:13px;padding:14px;min-height:76px}
+.province-card:hover{border-color:#b9c7ea;background:var(--soft)}
+.province-card strong{display:block;margin-bottom:5px}
+.province-card small{color:var(--muted)}
+.branch-list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.branch-item{display:block;border:1px solid var(--line);border-radius:14px;padding:15px;background:#fff;min-width:0}
+.branch-item:hover{border-color:#b9c7ea;background:var(--soft)}
+.branch-item strong{display:block;line-height:1.35;margin-bottom:5px}
+.branch-item small{display:block;color:var(--muted);line-height:1.45}
+.branch-breadcrumb{display:flex;gap:7px;align-items:center;flex-wrap:wrap;color:#667085;font-size:.85rem;margin-bottom:18px}
+.branch-breadcrumb a{color:var(--blue)}
+.contact-grid{display:grid;grid-template-columns:1.25fr .75fr;gap:12px;margin:18px 0}
+.contact-card{border:1px solid var(--line);border-radius:15px;padding:18px;background:#fff;min-width:0}
+.contact-card h2,.contact-card h3{margin:0 0 9px;letter-spacing:-.02em}
+.contact-card address{font-style:normal;color:#344054;line-height:1.65}
+.contact-row{display:flex;justify-content:space-between;gap:16px;padding:10px 0;border-bottom:1px solid var(--line)}
+.contact-row:last-child{border-bottom:0}
+.contact-row span{color:var(--muted)}
+.contact-row a{color:var(--blue);font-weight:800;text-align:right}
+.contact-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+.contact-actions .btn{flex:1 1 180px}
+.faq-list{display:grid;gap:10px}
+.faq-item{border:1px solid var(--line);border-radius:14px;padding:17px;background:#fff}
+.faq-item h3{font-size:1rem;margin:0 0 7px}
+.faq-item p{margin:0;color:#526174;line-height:1.62}
+.verification-note{font-size:.84rem;color:var(--muted);line-height:1.55;margin-top:12px}
+
 .admin{padding:30px 0}
 .admin h1{font-size:clamp(2rem,4vw,2.7rem);line-height:1.08}
 .admin-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin:18px 0}
@@ -118,6 +151,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 calc(42px + env(safe-area
   .mobile-picker{display:block}
   .admin-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .hero{padding-top:36px}
+  .province-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
 @media(max-width:620px){
   .wrap{width:min(100% - 20px,1160px)}
@@ -126,6 +160,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 calc(42px + env(safe-area
   .nav{gap:2px}
   .nav a{font-size:.8rem;padding:9px 8px}
   .nav a.hide-mobile{display:none}
+  .desktop-label{display:none}
+  .mobile-label{display:inline}
   .hero{padding:26px 0 16px}
   h1{font-size:clamp(2rem,10vw,2.8rem);letter-spacing:-.045em}
   .hero p,.lead{font-size:.98rem;line-height:1.58}
@@ -135,7 +171,8 @@ footer{border-top:1px solid var(--line);padding:26px 0 calc(42px + env(safe-area
   .crumbs{padding:12px 14px;font-size:.8rem}
   .content{padding:16px}
   .content h2{font-size:1.34rem}
-  .grid,.meta,.detail-grid{grid-template-columns:1fr}
+  .grid,.meta,.detail-grid,.branch-list,.contact-grid{grid-template-columns:1fr}
+  .province-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
   .node{min-height:72px;padding:14px}
   .actions{position:sticky;bottom:0;z-index:10;margin:16px -16px -16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
   .actions .btn{flex:1}
@@ -156,11 +193,15 @@ footer{border-top:1px solid var(--line);padding:26px 0 calc(42px + env(safe-area
   .responsive-table td:last-child{border-bottom:0}
   .responsive-table td:before{content:attr(data-label);font-weight:800;color:#667085;font-size:.78rem}
   .admin-links .btn{flex:1 1 150px}
+  .branch-cta{align-items:flex-start;flex-direction:column}
+  .branch-cta .btn{width:100%}
+  .contact-actions{position:sticky;bottom:0;z-index:10;margin:16px -18px -18px;padding:10px 18px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.97);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
 }
 @media(max-width:380px){
   .nav a{padding:8px 6px}
   .admin-grid{grid-template-columns:1fr}
   .responsive-table td{grid-template-columns:92px minmax(0,1fr)}
+  .province-grid{grid-template-columns:1fr}
 }
 @media(prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
@@ -172,20 +213,21 @@ function esc(value: string): string {
   return String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c] || c));
 }
 
-function shell(title: string, description: string, body: string, opts: { canonical?: string; noindex?: boolean; admin?: boolean } = {}): string {
+function shell(title: string, description: string, body: string, opts: { canonical?: string; noindex?: boolean; admin?: boolean; jsonLd?: unknown[] } = {}): string {
   const canonical = opts.canonical || "https://nereyebasvurulur.com/";
   const robots = opts.noindex ? "noindex,nofollow" : "index,follow";
+  const structuredData = (opts.jsonLd || []).map(value => `<script type="application/ld+json">${JSON.stringify(value).replace(/</g, "\\u003c")}</script>`).join("");
   const nav = opts.admin
-    ? `<a href="/admin/dashboard/">Dashboard</a><a href="/admin/data/">Veri</a><a href="/">Siteye dön</a>`
-    : `<a class="hide-mobile" href="/ara">Arama</a><a href="/admin/dashboard/">Yönetim</a>`;
-  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${esc(canonical)}"><style>${styles}</style></head><body><header><div class="wrap head"><a class="brand" href="/">Nereye <span>Başvurulur?</span></a><nav class="nav" aria-label="Ana menü">${nav}</nav></div></header>${body}<footer><div class="wrap">Nereye Başvurulur? · Resmî kaynaklarla doğrulanan yönlendirmeler. Son işlem öncesi ilgili kurum ve güncel mevzuatı kontrol edin.</div></footer></body></html>`;
+    ? `<a href="/admin/dashboard/">Dashboard</a><a href="/admin/data/">Veri</a><a href="/admin/askerlik-subeleri/">Şubeler</a><a href="/">Siteye dön</a>`
+    : `<a href="/askerlik-subeleri/"><span class="desktop-label">Askerlik şubeleri</span><span class="mobile-label">Şubeler</span></a><a class="hide-mobile" href="/ara">Arama</a><a href="/admin/dashboard/">Yönetim</a>`;
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${esc(canonical)}">${structuredData}<style>${styles}</style></head><body><header><div class="wrap head"><a class="brand" href="/">Nereye <span>Başvurulur?</span></a><nav class="nav" aria-label="Ana menü">${nav}</nav></div></header>${body}<footer><div class="wrap">Nereye Başvurulur? · Resmî kaynaklarla doğrulanan yönlendirmeler. Son işlem öncesi ilgili kurum ve güncel mevzuatı kontrol edin.</div></footer></body></html>`;
 }
 
 function menuJson(menu: MenuNode[]): string {
   return JSON.stringify(menu).replace(/</g, "\\u003c");
 }
 
-export function renderHome(menu: MenuNode[], routeCount: number): string {
+export function renderHome(menu: MenuNode[], routeCount: number, militaryDistrictCount: number, militaryOfficeCount: number): string {
   const mobileOptions = menu.map((item, index) => `<option value="${index}">${esc(item.label)}</option>`).join("");
   const js = `
 <script>
@@ -208,7 +250,7 @@ renderCats();syncPicker();
   return shell(
     "Nereye Başvurulur? | Doğru resmî başvuru yolunu bulun",
     "Kamu işlemleri, askerlik, okul, sosyal yardım, itiraz ve temel kamu hizmetlerinde doğru resmî başvuru yolunu bulun.",
-    `<main><section class="hero"><div class="wrap"><div class="kicker">Resmî başvuru yönlendirme ağacı</div><h1>Doğru kapıyı, kurum adını bilmeden bulun.</h1><p>Konu ağacından ilerleyin. Kurumu siz seçmezsiniz; resmî kaynaklarla doğrulanmış rota size yetkili başvuru kanalını gösterir. Şu anda ${routeCount} rota açık; yerel yetki değişebilen işlemler ayrıca işaretlenir.</p><div class="notice"><strong>Bilgilendirme:</strong> Bu site genel bilgilendirme ve yönlendirme amacı taşır; hukuki danışmanlık veya resmî görüş değildir. Özellikle süreye bağlı işlemlerde işlem yapmadan önce ilgili güncel mevzuatı ve yetkili kurumun resmî açıklamasını ayrıca kontrol edin.</div></div></section><section class="wrap"><div class="mobile-picker"><label for="categorySelect">1. Ana konuyu seçin</label><select id="categorySelect"><option value="">Kategori seçin…</option>${mobileOptions}</select></div><div class="app"><aside class="tree"><h3>Ana kategoriler</h3><div class="search"><input id="catSearch" placeholder="Kategori ara" aria-label="Kategori ara"><button type="button" onclick="document.getElementById('catSearch').value='';renderCats()">Temizle</button></div><div id="cats"></div></aside><section class="panel" id="flowPanel"><div class="crumbs" id="crumbs" aria-live="polite">Ana sayfa</div><div class="content"><h2 id="nodeTitle">Bir ana kategori seçin</h2><p id="nodeDesc">Kamu alanını seçin. Sistem yalnız ilgili alt dalları açar.</p><div class="grid" id="children"></div><div class="actions"><button class="btn" id="back" disabled>← Bir adım geri</button><a class="btn primary" href="/ara">Doğrudan ara</a></div></div></section></div></section></main>${js}`,
+    `<main><section class="hero"><div class="wrap"><div class="kicker">Resmî başvuru yönlendirme ağacı</div><h1>Doğru kapıyı, kurum adını bilmeden bulun.</h1><p>Konu ağacından ilerleyin. Kurumu siz seçmezsiniz; resmî kaynaklarla doğrulanmış rota size yetkili başvuru kanalını gösterir. Şu anda ${routeCount} rota açık; yerel yetki değişebilen işlemler ayrıca işaretlenir.</p><div class="notice"><strong>Bilgilendirme:</strong> Bu site genel bilgilendirme ve yönlendirme amacı taşır; hukuki danışmanlık veya resmî görüş değildir. Özellikle süreye bağlı işlemlerde işlem yapmadan önce ilgili güncel mevzuatı ve yetkili kurumun resmî açıklamasını ayrıca kontrol edin.</div><div class="branch-cta"><div><strong>Askerlik şubesi adresi ve yol tarifi mi arıyorsunuz?</strong><span>81 ilde ${militaryDistrictCount} ilçe için MSB’nin gösterdiği ${militaryOfficeCount} fiziksel şubenin adres, telefon ve yol tarifi bilgilerine ulaşın.</span></div><a class="btn primary" href="/askerlik-subeleri/">Askerlik şubelerini bul</a></div></div></section><section class="wrap"><div class="mobile-picker"><label for="categorySelect">1. Ana konuyu seçin</label><select id="categorySelect"><option value="">Kategori seçin…</option>${mobileOptions}</select></div><div class="app"><aside class="tree"><h3>Ana kategoriler</h3><div class="search"><input id="catSearch" placeholder="Kategori ara" aria-label="Kategori ara"><button type="button" onclick="document.getElementById('catSearch').value='';renderCats()">Temizle</button></div><div id="cats"></div></aside><section class="panel" id="flowPanel"><div class="crumbs" id="crumbs" aria-live="polite">Ana sayfa</div><div class="content"><h2 id="nodeTitle">Bir ana kategori seçin</h2><p id="nodeDesc">Kamu alanını seçin. Sistem yalnız ilgili alt dalları açar.</p><div class="grid" id="children"></div><div class="actions"><button class="btn" id="back" disabled>← Bir adım geri</button><a class="btn primary" href="/ara">Doğrudan ara</a></div></div></section></div></section></main>${js}`,
     { canonical: "https://nereyebasvurulur.com/" }
   );
 }
@@ -229,25 +271,157 @@ export function renderRoute(route: RouteRecord): string {
   const statusClass = route.verificationStatus === "verified" ? "" : " local";
   const riskLabel = route.freshnessRisk === "high" ? "Yüksek · işlem öncesi tekrar kontrol edin" : route.freshnessRisk === "medium" ? "Orta · periyodik kontrol" : "Düşük · periyodik kontrol";
   const legal = `<div class="meta"><div><b>Hukuki dayanak</b><small>${route.legalBasis.map(esc).join("<br>")}</small></div><div><b>Son doğrulama</b><small>${esc(route.lastVerified)}</small></div><div><b>Güncellik riski</b><small>${riskLabel}</small></div></div>`;
+  const militaryBranchFinder = route.category === "Askerlik Yükümlülüğü ve Askeralma İşlemleri"
+    ? `<section style="margin-top:24px"><div class="branch-cta"><div><strong>Fizikî başvuru için askerlik şubenizi bulun</strong><span>İlinizi ve ilçenizi seçerek MSB'nin gösterdiği sorumlu şubenin adresine, telefonuna ve yol tarifine ulaşın.</span></div><a class="btn primary" href="/askerlik-subeleri/">Askerlik şubesini bul</a></div></section>`
+    : "";
   return shell(
     `${route.title} | Nereye Başvurulur?`,
     route.summary,
-    `<main class="wrap"><section class="hero"><div class="kicker">${esc(route.category)} · ${esc(route.section)}</div><span class="status${statusClass}">${statusLabel}</span><h1>${esc(route.title)}</h1><p class="lead">${esc(route.summary)}</p>${route.currentCycleNote ? `<div class="notice"><strong>Güncel dönem notu:</strong> ${esc(route.currentCycleNote)}</div>` : ""}</section><section class="card content"><h2>Yetkili merci ve başvuru</h2><div class="detail-grid"><section class="detail-card"><h3>Yetkili merci</h3><ul class="plain-list">${authorities}</ul></section><section class="detail-card"><h3>Başvuru kanalları</h3><div class="channel-list">${channels}</div></section><section class="detail-card"><h3>Gerekli bilgi ve belgeler</h3><ul class="plain-list">${documents}</ul></section><section class="detail-card"><h3>Yerel yetki / konum</h3><p>${esc(route.locationLogic)}</p></section><section class="detail-card wide"><h3>Süre, itiraz ve üst başvuru</h3><p>${esc(route.deadlineAndAppeal)}</p><ul class="plain-list" style="margin-top:10px">${escalation}</ul></section></div><h2>Adım adım başvuru rotası</h2><div class="route">${steps}</div>${legal}${route.caution ? `<div class="notice"><strong>Önemli:</strong> ${esc(route.caution)}</div>` : ""}<section style="margin-top:24px"><h2>Resmî kaynaklar</h2><div class="source-list">${sources}</div></section></section></main>`,
+    `<main class="wrap"><section class="hero"><div class="kicker">${esc(route.category)} · ${esc(route.section)}</div><span class="status${statusClass}">${statusLabel}</span><h1>${esc(route.title)}</h1><p class="lead">${esc(route.summary)}</p>${route.currentCycleNote ? `<div class="notice"><strong>Güncel dönem notu:</strong> ${esc(route.currentCycleNote)}</div>` : ""}</section><section class="card content"><h2>Yetkili merci ve başvuru</h2><div class="detail-grid"><section class="detail-card"><h3>Yetkili merci</h3><ul class="plain-list">${authorities}</ul></section><section class="detail-card"><h3>Başvuru kanalları</h3><div class="channel-list">${channels}</div></section><section class="detail-card"><h3>Gerekli bilgi ve belgeler</h3><ul class="plain-list">${documents}</ul></section><section class="detail-card"><h3>Yerel yetki / konum</h3><p>${esc(route.locationLogic)}</p></section><section class="detail-card wide"><h3>Süre, itiraz ve üst başvuru</h3><p>${esc(route.deadlineAndAppeal)}</p><ul class="plain-list" style="margin-top:10px">${escalation}</ul></section></div><h2>Adım adım başvuru rotası</h2><div class="route">${steps}</div>${legal}${route.caution ? `<div class="notice"><strong>Önemli:</strong> ${esc(route.caution)}</div>` : ""}${militaryBranchFinder}<section style="margin-top:24px"><h2>Resmî kaynaklar</h2><div class="source-list">${sources}</div></section></section></main>`,
     { canonical: `https://nereyebasvurulur.com/konu/${route.slug}/` }
   );
 }
 
-export function renderSearch(query: string, matches: RouteRecord[]): string {
-  const results = matches.length ? matches.map(r => `<a class="source" href="/konu/${r.slug}/"><strong>${esc(r.title)}</strong><small>${esc(r.category)} · doğrulanmış rota</small></a>`).join("") : `<div class="notice">Doğrulanmış rotalarda eşleşme bulunamadı. Menüdeki doğrulama kuyruğunda yer alan konular kesin yönlendirme olarak gösterilmez.</div>`;
+function phoneDetails(phone: string): { display: string; href: string } {
+  const rawDigits = phone.replace(/\D/g, "");
+  const digits = rawDigits.length === 11 && rawDigits.startsWith("0") ? rawDigits.slice(1) : rawDigits;
+  return {
+    display: rawDigits.length === 10 ? `0 ${phone}` : phone,
+    href: digits.length === 10 ? `tel:+90${digits}` : `tel:${digits}`
+  };
+}
+
+export function renderMilitaryBranchDirectory(provinces: MilitaryProvince[], districtCount: number, officeCount: number): string {
+  const cards = provinces.map(province => `<a class="province-card" href="/askerlik-subeleri/${province.slug}/"><strong>${esc(province.name)} askerlik şubeleri</strong><small>${province.branches.length} ilçe · adres ve telefon</small></a>`).join("");
+  const canonical = "https://nereyebasvurulur.com/askerlik-subeleri/";
+  return shell(
+    "Türkiye Askerlik Şubeleri | Adres, Telefon ve Yol Tarifi",
+    `81 ilde ${districtCount} ilçe için MSB tarafından gösterilen askerlik şubelerinin güncel adres, telefon ve yol tarifi bilgileri.`,
+    `<main class="wrap"><section class="hero"><div class="kicker">MSB resmî iletişim verileri</div><span class="status">✓ 21 Ağustos 2026 tarihinde doğrulandı</span><h1>Türkiye askerlik şubeleri: adres, telefon ve yol tarifi</h1><p class="lead">İlinizi ve ilçenizi seçerek size hizmet veren askerlik şubesini bulun. ${districtCount} ilçe sayfasındaki ${officeCount} farklı fiziksel şube kaydı, Millî Savunma Bakanlığının resmî askerlik şubesi aramasından alınmıştır.</p><form class="search" action="/ara" method="get"><input name="q" placeholder="İlçe yazın: Çankaya askerlik şubesi" aria-label="Askerlik şubesi ara"><button type="submit">Şube ara</button></form><div class="notice"><strong>Önemli:</strong> Her ilçede fiziksel şube bulunmayabilir. Sayfa, seçtiğiniz ilçe için MSB sisteminin gösterdiği sorumlu şubenin adını, adresini ve telefonunu açıkça belirtir.</div></section><section class="card content"><h2>İl seçin</h2><p>İl sayfasında ilçenizi seçerek adres, telefon ve tek dokunuşla yol tarifi bilgisine ulaşabilirsiniz.</p><div class="province-grid">${cards}</div></section><section class="card content" style="margin-top:14px"><h2>Resmî veri kaynağı</h2><p>Şube iletişim bilgileri MSB Askeralma Genel Müdürlüğünün “Askerlik Şubeleri İletişim Bilgileri” ekranından; ilçe envanteri İçişleri Bakanlığının “Valilikler ve Kaymakamlıklar” sayfasından doğrulanmıştır.</p><div class="source-list"><a class="source" target="_blank" rel="noopener noreferrer" href="https://www.msb.gov.tr/askeralma"><strong>Askerlik Şubeleri İletişim Bilgileri</strong><small>Millî Savunma Bakanlığı · Resmî kaynak ↗</small></a><a class="source" target="_blank" rel="noopener noreferrer" href="https://www.icisleri.gov.tr/valilikler"><strong>Valilikler ve Kaymakamlıklar</strong><small>İçişleri Bakanlığı · Resmî ilçe envanteri ↗</small></a></div></section></main>`,
+    {
+      canonical,
+      jsonLd: [{
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: "Türkiye askerlik şubeleri",
+        description: `81 ilde ${districtCount} ilçe için askerlik şubesi adres, telefon ve yol tarifi dizini.`,
+        url: canonical
+      }]
+    }
+  );
+}
+
+export function renderMilitaryProvince(province: MilitaryProvince): string {
+  const branches = province.branches.map(record => {
+    const phone = phoneDetails(record.phone);
+    return `<a class="branch-item" href="${militaryBranchPath(record)}"><strong>${esc(record.district)} askerlik şubesi</strong><small>${esc(record.branchName)}</small><small>${esc(phone.display)} · Yol tarifi ve adres</small></a>`;
+  }).join("");
+  const canonical = `https://nereyebasvurulur.com/askerlik-subeleri/${province.slug}/`;
+  return shell(
+    `${province.name} Askerlik Şubeleri | İlçe İlçe Adres ve Telefon`,
+    `${province.name} ilindeki ${province.branches.length} ilçe için askerlik şubesi adresleri, telefon numaraları ve yol tarifi bağlantıları.`,
+    `<main class="wrap"><section class="hero"><nav class="branch-breadcrumb" aria-label="İçerik yolu"><a href="/">Ana sayfa</a><span>›</span><a href="/askerlik-subeleri/">Askerlik şubeleri</a><span>›</span><span>${esc(province.name)}</span></nav><div class="kicker">${esc(province.name)} · MSB resmî kayıtları</div><span class="status">✓ İletişim bilgileri doğrulandı</span><h1>${esc(province.name)} askerlik şubeleri</h1><p class="lead">${esc(province.name)} ilindeki ${province.branches.length} ilçe için MSB sisteminin gösterdiği sorumlu askerlik şubesini seçin. Her ilçe sayfasında açık adres, telefon, e-posta ve yol tarifi bulunur.</p><form class="search" action="/ara" method="get"><input name="q" placeholder="${esc(province.name)} ilçesi yazın" aria-label="${esc(province.name)} askerlik şubesi ara"><button type="submit">Ara</button></form></section><section class="card content"><h2>İlçe seçin</h2><div class="branch-list">${branches}</div></section></main>`,
+    {
+      canonical,
+      jsonLd: [{
+        "@context": "https://schema.org",
+        "@type": "CollectionPage",
+        name: `${province.name} askerlik şubeleri`,
+        description: `${province.name} ilindeki ilçeler için askerlik şubesi iletişim dizini.`,
+        url: canonical
+      }]
+    }
+  );
+}
+
+export function renderMilitaryBranch(record: MilitaryBranchRecord, province: MilitaryProvince): string {
+  const phone = phoneDetails(record.phone);
+  const canonicalPath = militaryBranchPath(record);
+  const canonical = `https://nereyebasvurulur.com${canonicalPath}`;
+  const servesSameNamedBranch = record.branchName.toLocaleLowerCase("tr-TR").includes(record.district.toLocaleLowerCase("tr-TR"));
+  const serviceExplanation = servesSameNamedBranch
+    ? `MSB'nin resmî iletişim aramasında ${record.province} ili ${record.district} ilçesi için ${record.branchName} gösterilmektedir.`
+    : `${record.district} ilçesinde ayrı bir fiziksel şube görünmüyor. MSB'nin resmî iletişim araması bu ilçe için ${record.branchName} kaydını göstermektedir.`;
+  const sourceDistrictNote = record.officialDistrict.toLocaleLowerCase("tr-TR") !== record.district.toLocaleLowerCase("tr-TR")
+    ? `MSB kayıt ekranındaki ilçe alanı “${record.officialDistrict}” olarak dönmektedir; güncel ilçe adı sayfa başlığında “${record.district}” olarak kullanılmıştır.`
+    : "";
+  const nearby = province.branches.filter(item => item.slug !== record.slug).slice(0, 6).map(item => `<a class="branch-item" href="${militaryBranchPath(item)}"><strong>${esc(item.district)} askerlik şubesi</strong><small>Adres, telefon ve yol tarifi</small></a>`).join("");
+  const faq = [
+    {
+      q: `${record.district} askerlik şubesi nerededir?`,
+      a: `${record.district} ilçesi için MSB sisteminin gösterdiği ${record.branchName}, ${record.address} adresindedir.`
+    },
+    {
+      q: `${record.district} askerlik şubesine nasıl gidilir?`,
+      a: `“Yol tarifi al” düğmesi, ${record.branchName} için MSB'de yayımlanan adresi harita uygulamasına hedef olarak aktarır. Başlangıç konumunuzu cihazınızdan seçebilirsiniz.`
+    },
+    {
+      q: `${record.district} askerlik şubesine nasıl ulaşırım?`,
+      a: `${record.branchName} telefon numarası ${phone.display}, e-posta adresi ${record.email} şeklindedir. Gitmeden önce çalışma ve kabul durumunu telefonla teyit edin.`
+    },
+    {
+      q: `${record.district} askerlik şubesinin telefonu nedir?`,
+      a: `MSB'nin resmî iletişim kaydında telefon numarası ${phone.display} olarak yer almaktadır.`
+    }
+  ];
+  const faqHtml = faq.map(item => `<section class="faq-item"><h3>${esc(item.q)}</h3><p>${esc(item.a)}</p></section>`).join("");
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "GovernmentOffice",
+      name: record.branchName,
+      url: canonical,
+      telephone: phone.href.replace("tel:", ""),
+      email: record.email,
+      address: {
+        "@type": "PostalAddress",
+        streetAddress: record.address,
+        addressRegion: record.province,
+        addressCountry: "TR"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: faq.map(item => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: { "@type": "Answer", text: item.a }
+      }))
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Ana sayfa", item: "https://nereyebasvurulur.com/" },
+        { "@type": "ListItem", position: 2, name: "Askerlik şubeleri", item: "https://nereyebasvurulur.com/askerlik-subeleri/" },
+        { "@type": "ListItem", position: 3, name: record.province, item: `https://nereyebasvurulur.com/askerlik-subeleri/${province.slug}/` },
+        { "@type": "ListItem", position: 4, name: `${record.district} askerlik şubesi`, item: canonical }
+      ]
+    }
+  ];
+
+  return shell(
+    `${record.district} Askerlik Şubesi Nerede? Adres, Telefon ve Yol Tarifi`,
+    `${record.province} ${record.district} askerlik şubesi adresi, telefonu ve yol tarifi. MSB kaydına göre sorumlu şube: ${record.branchName}.`,
+    `<main class="wrap"><section class="hero"><nav class="branch-breadcrumb" aria-label="İçerik yolu"><a href="/">Ana sayfa</a><span>›</span><a href="/askerlik-subeleri/">Askerlik şubeleri</a><span>›</span><a href="/askerlik-subeleri/${province.slug}/">${esc(record.province)}</a><span>›</span><span>${esc(record.district)}</span></nav><div class="kicker">${esc(record.province)} · ${esc(record.district)}</div><span class="status">✓ MSB resmî kaydından doğrulandı</span><h1>${esc(record.district)} Askerlik Şubesi nerede?</h1><p class="lead">${esc(serviceExplanation)}</p></section><section class="card content"><div class="contact-grid"><section class="contact-card"><h2>${esc(record.branchName)}</h2><address>${esc(record.address)}</address><div class="contact-actions"><a class="btn primary" target="_blank" rel="noopener noreferrer" href="${esc(record.directionsUrl)}">Yol tarifi al ↗</a><a class="btn" href="${esc(phone.href)}">Telefon et</a></div></section><section class="contact-card"><h3>İletişim bilgileri</h3><div class="contact-row"><span>Telefon</span><a href="${esc(phone.href)}">${esc(phone.display)}</a></div><div class="contact-row"><span>E-posta</span><a href="mailto:${esc(record.email)}">${esc(record.email)}</a></div><div class="contact-row"><span>Belgegeçer</span><strong>${esc(record.fax)}</strong></div><div class="contact-row"><span>Bağlı bölge</span><strong>${esc(record.regionalOffice)}</strong></div></section></div><div class="notice"><strong>Gitmeden önce:</strong> Askerlik işlemlerinin önemli bir bölümü e-Devlet “Askerliğim” hizmetinden başlatılabilir. Fizikî müracaat gerekiyorsa T.C. kimlik kartınızı yanınızda bulundurun ve kabul saatini telefonla teyit edin.</div><section style="margin-top:24px"><h2>${esc(record.district)} askerlik şubesine nasıl gidilir?</h2><p>Yol tarifi düğmesi, MSB'nin yayımladığı <strong>${esc(record.address)}</strong> adresini hedef olarak açar. Harita uygulamasında bulunduğunuz konumu başlangıç noktası seçerek otomobil, toplu taşıma veya yaya seçeneklerini görebilirsiniz.</p></section><section style="margin-top:24px"><h2>${esc(record.district)} için hangi askerlik şubesi hizmet veriyor?</h2><p>${esc(serviceExplanation)}</p>${sourceDistrictNote ? `<p class="verification-note">${esc(sourceDistrictNote)}</p>` : ""}</section><section style="margin-top:24px"><h2>Askerlik işlemleri için başvuru adımları</h2><div class="source-list"><a class="source" href="/konu/askerlik-yoklamasi-nereye-yapilir/"><strong>Askerlik yoklaması</strong><small>e-Devlet, aile hekimi ve askerlik şubesi adımları</small></a><a class="source" href="/konu/bedelli-askerlik-nereye-basvurulur/"><strong>Bedelli askerlik başvurusu</strong><small>Başvuru, ödeme ve sınıflandırma rotası</small></a><a class="source" href="/konu/siniflandirma-ve-sevk-sevk-belgesi-nereye-basvurulur/"><strong>Sevk belgesi</strong><small>e-Devlet veya askerlik şubesi kanalı</small></a><a class="source" href="/konu/askerlik-yukumlulugu-ve-askeralma-islemleri-askerlik-durum-belgesi-nereye-basvurulur/"><strong>Askerlik durum belgesi</strong><small>Belge alma ve doğrulama adımları</small></a></div></section><section style="margin-top:24px"><h2>Sık sorulan sorular</h2><div class="faq-list">${faqHtml}</div></section><section style="margin-top:24px"><h2>Resmî kaynak ve doğrulama</h2><div class="source-list"><a class="source" target="_blank" rel="noopener noreferrer" href="${esc(record.officialSourceUrl)}"><strong>Askerlik Şubeleri İletişim Bilgileri</strong><small>Millî Savunma Bakanlığı · İl: ${esc(record.officialProvince)}, ilçe: ${esc(record.officialDistrict)} ↗</small></a></div><p class="verification-note">Son doğrulama: ${esc(record.lastVerified)}. Adres ve telefonlar değişebileceği için işlem gününde MSB kaydını ve telefon bilgisini yeniden kontrol edin.</p></section>${nearby ? `<section style="margin-top:24px"><h2>${esc(record.province)} ilindeki diğer askerlik şubeleri</h2><div class="branch-list">${nearby}</div></section>` : ""}</section></main>`,
+    { canonical, jsonLd }
+  );
+}
+
+export function renderSearch(query: string, matches: RouteRecord[], branchMatches: MilitaryBranchRecord[] = []): string {
+  const routeResults = matches.map(r => `<a class="source" href="/konu/${r.slug}/"><strong>${esc(r.title)}</strong><small>${esc(r.category)} · doğrulanmış rota</small></a>`).join("");
+  const branchResults = branchMatches.map(record => `<a class="source" href="${militaryBranchPath(record)}"><strong>${esc(record.province)} ${esc(record.district)} askerlik şubesi</strong><small>${esc(record.branchName)} · ${esc(record.phone)} · adres ve yol tarifi</small></a>`).join("");
+  const results = routeResults || branchResults ? `${branchResults}${routeResults}` : `<div class="notice">Doğrulanmış rotalarda veya askerlik şubelerinde eşleşme bulunamadı. Doğrulanamayan kayıtlar kesin yönlendirme olarak gösterilmez.</div>`;
   return shell(
     "Arama | Nereye Başvurulur?",
-    "Doğrulanmış resmî başvuru rotalarında arama.",
-    `<main class="wrap"><section class="hero"><div class="kicker">Arama</div><h1>Doğrulanmış rotalarda ara</h1><form class="search" action="/ara" method="get"><input name="q" value="${esc(query)}" placeholder="Örn. bedelli askerlik, trafik cezası" aria-label="Başvuru rotası ara"><button type="submit">Ara</button></form></section><section class="card content"><div class="source-list">${results}</div></section></main>`,
+    "Doğrulanmış resmî başvuru rotaları ve askerlik şubelerinde arama.",
+    `<main class="wrap"><section class="hero"><div class="kicker">Arama</div><h1>Başvuru rotası veya askerlik şubesi ara</h1><form class="search" action="/ara" method="get"><input name="q" value="${esc(query)}" placeholder="Örn. Çankaya askerlik şubesi, bedelli askerlik" aria-label="Başvuru rotası veya askerlik şubesi ara"><button type="submit">Ara</button></form></section><section class="card content"><div class="source-list">${results}</div></section></main>`,
     { canonical: "https://nereyebasvurulur.com/ara", noindex: true }
   );
 }
 
-export function renderDashboard(stats: { categories: number; leaves: number; linked: number; routes: number; published: number; verified: number; localCheck: number; needsReview: number; sources: number; highRisk: number }, routes: RouteRecord[]): string {
+export function renderDashboard(stats: { categories: number; leaves: number; linked: number; routes: number; published: number; verified: number; localCheck: number; needsReview: number; sources: number; highRisk: number; militaryProvinces: number; militaryDistrictPages: number; militaryPhysicalBranches: number; militaryLastVerified: string }, routes: RouteRecord[]): string {
   const recent = routes.map(r => {
     const title = r.verificationStatus === "needs-review" ? `<strong>${esc(r.title)}</strong>` : `<a href="/konu/${r.slug}/"><strong>${esc(r.title)}</strong></a>`;
     const status = r.verificationStatus === "verified" ? `<span class="badge ok">Doğrulandı</span>` : r.verificationStatus === "local-check" ? `<span class="badge warn">Yerel kontrol</span>` : `<span class="badge closed">Yayıma kapalı</span>`;
@@ -257,7 +431,7 @@ export function renderDashboard(stats: { categories: number; leaves: number; lin
   return shell(
     "Yönetim Dashboard | Nereye Başvurulur?",
     "Nereye Başvurulur yönetim paneli.",
-    `<main class="wrap admin"><div class="kicker">Yönetim</div><h1>Nereye Başvurulur Dashboard</h1><p class="lead">Tüm link-tree yapraklarının veri kapsamı, yayın durumu ve güncellik riski.</p><div class="admin-grid"><div class="metric"><strong>${stats.categories}</strong><span>Ana kategori</span></div><div class="metric"><strong>${stats.leaves}</strong><span>Toplam menü yaprağı</span></div><div class="metric"><strong>${stats.published}</strong><span>Canlı rota</span></div><div class="metric"><strong>${stats.needsReview}</strong><span>Kesin yönlendirmeye kapalı</span></div></div><div class="admin-grid"><div class="metric"><strong>${stats.verified}</strong><span>Ulusal kanal doğrulandı</span></div><div class="metric"><strong>${stats.localCheck}</strong><span>Yerel yetki kontrolü gerekli</span></div><div class="metric"><strong>${stats.sources}</strong><span>Resmî kaynak bağlantısı</span></div><div class="metric"><strong>${stats.highRisk}</strong><span>Yüksek güncellik riski</span></div></div><section class="card content"><h2>226 yaprağın doğrulama envanteri</h2><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${recent}</tbody></table></div></section></main>`,
+    `<main class="wrap admin"><div class="kicker">Yönetim</div><h1>Nereye Başvurulur Dashboard</h1><p class="lead">Link-tree rotaları ile askerlik şubesi konum envanterinin kapsamı, yayın durumu ve güncellik riski.</p><div class="admin-grid"><div class="metric"><strong>${stats.categories}</strong><span>Ana kategori</span></div><div class="metric"><strong>${stats.leaves}</strong><span>Toplam menü yaprağı</span></div><div class="metric"><strong>${stats.published}</strong><span>Canlı başvuru rotası</span></div><div class="metric"><strong>${stats.needsReview}</strong><span>Kesin yönlendirmeye kapalı</span></div></div><div class="admin-grid"><div class="metric"><strong>${stats.verified}</strong><span>Ulusal kanal doğrulandı</span></div><div class="metric"><strong>${stats.localCheck}</strong><span>Yerel yetki kontrolü gerekli</span></div><div class="metric"><strong>${stats.sources}</strong><span>Resmî kaynak bağlantısı</span></div><div class="metric"><strong>${stats.highRisk}</strong><span>Yüksek güncellik riski</span></div></div><div class="admin-grid"><div class="metric"><strong>${stats.militaryProvinces}</strong><span>Şube dizinindeki il</span></div><div class="metric"><strong>${stats.militaryDistrictPages}</strong><span>İlçe askerlik şubesi sayfası</span></div><div class="metric"><strong>${stats.militaryPhysicalBranches}</strong><span>Farklı fiziksel şube</span></div><div class="metric"><strong>${esc(stats.militaryLastVerified)}</strong><span>Şube son doğrulaması</span></div></div><div class="admin-links" style="margin-bottom:18px"><a class="btn primary" href="/admin/askerlik-subeleri/">Askerlik şubesi envanterini aç</a><a class="btn" href="/admin/data/">Rota verisini aç</a></div><section class="card content"><h2>${stats.leaves} yaprağın doğrulama envanteri</h2><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${recent}</tbody></table></div></section></main>`,
     { noindex: true, admin: true, canonical: "https://nereyebasvurulur.com/admin/dashboard/" }
   );
 }
@@ -271,8 +445,18 @@ export function renderDataPage(routes: RouteRecord[]): string {
   return shell(
     "Veri Envanteri | Nereye Başvurulur?",
     "Yönetim veri envanteri.",
-    `<main class="wrap admin"><div class="kicker">Yönetim / Veri</div><h1>Rota veri envanteri</h1><p class="lead">Her yaprak için veri kaydı tutulur; resmî kanalı kesinleştirilemeyen kayıt canlı bağlantı kazanmaz.</p><div class="admin-links"><a class="btn primary" href="/admin/api/data">JSON verisini aç</a><a class="btn" href="/admin/dashboard/">Dashboard</a></div><section class="card content" style="margin-top:18px"><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Kaynak</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${rows}</tbody></table></div></section></main>`,
+    `<main class="wrap admin"><div class="kicker">Yönetim / Veri</div><h1>Rota veri envanteri</h1><p class="lead">Her yaprak için veri kaydı tutulur; resmî kanalı kesinleştirilemeyen kayıt canlı bağlantı kazanmaz.</p><div class="admin-links"><a class="btn primary" href="/admin/api/data">JSON verisini aç</a><a class="btn" href="/admin/askerlik-subeleri/">Askerlik şubeleri</a><a class="btn" href="/admin/dashboard/">Dashboard</a></div><section class="card content" style="margin-top:18px"><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Kaynak</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${rows}</tbody></table></div></section></main>`,
     { noindex: true, admin: true, canonical: "https://nereyebasvurulur.com/admin/data/" }
+  );
+}
+
+export function renderMilitaryBranchAdmin(branches: MilitaryBranchRecord[]): string {
+  const rows = branches.map(record => `<tr><td data-label="İl / ilçe"><a href="${militaryBranchPath(record)}"><strong>${esc(record.province)} / ${esc(record.district)}</strong></a><br><small>${esc(record.branchName)}</small></td><td data-label="Telefon">${esc(phoneDetails(record.phone).display)}</td><td data-label="Adres">${esc(record.address)}</td><td data-label="Durum"><span class="badge ok">MSB doğrulandı</span></td><td data-label="Son kontrol">${esc(record.lastVerified)}</td></tr>`).join("");
+  return shell(
+    "Askerlik Şubesi Envanteri | Yönetim",
+    "Askerlik şubesi ilçe, adres ve iletişim veri envanteri.",
+    `<main class="wrap admin"><div class="kicker">Yönetim / Askerlik şubeleri</div><h1>${branches.length} ilçe sayfasının şube envanteri</h1><p class="lead">Her kayıt MSB'nin il ve ilçe aramasından alınan sorumlu şube, adres, telefon ve yol tarifi hedefini içerir.</p><div class="admin-links"><a class="btn primary" href="/admin/api/data">JSON verisini aç</a><a class="btn" href="/admin/dashboard/">Dashboard</a></div><section class="card content" style="margin-top:18px"><div class="table-wrap"><table class="responsive-table"><thead><tr><th>İl / ilçe</th><th>Telefon</th><th>Adres</th><th>Durum</th><th>Son kontrol</th></tr></thead><tbody>${rows}</tbody></table></div></section></main>`,
+    { noindex: true, admin: true, canonical: "https://nereyebasvurulur.com/admin/askerlik-subeleri/" }
   );
 }
 

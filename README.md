@@ -42,6 +42,8 @@ pnpm run dev
 
 `pnpm run validate`; TypeScript, 226 yapraklık veri bütünlüğü, resmî kaynak alan adları ve Cloudflare paketleme kontrollerini birlikte çalıştırır.
 
+`pnpm run refresh:military-branches`; İçişleri Bakanlığının güncel ilçe envanterini ve MSB Askeralma Genel Müdürlüğünün şube iletişim aramasını okuyarak askerlik şubesi veri dosyasını yeniden üretir. Sonuçlar doğrulama testlerinden geçmeden yayımlanmaz.
+
 ## Yayın ve içerik güvenliği
 
 Proje sahibi 20 Ağustos 2026 tarihinde canlı yayın için açık onay vermiştir. Ayrıntı `LAUNCH_LOCK.md` içindedir.
@@ -56,4 +58,8 @@ Detay: `CONTENT_VERIFICATION_POLICY.md` ve `SCOPE.md`.
 
 ## Mevcut durum
 
-17 ana kategori altındaki 226 link-tree yaprağının tamamı veri envanterine alınmıştır. 21 Ağustos 2026 doğrulamasında 209 rota yayıma uygundur; konu başlığı yetkili mercii kesinleştirmek için yetersiz olan 17 kayıt güvenli biçimde yayıma kapalıdır. Statik katalog canlı ürünü besler; D1 şeması sonraki veri büyümesi ve kaynak izleme için repoda tutulur.
+17 ana kategori altındaki 226 link-tree yaprağının tamamı veri envanterine alınmıştır. 21 Ağustos 2026 doğrulamasında 209 rota yayıma uygundur; konu başlığı yetkili mercii kesinleştirmek için yetersiz olan 17 kayıt güvenli biçimde yayıma kapalıdır.
+
+Askerlik şubesi dizini 81 ildeki 973 ilçenin tamamını kapsar. MSB'nin resmî il/ilçe araması bu ilçeleri 397 farklı fiziksel askerlik şubesine eşlemektedir. Her ilçe sayfasında sorumlu şube adı, adres, telefon, e-posta, bağlı ASAL bölgesi, resmî kaynak, son doğrulama tarihi ve adresi hedef alan yol tarifi bağlantısı bulunur. Her ilçede ayrı fiziksel şube varmış gibi bir ifade kullanılmaz; MSB'nin başka ilçedeki bir şubeyi göstermesi açıkça belirtilir.
+
+Statik katalog canlı ürünü besler; D1 şeması sonraki veri büyümesi ve kaynak izleme için repoda tutulur.
