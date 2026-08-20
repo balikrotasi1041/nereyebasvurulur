@@ -11,6 +11,7 @@ const encoder = new TextEncoder();
 const INDEXNOW_KEY = "b1493a8a691bb36804ec62b677f59d5b";
 const SITE_ORIGIN = "https://nereyebasvurulur.com";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
+const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
 
 function timingSafeEqual(left: string, right: string): boolean {
   const a = encoder.encode(String(left));
@@ -66,20 +67,20 @@ function securityHeaders(headers: Headers, admin = false): Headers {
   return headers;
 }
 
-function withGoogleVerification(body: string): string {
+function withSearchEngineVerification(body: string): string {
   if (!body.includes("<head>")) return body;
   return body.replace(
     "<head>",
-    `<head><meta name="google-site-verification" content="${GOOGLE_SITE_VERIFICATION}">`
+    `<head><meta name="google-site-verification" content="${GOOGLE_SITE_VERIFICATION}"><meta name="yandex-verification" content="${YANDEX_SITE_VERIFICATION}">`
   );
 }
 
 function html(body: string, status = 200, admin = false): Response {
-  return new Response(withGoogleVerification(body), {
+  return new Response(withSearchEngineVerification(body), {
     status,
     headers: securityHeaders(new Headers({
       "content-type": "text/html; charset=utf-8",
-      "cache-control": admin ? "private, no-store" : (status === 200 ? "public, max-age=300" : "no-store")
+      "cache-control": admin ? "private, no-store" : "no-store, max-age=0"
     }), admin)
   });
 }
@@ -179,7 +180,7 @@ export default {
     }
 
     if (path === "/health") {
-      return new Response(JSON.stringify({ status: "ok", release: "v2-search-engine-ready", publicLaunch: true, indexNowKeyHosted: true, googleVerificationMeta: true, ...stats() }), {
+      return new Response(JSON.stringify({ status: "ok", release: "v2-search-engine-ready", publicLaunch: true, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, ...stats() }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
       });
     }
