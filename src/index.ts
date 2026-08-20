@@ -8,6 +8,8 @@ type Env = {
 };
 
 const encoder = new TextEncoder();
+const INDEXNOW_KEY = "b1493a8a691bb36804ec62b677f59d5b";
+const SITE_ORIGIN = "https://nereyebasvurulur.com";
 
 function timingSafeEqual(left: string, right: string): boolean {
   const a = encoder.encode(String(left));
@@ -103,12 +105,21 @@ function searchRoutes(query: string) {
     .map(item => item.route);
 }
 
+function xmlEscape(value: string): string {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&apos;");
+}
+
+function latestVerifiedDate(): string {
+  return publishedRoutes.map(route => route.lastVerified).filter(Boolean).sort().at(-1) || "2026-08-21";
+}
+
 function sitemap(): string {
-  const urls = [
-    "https://nereyebasvurulur.com/",
-    ...publishedRoutes.map(route => `https://nereyebasvurulur.com/konu/${route.slug}/`)
+  const homeDate = latestVerifiedDate();
+  const entries = [
+    `<url><loc>${SITE_ORIGIN}/</loc><lastmod>${xmlEscape(homeDate)}</lastmod></url>`,
+    ...publishedRoutes.map(route => `<url><loc>${SITE_ORIGIN}/konu/${xmlEscape(route.slug)}/</loc><lastmod>${xmlEscape(route.lastVerified)}</lastmod></url>`)
   ];
-  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(url => `<url><loc>${url}</loc></url>`).join("")}</urlset>`;
+  return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${entries.join("")}</urlset>`;
 }
 
 function stats() {
@@ -137,13 +148,19 @@ export default {
     }
 
     if (url.hostname === "www.nereyebasvurulur.com") {
-      return Response.redirect(`https://nereyebasvurulur.com${url.pathname}${url.search}`, 308);
+      return Response.redirect(`${SITE_ORIGIN}${url.pathname}${url.search}`, 308);
     }
 
     if (isAdmin && !(await adminAuthorized(request, env))) return unauthorized();
 
+    if (path === `/${INDEXNOW_KEY}.txt`) {
+      return new Response(INDEXNOW_KEY, {
+        headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=86400" }
+      });
+    }
+
     if (path === "/robots.txt") {
-      return new Response("User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: https://nereyebasvurulur.com/sitemap.xml\n", {
+      return new Response(`User-agent: *\nAllow: /\nDisallow: /admin/\nSitemap: ${SITE_ORIGIN}/sitemap.xml\n`, {
         headers: { "content-type": "text/plain; charset=utf-8", "cache-control": "public, max-age=3600" }
       });
     }
@@ -153,7 +170,7 @@ export default {
     }
 
     if (path === "/health") {
-      return new Response(JSON.stringify({ status: "ok", release: "v2-official-route-catalog", publicLaunch: true, ...stats() }), {
+      return new Response(JSON.stringify({ status: "ok", release: "v2-search-engine-ready", publicLaunch: true, indexNowKeyHosted: true, ...stats() }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
       });
     }
@@ -172,7 +189,7 @@ export default {
     }
 
     if (path === "/admin" || path === "/admin/") {
-      return Response.redirect("https://nereyebasvurulur.com/admin/dashboard/", 302);
+      return Response.redirect(`${SITE_ORIGIN}/admin/dashboard/`, 302);
     }
 
     if (path === "/admin/dashboard" || path === "/admin/dashboard/") {
