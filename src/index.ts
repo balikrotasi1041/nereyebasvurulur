@@ -1,8 +1,16 @@
 import { categories, problems } from "./data";
 import { renderHome, renderNotFound, renderProblem, renderSearch } from "./ui";
 
+const USER_INFORMATION_NOTICE = `<aside role="note" aria-label="Kullanıcı bilgilendirmesi" style="width:min(1120px,calc(100% - 32px));margin:8px auto 0;padding:14px 16px;border:1px solid #f2d38c;border-radius:14px;background:#fff8e7;color:#6b4d00;font:500 .9rem/1.55 Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif"><strong>Bilgilendirme:</strong> Bu sitede sunulan kurum, başvuru kanalı, süre ve süreç bilgileri genel bilgilendirme ve yönlendirme amacı taşır ve tavsiye niteliğindedir; hukuki danışmanlık, resmî görüş veya kesin işlem garantisi değildir. Bir işlem yapmadan önce ilgili güncel mevzuatı, yetkili kurumun resmî açıklamalarını ve varsa kanunda veya özel düzenlemede öngörülen başvuru/itiraz yollarını incelemeniz kesinlikle tavsiye edilir. Özellikle süreye bağlı işlemlerde yalnızca bu sitedeki bilgiye dayanmayın.</aside>`;
+
+function addUserInformationNotice(body: string): string {
+  return body.includes("</header>")
+    ? body.replace("</header>", `</header>${USER_INFORMATION_NOTICE}`)
+    : body;
+}
+
 function html(body: string, status = 200): Response {
-  return new Response(body, {
+  return new Response(addUserInformationNotice(body), {
     status,
     headers: {
       "content-type": "text/html; charset=utf-8",
