@@ -7,10 +7,13 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check": "tsc --noEmit",
+    "verify": "tsx scripts/verify-data.ts",
+    "validate": "pnpm run check && pnpm run verify && pnpm run cf:check",
     "cf:check": "wrangler deploy --dry-run"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "latest",
+    "tsx": "latest",
     "typescript": "latest",
     "wrangler": "latest"
   }

@@ -1,4 +1,4 @@
-import { countLeaves, countLinkedLeaves, menuTree, routeBySlug, routes } from "./data";
+import { countLeaves, countLinkedLeaves, menuTree, publishedRoutes, routeBySlug, routes } from "./data";
 import { renderDashboard, renderDataPage, renderHome, renderNotFound, renderRoute, renderSearch } from "./ui";
 
 type Env = {
@@ -90,9 +90,9 @@ function normalize(value: string): string {
 
 function searchRoutes(query: string) {
   const q = normalize(query);
-  if (!q) return routes;
+  if (!q) return publishedRoutes;
   const terms = q.split(" ").filter(Boolean);
-  return routes
+  return publishedRoutes
     .map(route => {
       const haystack = normalize([route.title, route.summary, route.category, ...route.aliases].join(" "));
       const score = terms.reduce((n, term) => n + (haystack.includes(term) ? 1 : 0), 0);
@@ -106,7 +106,7 @@ function searchRoutes(query: string) {
 function sitemap(): string {
   const urls = [
     "https://nereyebasvurulur.com/",
-    ...routes.map(route => `https://nereyebasvurulur.com/konu/${route.slug}/`)
+    ...publishedRoutes.map(route => `https://nereyebasvurulur.com/konu/${route.slug}/`)
   ];
   return `<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${urls.map(url => `<url><loc>${url}</loc></url>`).join("")}</urlset>`;
 }
@@ -117,8 +117,12 @@ function stats() {
     leaves: countLeaves(menuTree),
     linked: countLinkedLeaves(menuTree),
     routes: routes.length,
+    published: publishedRoutes.length,
+    verified: routes.filter(route => route.verificationStatus === "verified").length,
+    localCheck: routes.filter(route => route.verificationStatus === "local-check").length,
+    needsReview: routes.filter(route => route.verificationStatus === "needs-review").length,
     sources: routes.reduce((sum, route) => sum + route.sources.length, 0),
-    timeSensitive: routes.filter(route => route.timeSensitive).length
+    highRisk: routes.filter(route => route.freshnessRisk === "high").length
   };
 }
 
@@ -149,12 +153,12 @@ export default {
     }
 
     if (path === "/health") {
-      return new Response(JSON.stringify({ status: "ok", release: "v1", publicLaunch: true, ...stats() }), {
+      return new Response(JSON.stringify({ status: "ok", release: "v2-official-route-catalog", publicLaunch: true, ...stats() }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
       });
     }
 
-    if (path === "/") return html(renderHome(menuTree, routes.length));
+    if (path === "/") return html(renderHome(menuTree, publishedRoutes.length));
 
     if (path === "/ara" || path === "/ara/") {
       const query = (url.searchParams.get("q") || "").slice(0, 160);

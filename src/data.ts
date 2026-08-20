@@ -1,21 +1,43 @@
+import { buildRouteCatalog, linkVerifiedRoutes } from "./route-catalog";
+
 export type Source = {
   title: string;
   url: string;
   authority: string;
 };
 
+export type ApplicationChannel = {
+  type: "e-government" | "official-portal" | "in-person" | "phone" | "post" | "other";
+  label: string;
+  url?: string;
+  note?: string;
+};
+
+export type VerificationStatus = "verified" | "local-check" | "needs-review";
+export type FreshnessRisk = "low" | "medium" | "high";
+
 export type RouteRecord = {
+  pathKey: string;
   slug: string;
   title: string;
   summary: string;
   category: string;
+  section: string;
   aliases: string[];
+  verificationStatus: VerificationStatus;
+  competentAuthorities: string[];
+  applicationChannels: ApplicationChannel[];
+  requiredDocuments: string[];
+  deadlineAndAppeal: string;
+  escalation: string[];
+  locationLogic: string;
   steps: string[];
-  legalBasis?: string[];
+  legalBasis: string[];
   caution?: string;
   currentCycleNote?: string;
   sources: Source[];
   lastVerified: string;
+  freshnessRisk: FreshnessRisk;
   timeSensitive: boolean;
 };
 
@@ -28,7 +50,7 @@ export type MenuNode = {
 const leaf = (label: string, slug?: string): MenuNode => ({ label, slug });
 const branch = (label: string, children: MenuNode[]): MenuNode => ({ label, children });
 
-export const menuTree: MenuNode[] = [
+const rawMenuTree: MenuNode[] = [
   branch("Sosyal Yardım ve Aile Hizmetleri", [
     branch("Sosyal Yardımlar", [leaf("Genel sosyal yardım"), leaf("Gıda yardımı"), leaf("Yakacak yardımı"), leaf("Barınma yardımı"), leaf("Elektrik tüketim desteği")]),
     branch("Aile Destekleri", [leaf("Doğum yardımı"), leaf("Çocuk destekleri"), leaf("Eşi vefat etmiş kadınlara yardım"), leaf("Asker ailesi yardımı")]),
@@ -159,156 +181,11 @@ export const menuTree: MenuNode[] = [
   ])
 ];
 
-export const routes: RouteRecord[] = [
-  {
-    slug: "trafik-cezasina-itiraz-nereye-yapilir",
-    title: "Trafik cezasına itiraz nereye yapılır?",
-    summary: "Trafik idari para cezasının yanlış veya haksız olduğunu düşünüyorsanız, güncel Emniyet Genel Müdürlüğü açıklamasına göre cezanın tebliğ tarihinden itibaren 15 gün içinde görevli yargı merciine başvurabilirsiniz.",
-    category: "İtiraz ve Üst Başvuru Yolları",
-    aliases: ["trafik cezası itiraz", "eds cezası itiraz", "plakaya yazılan ceza itiraz", "trafik para cezası"],
-    steps: [
-      "Tebliğ tarihini ve ceza karar tutanağını kontrol edin. Süre hesabında özellikle tebliğ tarihini esas alın.",
-      "Emniyet Genel Müdürlüğünün güncel SSS açıklamasına göre Trafik Mahkemesinin bulunduğu yerde Trafik Mahkemesine; bulunmadığı yerde yetkili Sulh Ceza Hâkimliğine başvurulur.",
-      "UYAP Vatandaş Portal trafik ve idari para cezalarına elektronik itiraz imkânı sunmaktadır. Portalın o anki kimlik doğrulama ve elektronik imza şartlarını başvuru sırasında ayrıca kontrol edin.",
-      "Ceza tutanağı, tebligat ve itirazınızı destekleyen belgeleri/delilleri başvuruya ekleyin."
-    ],
-    legalBasis: ["5326 sayılı Kabahatler Kanunu m.27", "2918 sayılı Karayolları Trafik Kanunu"],
-    caution: "Trafikten men, sürücü belgesinin geri alınması gibi para cezasından farklı idari yaptırımlarda görevli yargı yolu değişebilir. Bu sayfa yalnız trafik idari para cezasına itiraz rotasını temel alır.",
-    sources: [
-      { title: "Emniyet Genel Müdürlüğü Trafik Başkanlığı - Sıkça Sorulan Sorular", url: "https://trafik.gov.tr/sss0", authority: "Emniyet Genel Müdürlüğü" },
-      { title: "UYAP - Sunulan Hizmetler", url: "https://www.uyap.gov.tr/Hizmetler", authority: "Adalet Bakanlığı / UYAP" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  },
-  {
-    slug: "askerlik-yoklamasi-nereye-yapilir",
-    title: "Askerlik yoklaması nereye yapılır?",
-    summary: "MSB Askeralma Genel Müdürlüğü, yoklama işleminin e-Devlet'teki “Askerliğim” hizmetinden başlatılabildiğini; ilk adım tamamlandıktan sonra aile hekimi muayenesi ve süreç takibinin devam ettiğini açıklıyor.",
-    category: "Askerlik Yükümlülüğü ve Askeralma İşlemleri",
-    aliases: ["askerlik yoklama", "e yoklama", "askerliğim yoklama", "askerlik muayene"],
-    steps: [
-      "e-Devlet'e giriş yapın ve Millî Savunma Bakanlığı altındaki “Askerliğim” bütünleşik hizmetinden yoklama başvurusunu başlatın.",
-      "Sınıflandırmaya esas bilgi formu ve sistemde istenen bilgileri tamamlayın.",
-      "MSB'nin güncel açıklamasına göre T.C. kimlik kartınız ve varsa sağlık belgelerinizle kayıtlı aile hekiminize müracaat edin.",
-      "e-Devlet'teki Yoklama Başvurusu Süreç Takibi üzerinden işlemin durumunu izleyin; sistem sizi farklı bir sağlık kuruluşuna sevk ederse o yönlendirmeyi izleyin."
-    ],
-    legalBasis: ["7179 sayılı Askeralma Kanunu", "Askeralma Yönetmeliği"],
-    sources: [
-      { title: "MSB - Askerlik Başvurusu Nasıl Yapılır?", url: "https://www.msb.gov.tr/Askeralma/icerik/askerlik-basvurusu-nasil-yapilir", authority: "Millî Savunma Bakanlığı" },
-      { title: "MSB - Askeralma Genel Müdürlüğü", url: "https://www.msb.gov.tr/Askeralma", authority: "Millî Savunma Bakanlığı" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  },
-  {
-    slug: "bedelli-askerlik-nereye-basvurulur",
-    title: "Bedelli askerlik için nereye başvurulur?",
-    summary: "Başvuru kanalı yükümlünün yoklama kaçağı, saklı veya bakaya kaydına göre değişir. Kaydı olmayanlar e-Devlet veya askerlik şubesini kullanabilir; bu kayıtlardan biri bulunanlar için MSB askerlik şubesi rotasını öngörüyor.",
-    category: "Askerlik Yükümlülüğü ve Askeralma İşlemleri",
-    aliases: ["bedelli askerlik", "bedelli başvuru", "bedelli askerlik e devlet", "bedelli askerlik şubesi"],
-    steps: [
-      "Önce yoklama ve askerlik durumunuzu e-Devlet “Askerliğim” hizmetinden kontrol edin.",
-      "Müracaat tarihine kadar yoklama kaçağı, saklı veya bakaya kaydınız yoksa e-Devlet üzerinden veya askerlik şubesinden başvurabilirsiniz.",
-      "Bu kayıtlardan biri varsa MSB'nin güncel bedelli askerlik açıklamasındaki özel başvuru kuralını izleyin; başvuru askerlik şubesi üzerinden yürütülür.",
-      "Başvurudan sonra ödeme süresini ve celp tercihlerini MSB'nin güncel duyurularından takip edin."
-    ],
-    legalBasis: ["7179 sayılı Askeralma Kanunu m.9", "Askeralma Yönetmeliği"],
-    caution: "Bedel, ödeme süresi, celp takvimi ve başvuru dönemleri değişkendir. Ödeme yapmadan önce aynı gün MSB Askeralma duyurusunu kontrol edin.",
-    currentCycleNote: "MSB'nin 7 Temmuz 2026 tarihli duyurusunda 1 Temmuz-31 Aralık 2026 dönemi bedelli askerlik bedeli 472.653,60 TL olarak açıklanmış ve müracaat işlemlerinin 7 Temmuz 2026'da yeniden başladığı belirtilmiştir.",
-    sources: [
-      { title: "MSB - Bedelli Askerlik", url: "https://www.msb.gov.tr/Askeralma/icerik/bedelli-askerlik", authority: "Millî Savunma Bakanlığı" },
-      { title: "MSB - 01 Temmuz–31 Aralık 2026 Bedelli Askerlik Müracaat Duyurusu", url: "https://www.msb.gov.tr/Askeralma/Duyuru/67032f65cc024348b8cf3fea86c95128", authority: "Millî Savunma Bakanlığı" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  },
-  {
-    slug: "msu-askeri-ogrenci-basvurusu-nereye-yapilir",
-    title: "MSÜ askerî öğrenci başvurusu nereye yapılır?",
-    summary: "MSÜ askerî öğrenci süreci tek kapıdan ibaret değildir: aday belirleme sınavı ÖSYM üzerinden, okul tercihleri ve seçim aşamaları ise MSB Personel Temin sistemi üzerinden yürütülür.",
-    category: "Askerî Okullar ve TSK Personel Temini",
-    aliases: ["msü başvuru", "harp okulu başvuru", "astsubay myo başvuru", "askeri okul başvuru"],
-    steps: [
-      "İlgili yılın MSÜ Aday Belirleme Sınavı kılavuzunu ÖSYM'den kontrol edin ve başvuruyu ÖSYM AİS, ÖSYM Başvuru Merkezi veya ÖSYM mobil kanallarından kılavuzdaki tarihlerde yapın.",
-      "Harp Okulları/Astsubay MYO için o yılın YKS şartlarını ayrıca yerine getirin. 2026 kılavuzunda Harp Okulları için TYT+AYT, Astsubay MYO için TYT şartı yer aldı.",
-      "MSÜ sınavı sonrası okul tercihlerini MSB Personel Temin sisteminden yapın; tercih yapmayan adaylar seçim aşamalarına çağrılmaz.",
-      "İkinci seçim aşaması, çağrı, evrak, fiziki yeterlilik, sağlık, mülakat ve sonuç duyurularını MSB Personel Temin sisteminden takip edin."
-    ],
-    currentCycleNote: "2026-MSÜ sınav başvuruları 5-29 Ocak 2026'da alındı. MSB Personel Temin sistemi 17 Ağustos 2026'da Harp Okulları ve Astsubay MYO sonuç duyurularını yayımladı. Yeni adayların sonraki dönem kılavuzunu beklemesi gerekir.",
-    caution: "Başvuru tarihleri, yaş/öğrenim şartları, YKS puan türleri ve seçim aşamaları her dönem kılavuzla değişebilir. Eski dönem şartlarını yeni dönem için kullanmayın.",
-    sources: [
-      { title: "ÖSYM - 2026-MSÜ Sınavı Başvuruların Alınması", url: "https://www.osym.gov.tr/2026msu-sinavi-basvurularin-alinmasi", authority: "ÖSYM" },
-      { title: "MSB Personel Temin Sistemi", url: "https://personeltemin.msb.gov.tr/", authority: "Millî Savunma Bakanlığı" },
-      { title: "MSB - Öğrenci Temini", url: "https://personeltemin.msb.gov.tr/Anasayfa/IcerikWeb/MDS03?menuItem=1", authority: "Millî Savunma Bakanlığı" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  },
-  {
-    slug: "jsga-guvenlik-bilimleri-fakultesi-basvurusu",
-    title: "JSGA Güvenlik Bilimleri Fakültesi başvurusu nereye yapılır?",
-    summary: "Jandarma ve Sahil Güvenlik Akademisi Güvenlik Bilimleri Fakültesi öğrenci temini, Jandarma Genel Komutanlığı Personel - JSGA Öğrenci Temin Sistemi üzerinden yürütülür.",
-    category: "Jandarma ve Sahil Güvenlik Temin İşlemleri",
-    aliases: ["jsga güvenlik bilimleri", "jandarma subay öğrenci", "jandarma öğrenci temin"],
-    steps: [
-      "Jandarma Genel Komutanlığının ilgili yıl öğrenci temin duyurusunu ve başvuru kılavuzunu kontrol edin.",
-      "Başvuruyu J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemi üzerinden, ilan edilen tarih aralığında yapın.",
-      "Sistem e-Devlet üzerinden giriş kullanır ve çok faktörlü kimlik doğrulaması zorunluluğunu ayrıca duyurur.",
-      "Başvuru sonuçları ve sonraki seçim aşamalarını aynı sistemdeki duyuru/sonuç ekranlarından takip edin."
-    ],
-    currentCycleNote: "2026 Güvenlik Bilimleri Fakültesi başvuruları 3-26 Temmuz 2026 arasında alındı; 2026 başvuru sonuçları 5 Ağustos 2026'da sistemde yayımlandı.",
-    caution: "2026 dönemi başvurusu kapanmıştır. Yeni dönem için yalnız yeni Jandarma duyurusu ve kılavuzu esas alınmalıdır.",
-    sources: [
-      { title: "Jandarma - 2026 Güvenlik Bilimleri Fakültesi ve JAMYO Öğrenci Temini", url: "https://www.jandarma.gov.tr/2026-yili-guvenlik-bilimleri-fakultesi-ve-jandarma-astsubay-meslek-yuksekokuluna-ogrenci-temini", authority: "Jandarma Genel Komutanlığı" },
-      { title: "J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemi", url: "https://vatandas.jandarma.gov.tr/PTM/frmAdayGirisveDuyuru.aspx", authority: "Jandarma Genel Komutanlığı" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  },
-  {
-    slug: "jsga-jandarma-astsubay-myo-basvurusu",
-    title: "Jandarma Astsubay Meslek Yüksekokulu başvurusu nereye yapılır?",
-    summary: "JAMYO öğrenci temini Jandarma Genel Komutanlığı Personel - JSGA Öğrenci Temin Sistemi üzerinden yürütülür; dönem şartları başvuru kılavuzunda ilan edilir.",
-    category: "Jandarma ve Sahil Güvenlik Temin İşlemleri",
-    aliases: ["jamyo başvuru", "jandarma astsubay myo", "jandarma astsubay öğrenci"],
-    steps: [
-      "İlgili yılın JAMYO başvuru kılavuzunu Jandarma Genel Komutanlığının resmî duyurusundan kontrol edin.",
-      "İlan döneminde J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemine e-Devlet üzerinden giriş yaparak başvurun.",
-      "Sonuç, sınav çağrısı ve sonraki aşamaları aynı sistemden takip edin."
-    ],
-    currentCycleNote: "2026 JAMYO başvuruları 3-26 Temmuz 2026 arasında alındı; 2026 sonuç duyurusu 5 Ağustos 2026'da sistemde yer aldı.",
-    caution: "Yaş, öğrenim, sınav puanı, fiziki kriter ve takvim gibi şartlar dönemsel kılavuzla değişebilir.",
-    sources: [
-      { title: "Jandarma - 2026 Güvenlik Bilimleri Fakültesi ve JAMYO Öğrenci Temini", url: "https://www.jandarma.gov.tr/2026-yili-guvenlik-bilimleri-fakultesi-ve-jandarma-astsubay-meslek-yuksekokuluna-ogrenci-temini", authority: "Jandarma Genel Komutanlığı" },
-      { title: "J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemi", url: "https://vatandas.jandarma.gov.tr/PTM/frmAdayGirisveDuyuru.aspx", authority: "Jandarma Genel Komutanlığı" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  },
-  {
-    slug: "jandarma-subay-astsubay-personel-temini",
-    title: "Jandarma subay/astsubay personel teminine nereye başvurulur?",
-    summary: "Jandarma Genel Komutanlığı ve Sahil Güvenlik Komutanlığının ilanlı muvazzaf/sözleşmeli subay ve astsubay teminleri Jandarma Personel - JSGA Öğrenci Temin Sistemi üzerinden yürütülür.",
-    category: "Jandarma ve Sahil Güvenlik Temin İşlemleri",
-    aliases: ["jandarma subay temin", "jandarma astsubay temin", "jandarma personel alımı"],
-    steps: [
-      "Jandarma Genel Komutanlığının ilgili personel temin duyurusunu ve kılavuzunu kontrol edin.",
-      "Başvuru açıkken J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemi üzerinden e-Devlet ile giriş yaparak başvurun.",
-      "Sınav çağrısı, evrak, fiziki değerlendirme, sağlık, mülakat ve sonuç duyurularını aynı sistemden takip edin."
-    ],
-    currentCycleNote: "2026 yılı muvazzaf/sözleşmeli subay/astsubay temini için başvurular 26 Ocak-9 Şubat 2026 arasında alındı; bu dönem kapanmıştır.",
-    caution: "Personel teminleri ilan bazlıdır. Yeni ilan yayımlanmadan eski kılavuzdaki şartlarla başvuru yapılamaz.",
-    sources: [
-      { title: "Jandarma - 2026 Muvazzaf/Sözleşmeli Subay/Astsubay Temini", url: "https://www.jandarma.gov.tr/2026-yili-muvazzafsozlesmeli-subayastsubay-temini", authority: "Jandarma Genel Komutanlığı" },
-      { title: "J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemi", url: "https://vatandas.jandarma.gov.tr/PTM/frmAdayGirisveDuyuru.aspx", authority: "Jandarma Genel Komutanlığı" }
-    ],
-    lastVerified: "2026-08-20",
-    timeSensitive: true
-  }
-];
-
-export const routeBySlug = new Map(routes.map(route => [route.slug, route]));
+const catalog = buildRouteCatalog(rawMenuTree);
+export const routes = catalog.routes;
+export const publishedRoutes = routes.filter(route => route.verificationStatus !== "needs-review");
+export const menuTree = linkVerifiedRoutes(rawMenuTree, publishedRoutes);
+export const routeBySlug = new Map(publishedRoutes.map(route => [route.slug, route]));
 
 export function countLeaves(nodes: MenuNode[]): number {
   return nodes.reduce((sum, node) => sum + (node.children ? countLeaves(node.children) : 1), 0);
