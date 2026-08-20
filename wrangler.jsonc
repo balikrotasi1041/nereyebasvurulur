@@ -1,0 +1,20 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "nereyebasvurulur",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-08-20",
+  "workers_dev": false,
+  "routes": [
+    {
+      "pattern": "nereyebasvurulur.com",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.nereyebasvurulur.com",
+      "custom_domain": true
+    }
+  ],
+  "observability": {
+    "enabled": true
+  }
+}
