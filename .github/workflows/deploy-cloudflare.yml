@@ -64,8 +64,13 @@ jobs:
           key = "b1493a8a691bb36804ec62b677f59d5b"
           sitemap_url = f"{base}/sitemap.xml"
           key_location = f"{base}/{key}.txt"
+          user_agent = "nereyebasvurulur-deploy/1.0 (+https://nereyebasvurulur.com)"
 
-          with urllib.request.urlopen(sitemap_url, timeout=20) as response:
+          sitemap_request = urllib.request.Request(
+              sitemap_url,
+              headers={"User-Agent": user_agent},
+          )
+          with urllib.request.urlopen(sitemap_request, timeout=20) as response:
               xml = response.read()
 
           root = ET.fromstring(xml)
@@ -84,7 +89,10 @@ jobs:
           request = urllib.request.Request(
               "https://api.indexnow.org/indexnow",
               data=payload,
-              headers={"Content-Type": "application/json; charset=utf-8"},
+              headers={
+                  "Content-Type": "application/json; charset=utf-8",
+                  "User-Agent": user_agent,
+              },
               method="POST",
           )
           try:
