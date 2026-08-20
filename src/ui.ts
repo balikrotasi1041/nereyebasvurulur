@@ -66,9 +66,22 @@ h1{font-size:clamp(2.15rem,5vw,4.1rem);line-height:1.02;letter-spacing:-.052em;m
 .btn.primary:hover{background:var(--blue2)}
 
 .status{display:inline-flex;align-items:center;gap:7px;padding:7px 10px;border-radius:999px;font-size:.82rem;font-weight:800;background:var(--okbg);color:var(--ok)}
+.status.local{background:var(--warn);color:#7a5b00}
 .route{display:grid;gap:11px;margin:20px 0}
 .step{border:1px solid var(--line);border-radius:14px;padding:17px;background:#fff;line-height:1.58}
 .step b{display:block;color:var(--blue);font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;margin:18px 0}
+.detail-card{border:1px solid var(--line);border-radius:14px;padding:17px;background:#fff;min-width:0}
+.detail-card.wide{grid-column:1/-1}
+.detail-card h3{font-size:1rem;margin:0 0 9px;color:#344054}
+.detail-card p{margin:0;color:#475467;line-height:1.6}
+.plain-list{margin:0;padding-left:19px;color:#475467;line-height:1.58}
+.plain-list li+li{margin-top:6px}
+.channel-list{display:grid;gap:8px}
+.channel{display:block;border:1px solid var(--line);border-radius:11px;padding:12px;background:#fbfcfe}
+.channel[href]:hover{border-color:#b9c7ea;background:var(--soft)}
+.channel strong{display:block;color:#344054;font-size:.93rem}
+.channel small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
 .source-list{display:grid;gap:9px}
 .source{display:block;border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px;min-height:62px}
 .source:hover{border-color:#b9c7ea}
@@ -93,6 +106,8 @@ td small{color:var(--muted)}
 .badge{display:inline-block;border-radius:999px;padding:5px 8px;font-size:.76rem;font-weight:800}
 .badge.ok{background:var(--okbg);color:var(--ok)}
 .badge.warn{background:var(--warn);color:#7a5b00}
+.badge.closed{background:#f2f4f7;color:#475467}
+.badge.high{background:#fff0f0;color:var(--danger)}
 .admin-links{display:flex;gap:8px;flex-wrap:wrap}
 
 footer{border-top:1px solid var(--line);padding:26px 0 calc(42px + env(safe-area-inset-bottom));color:var(--muted);font-size:.88rem;margin-top:40px;line-height:1.55}
@@ -120,7 +135,7 @@ footer{border-top:1px solid var(--line);padding:26px 0 calc(42px + env(safe-area
   .crumbs{padding:12px 14px;font-size:.8rem}
   .content{padding:16px}
   .content h2{font-size:1.34rem}
-  .grid,.meta{grid-template-columns:1fr}
+  .grid,.meta,.detail-grid{grid-template-columns:1fr}
   .node{min-height:72px;padding:14px}
   .actions{position:sticky;bottom:0;z-index:10;margin:16px -16px -16px;padding:10px 16px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.96);border-top:1px solid var(--line);backdrop-filter:blur(8px)}
   .actions .btn{flex:1}
@@ -193,7 +208,7 @@ renderCats();syncPicker();
   return shell(
     "Nereye Başvurulur? | Doğru resmî başvuru yolunu bulun",
     "Kamu işlemleri, askerlik, okul, sosyal yardım, itiraz ve temel kamu hizmetlerinde doğru resmî başvuru yolunu bulun.",
-    `<main><section class="hero"><div class="wrap"><div class="kicker">Resmî başvuru yönlendirme ağacı</div><h1>Doğru kapıyı, kurum adını bilmeden bulun.</h1><p>Konu ağacından ilerleyin. Kurumu siz seçmezsiniz; resmî kaynaklarla doğrulanmış rota size yetkili başvuru kanalını gösterir. İlk sürümde ${routeCount} kritik rota resmî kaynaklarla doğrulanmış olarak açık.</p><div class="notice"><strong>Bilgilendirme:</strong> Bu site genel bilgilendirme ve yönlendirme amacı taşır; hukuki danışmanlık veya resmî görüş değildir. Özellikle süreye bağlı işlemlerde işlem yapmadan önce ilgili güncel mevzuatı ve yetkili kurumun resmî açıklamasını ayrıca kontrol edin.</div></div></section><section class="wrap"><div class="mobile-picker"><label for="categorySelect">1. Ana konuyu seçin</label><select id="categorySelect"><option value="">Kategori seçin…</option>${mobileOptions}</select></div><div class="app"><aside class="tree"><h3>Ana kategoriler</h3><div class="search"><input id="catSearch" placeholder="Kategori ara" aria-label="Kategori ara"><button type="button" onclick="document.getElementById('catSearch').value='';renderCats()">Temizle</button></div><div id="cats"></div></aside><section class="panel" id="flowPanel"><div class="crumbs" id="crumbs" aria-live="polite">Ana sayfa</div><div class="content"><h2 id="nodeTitle">Bir ana kategori seçin</h2><p id="nodeDesc">Kamu alanını seçin. Sistem yalnız ilgili alt dalları açar.</p><div class="grid" id="children"></div><div class="actions"><button class="btn" id="back" disabled>← Bir adım geri</button><a class="btn primary" href="/ara">Doğrudan ara</a></div></div></section></div></section></main>${js}`,
+    `<main><section class="hero"><div class="wrap"><div class="kicker">Resmî başvuru yönlendirme ağacı</div><h1>Doğru kapıyı, kurum adını bilmeden bulun.</h1><p>Konu ağacından ilerleyin. Kurumu siz seçmezsiniz; resmî kaynaklarla doğrulanmış rota size yetkili başvuru kanalını gösterir. Şu anda ${routeCount} rota açık; yerel yetki değişebilen işlemler ayrıca işaretlenir.</p><div class="notice"><strong>Bilgilendirme:</strong> Bu site genel bilgilendirme ve yönlendirme amacı taşır; hukuki danışmanlık veya resmî görüş değildir. Özellikle süreye bağlı işlemlerde işlem yapmadan önce ilgili güncel mevzuatı ve yetkili kurumun resmî açıklamasını ayrıca kontrol edin.</div></div></section><section class="wrap"><div class="mobile-picker"><label for="categorySelect">1. Ana konuyu seçin</label><select id="categorySelect"><option value="">Kategori seçin…</option>${mobileOptions}</select></div><div class="app"><aside class="tree"><h3>Ana kategoriler</h3><div class="search"><input id="catSearch" placeholder="Kategori ara" aria-label="Kategori ara"><button type="button" onclick="document.getElementById('catSearch').value='';renderCats()">Temizle</button></div><div id="cats"></div></aside><section class="panel" id="flowPanel"><div class="crumbs" id="crumbs" aria-live="polite">Ana sayfa</div><div class="content"><h2 id="nodeTitle">Bir ana kategori seçin</h2><p id="nodeDesc">Kamu alanını seçin. Sistem yalnız ilgili alt dalları açar.</p><div class="grid" id="children"></div><div class="actions"><button class="btn" id="back" disabled>← Bir adım geri</button><a class="btn primary" href="/ara">Doğrudan ara</a></div></div></section></div></section></main>${js}`,
     { canonical: "https://nereyebasvurulur.com/" }
   );
 }
@@ -201,11 +216,23 @@ renderCats();syncPicker();
 export function renderRoute(route: RouteRecord): string {
   const steps = route.steps.map((step, i) => `<div class="step"><b>${i + 1}. Adım</b>${esc(step)}</div>`).join("");
   const sources = route.sources.map(source => `<a class="source" rel="noopener noreferrer" target="_blank" href="${esc(source.url)}"><strong>${esc(source.title)}</strong><small>${esc(source.authority)} · Resmî kaynak ↗</small></a>`).join("");
-  const legal = route.legalBasis?.length ? `<div class="meta"><div><b>Hukuki dayanak</b><small>${route.legalBasis.map(esc).join("<br>")}</small></div><div><b>Son doğrulama</b><small>${esc(route.lastVerified)}</small></div><div><b>Güncellik</b><small>${route.timeSensitive ? "Yüksek · işlem öncesi tekrar kontrol edin" : "Periyodik kontrol"}</small></div></div>` : "";
+  const authorities = route.competentAuthorities.map(item => `<li>${esc(item)}</li>`).join("");
+  const documents = route.requiredDocuments.map(item => `<li>${esc(item)}</li>`).join("");
+  const escalation = route.escalation.map(item => `<li>${esc(item)}</li>`).join("");
+  const channels = route.applicationChannels.map(channel => {
+    const body = `<strong>${esc(channel.label)}</strong><small>${esc(channel.note || (channel.url ? "Resmî çevrim içi kanal" : "Fizikî / doğrudan kanal"))}${channel.url ? " · Aç ↗" : ""}</small>`;
+    return channel.url
+      ? `<a class="channel" rel="noopener noreferrer" target="_blank" href="${esc(channel.url)}">${body}</a>`
+      : `<div class="channel">${body}</div>`;
+  }).join("");
+  const statusLabel = route.verificationStatus === "verified" ? "✓ Resmî kaynaklarla doğrulandı" : "◉ Yerel yetki kontrolü gerekli";
+  const statusClass = route.verificationStatus === "verified" ? "" : " local";
+  const riskLabel = route.freshnessRisk === "high" ? "Yüksek · işlem öncesi tekrar kontrol edin" : route.freshnessRisk === "medium" ? "Orta · periyodik kontrol" : "Düşük · periyodik kontrol";
+  const legal = `<div class="meta"><div><b>Hukuki dayanak</b><small>${route.legalBasis.map(esc).join("<br>")}</small></div><div><b>Son doğrulama</b><small>${esc(route.lastVerified)}</small></div><div><b>Güncellik riski</b><small>${riskLabel}</small></div></div>`;
   return shell(
     `${route.title} | Nereye Başvurulur?`,
     route.summary,
-    `<main class="wrap"><section class="hero"><div class="kicker">${esc(route.category)}</div><span class="status">✓ Resmî kaynaklarla doğrulandı</span><h1>${esc(route.title)}</h1><p class="lead">${esc(route.summary)}</p>${route.currentCycleNote ? `<div class="notice"><strong>Güncel dönem notu:</strong> ${esc(route.currentCycleNote)}</div>` : ""}</section><section class="card content"><h2>Başvuru rotası</h2><div class="route">${steps}</div>${legal}${route.caution ? `<div class="notice"><strong>Önemli:</strong> ${esc(route.caution)}</div>` : ""}<section style="margin-top:24px"><h2>Resmî kaynaklar</h2><div class="source-list">${sources}</div></section></section></main>`,
+    `<main class="wrap"><section class="hero"><div class="kicker">${esc(route.category)} · ${esc(route.section)}</div><span class="status${statusClass}">${statusLabel}</span><h1>${esc(route.title)}</h1><p class="lead">${esc(route.summary)}</p>${route.currentCycleNote ? `<div class="notice"><strong>Güncel dönem notu:</strong> ${esc(route.currentCycleNote)}</div>` : ""}</section><section class="card content"><h2>Yetkili merci ve başvuru</h2><div class="detail-grid"><section class="detail-card"><h3>Yetkili merci</h3><ul class="plain-list">${authorities}</ul></section><section class="detail-card"><h3>Başvuru kanalları</h3><div class="channel-list">${channels}</div></section><section class="detail-card"><h3>Gerekli bilgi ve belgeler</h3><ul class="plain-list">${documents}</ul></section><section class="detail-card"><h3>Yerel yetki / konum</h3><p>${esc(route.locationLogic)}</p></section><section class="detail-card wide"><h3>Süre, itiraz ve üst başvuru</h3><p>${esc(route.deadlineAndAppeal)}</p><ul class="plain-list" style="margin-top:10px">${escalation}</ul></section></div><h2>Adım adım başvuru rotası</h2><div class="route">${steps}</div>${legal}${route.caution ? `<div class="notice"><strong>Önemli:</strong> ${esc(route.caution)}</div>` : ""}<section style="margin-top:24px"><h2>Resmî kaynaklar</h2><div class="source-list">${sources}</div></section></section></main>`,
     { canonical: `https://nereyebasvurulur.com/konu/${route.slug}/` }
   );
 }
@@ -220,22 +247,31 @@ export function renderSearch(query: string, matches: RouteRecord[]): string {
   );
 }
 
-export function renderDashboard(stats: { categories: number; leaves: number; linked: number; routes: number; sources: number; timeSensitive: number }, routes: RouteRecord[]): string {
-  const recent = routes.map(r => `<tr><td data-label="Rota"><a href="/konu/${r.slug}/"><strong>${esc(r.title)}</strong></a><br><small>${esc(r.category)}</small></td><td data-label="Durum"><span class="badge ok">Doğrulandı</span></td><td data-label="Son kontrol">${esc(r.lastVerified)}</td><td data-label="Risk">${r.timeSensitive ? `<span class="badge warn">Yüksek</span>` : "Normal"}</td></tr>`).join("");
+export function renderDashboard(stats: { categories: number; leaves: number; linked: number; routes: number; published: number; verified: number; localCheck: number; needsReview: number; sources: number; highRisk: number }, routes: RouteRecord[]): string {
+  const recent = routes.map(r => {
+    const title = r.verificationStatus === "needs-review" ? `<strong>${esc(r.title)}</strong>` : `<a href="/konu/${r.slug}/"><strong>${esc(r.title)}</strong></a>`;
+    const status = r.verificationStatus === "verified" ? `<span class="badge ok">Doğrulandı</span>` : r.verificationStatus === "local-check" ? `<span class="badge warn">Yerel kontrol</span>` : `<span class="badge closed">Yayıma kapalı</span>`;
+    const risk = r.freshnessRisk === "high" ? `<span class="badge high">Yüksek</span>` : r.freshnessRisk === "medium" ? `<span class="badge warn">Orta</span>` : "Düşük";
+    return `<tr><td data-label="Rota">${title}<br><small>${esc(r.category)}</small></td><td data-label="Durum">${status}</td><td data-label="Son kontrol">${esc(r.lastVerified)}</td><td data-label="Risk">${risk}</td></tr>`;
+  }).join("");
   return shell(
     "Yönetim Dashboard | Nereye Başvurulur?",
     "Nereye Başvurulur yönetim paneli.",
-    `<main class="wrap admin"><div class="kicker">Yönetim</div><h1>Nereye Başvurulur Dashboard</h1><p class="lead">İlk sürüm içerik kapsamı, doğrulama durumu ve yüksek riskli rotaların görünümü.</p><div class="admin-grid"><div class="metric"><strong>${stats.categories}</strong><span>Ana kategori</span></div><div class="metric"><strong>${stats.leaves}</strong><span>Menü yaprağı</span></div><div class="metric"><strong>${stats.routes}</strong><span>Doğrulanmış rota</span></div><div class="metric"><strong>${stats.timeSensitive}</strong><span>Yüksek güncellik riski</span></div></div><div class="admin-grid"><div class="metric"><strong>${stats.linked}</strong><span>Canlı rota bağlantısı</span></div><div class="metric"><strong>${stats.sources}</strong><span>Resmî kaynak kaydı</span></div><div class="metric"><strong>${stats.leaves - stats.linked}</strong><span>Doğrulama kuyruğu</span></div><div class="metric"><strong>0</strong><span>Kaynağı olmayan canlı rota</span></div></div><section class="card content"><h2>Canlı doğrulanmış rotalar</h2><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${recent}</tbody></table></div></section></main>`,
+    `<main class="wrap admin"><div class="kicker">Yönetim</div><h1>Nereye Başvurulur Dashboard</h1><p class="lead">Tüm link-tree yapraklarının veri kapsamı, yayın durumu ve güncellik riski.</p><div class="admin-grid"><div class="metric"><strong>${stats.categories}</strong><span>Ana kategori</span></div><div class="metric"><strong>${stats.leaves}</strong><span>Toplam menü yaprağı</span></div><div class="metric"><strong>${stats.published}</strong><span>Canlı rota</span></div><div class="metric"><strong>${stats.needsReview}</strong><span>Kesin yönlendirmeye kapalı</span></div></div><div class="admin-grid"><div class="metric"><strong>${stats.verified}</strong><span>Ulusal kanal doğrulandı</span></div><div class="metric"><strong>${stats.localCheck}</strong><span>Yerel yetki kontrolü gerekli</span></div><div class="metric"><strong>${stats.sources}</strong><span>Resmî kaynak bağlantısı</span></div><div class="metric"><strong>${stats.highRisk}</strong><span>Yüksek güncellik riski</span></div></div><section class="card content"><h2>226 yaprağın doğrulama envanteri</h2><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${recent}</tbody></table></div></section></main>`,
     { noindex: true, admin: true, canonical: "https://nereyebasvurulur.com/admin/dashboard/" }
   );
 }
 
 export function renderDataPage(routes: RouteRecord[]): string {
-  const rows = routes.map(r => `<tr><td data-label="Slug"><strong>${esc(r.slug)}</strong></td><td data-label="Kategori">${esc(r.category)}</td><td data-label="Kaynak">${r.sources.length}</td><td data-label="Son kontrol">${esc(r.lastVerified)}</td><td data-label="Risk">${r.timeSensitive ? `<span class="badge warn">Yüksek</span>` : "Normal"}</td></tr>`).join("");
+  const rows = routes.map(r => {
+    const status = r.verificationStatus === "verified" ? `<span class="badge ok">Doğrulandı</span>` : r.verificationStatus === "local-check" ? `<span class="badge warn">Yerel kontrol</span>` : `<span class="badge closed">Yayıma kapalı</span>`;
+    const risk = r.freshnessRisk === "high" ? `<span class="badge high">Yüksek</span>` : r.freshnessRisk === "medium" ? `<span class="badge warn">Orta</span>` : "Düşük";
+    return `<tr><td data-label="Rota"><strong>${esc(r.pathKey)}</strong><br><small>${esc(r.slug)}</small></td><td data-label="Durum">${status}</td><td data-label="Kaynak">${r.sources.length}</td><td data-label="Son kontrol">${esc(r.lastVerified)}</td><td data-label="Risk">${risk}</td></tr>`;
+  }).join("");
   return shell(
     "Veri Envanteri | Nereye Başvurulur?",
     "Yönetim veri envanteri.",
-    `<main class="wrap admin"><div class="kicker">Yönetim / Veri</div><h1>Rota veri envanteri</h1><p class="lead">Canlıya açılan her rota en az bir resmî kaynak ve son doğrulama tarihi taşımak zorunda.</p><div class="admin-links"><a class="btn primary" href="/admin/api/data">JSON verisini aç</a><a class="btn" href="/admin/dashboard/">Dashboard</a></div><section class="card content" style="margin-top:18px"><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Slug</th><th>Kategori</th><th>Kaynak</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${rows}</tbody></table></div></section></main>`,
+    `<main class="wrap admin"><div class="kicker">Yönetim / Veri</div><h1>Rota veri envanteri</h1><p class="lead">Her yaprak için veri kaydı tutulur; resmî kanalı kesinleştirilemeyen kayıt canlı bağlantı kazanmaz.</p><div class="admin-links"><a class="btn primary" href="/admin/api/data">JSON verisini aç</a><a class="btn" href="/admin/dashboard/">Dashboard</a></div><section class="card content" style="margin-top:18px"><div class="table-wrap"><table class="responsive-table"><thead><tr><th>Rota</th><th>Durum</th><th>Kaynak</th><th>Son kontrol</th><th>Risk</th></tr></thead><tbody>${rows}</tbody></table></div></section></main>`,
     { noindex: true, admin: true, canonical: "https://nereyebasvurulur.com/admin/data/" }
   );
 }

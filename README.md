@@ -35,23 +35,25 @@ Site bir makale arşivi değil, karar ağacı tabanlı bir **başvuru rotası** 
 ## Geliştirme
 
 ```bash
-npm install
-npm run check
-npm run dev
+pnpm install
+pnpm run validate
+pnpm run dev
 ```
 
-## Yayın güvenliği
+`pnpm run validate`; TypeScript, 226 yapraklık veri bütünlüğü, resmî kaynak alan adları ve Cloudflare paketleme kontrollerini birlikte çalıştırır.
 
-Proje sahibinin açık onayı olmadan canlı yayına açılmaz. Bu branch'te:
+## Yayın ve içerik güvenliği
 
-- `workers_dev` kapalıdır.
-- Custom Domain tanımlı değildir.
-- Sayfalarda `noindex,nofollow` vardır.
-- `robots.txt` tüm botları engeller.
-- sitemap geliştirme aşamasında boştur.
+Proje sahibi 20 Ağustos 2026 tarihinde canlı yayın için açık onay vermiştir. Ayrıntı `LAUNCH_LOCK.md` içindedir.
 
-Detay: `LAUNCH_LOCK.md`.
+- Yalnız `verified` ve `local-check` rotaları menüye, aramaya ve sitemap'e girer.
+- `needs-review` kayıtları admin envanterinde görünür ama kesin yönlendirme olarak yayımlanmaz.
+- Her kayıt yetkili merci, kanal, belgeler, süre/itiraz, üst başvuru, yerel yetki, hukuki dayanak, resmî kaynak, son doğrulama ve güncellik riski taşır.
+- İçerik güncellemesine yapay günlük kayıt kotası uygulanmaz.
+- Admin alanı kimlik doğrulaması ve `noindex` ile korunur.
+
+Detay: `CONTENT_VERIFICATION_POLICY.md` ve `SCOPE.md`.
 
 ## Mevcut durum
 
-İlk arayüz, basit sorun araması, örnek sorun taksonomisi ve D1 şeması hazırlanmıştır. Örnek sorunlar taslaktır; resmî kaynak doğrulaması yapılmadan yayınlanmayacaktır.
+17 ana kategori altındaki 226 link-tree yaprağının tamamı veri envanterine alınmıştır. 21 Ağustos 2026 doğrulamasında 209 rota yayıma uygundur; konu başlığı yetkili mercii kesinleştirmek için yetersiz olan 17 kayıt güvenli biçimde yayıma kapalıdır. Statik katalog canlı ürünü besler; D1 şeması sonraki veri büyümesi ve kaynak izleme için repoda tutulur.
