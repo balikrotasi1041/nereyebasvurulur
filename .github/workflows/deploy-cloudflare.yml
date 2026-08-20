@@ -51,3 +51,51 @@ jobs:
           curl --fail --show-error --silent "${base}/sitemap.xml" | grep -Fq '<urlset'
           test "$(curl --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
           echo "Live homepage, Google/Yandex verification tags, health, robots, sitemap and IndexNow key verified."
+
+      - name: Notify IndexNow
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json
+          import urllib.request
+          import xml.etree.ElementTree as ET
+
+          base = "https://nereyebasvurulur.com"
+          key = "b1493a8a691bb36804ec62b677f59d5b"
+          sitemap_url = f"{base}/sitemap.xml"
+          key_location = f"{base}/{key}.txt"
+
+          with urllib.request.urlopen(sitemap_url, timeout=20) as response:
+              xml = response.read()
+
+          root = ET.fromstring(xml)
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = [node.text.strip() for node in root.findall("sm:url/sm:loc", ns) if node.text and node.text.strip()]
+          if not urls:
+              raise SystemExit("No URLs found in sitemap; IndexNow notification aborted.")
+
+          payload = json.dumps({
+              "host": "nereyebasvurulur.com",
+              "key": key,
+              "keyLocation": key_location,
+              "urlList": urls,
+          }).encode("utf-8")
+
+          request = urllib.request.Request(
+              "https://api.indexnow.org/indexnow",
+              data=payload,
+              headers={"Content-Type": "application/json; charset=utf-8"},
+              method="POST",
+          )
+          try:
+              with urllib.request.urlopen(request, timeout=30) as response:
+                  status = response.status
+          except urllib.error.HTTPError as exc:
+              status = exc.code
+              if status not in (200, 202):
+                  raise
+
+          if status not in (200, 202):
+              raise SystemExit(f"IndexNow returned unexpected HTTP {status}")
+          print(f"IndexNow accepted {len(urls)} URLs with HTTP {status}.")
+          PY
