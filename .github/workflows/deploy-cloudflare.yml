@@ -26,8 +26,7 @@ jobs:
         uses: actions/checkout@v6
 
       - name: Deploy Worker to Cloudflare
-        uses: cloudflare/wrangler-action@v3
-        with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          accountId: 5babf073b0ff52a7b1f5a4626301ec82
-          command: deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 5babf073b0ff52a7b1f5a4626301ec82
+        run: npx --yes wrangler@latest deploy
