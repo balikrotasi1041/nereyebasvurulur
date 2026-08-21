@@ -35,6 +35,7 @@ export type RouteRecord = {
   legalBasis: string[];
   caution?: string;
   currentCycleNote?: string;
+  publicationBlocker?: string;
   sources: Source[];
   lastVerified: string;
   freshnessRisk: FreshnessRisk;

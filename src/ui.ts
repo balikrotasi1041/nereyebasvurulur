@@ -440,7 +440,8 @@ export function renderDataPage(routes: RouteRecord[]): string {
   const rows = routes.map(r => {
     const status = r.verificationStatus === "verified" ? `<span class="badge ok">Doğrulandı</span>` : r.verificationStatus === "local-check" ? `<span class="badge warn">Yerel kontrol</span>` : `<span class="badge closed">Yayıma kapalı</span>`;
     const risk = r.freshnessRisk === "high" ? `<span class="badge high">Yüksek</span>` : r.freshnessRisk === "medium" ? `<span class="badge warn">Orta</span>` : "Düşük";
-    return `<tr><td data-label="Rota"><strong>${esc(r.pathKey)}</strong><br><small>${esc(r.slug)}</small></td><td data-label="Durum">${status}</td><td data-label="Kaynak">${r.sources.length}</td><td data-label="Son kontrol">${esc(r.lastVerified)}</td><td data-label="Risk">${risk}</td></tr>`;
+    const blocker = r.publicationBlocker ? `<br><small>Eksik kapsam: ${esc(r.publicationBlocker)}</small>` : "";
+    return `<tr><td data-label="Rota"><strong>${esc(r.pathKey)}</strong><br><small>${esc(r.slug)}</small>${blocker}</td><td data-label="Durum">${status}</td><td data-label="Kaynak">${r.sources.length}</td><td data-label="Son kontrol">${esc(r.lastVerified)}</td><td data-label="Risk">${risk}</td></tr>`;
   }).join("");
   return shell(
     "Veri Envanteri | Nereye Başvurulur?",

@@ -32,6 +32,7 @@ type RouteDraft = {
   freshnessRisk: FreshnessRisk;
   caution?: string;
   currentCycleNote?: string;
+  publicationBlocker?: string;
 };
 
 const src = (title: string, url: string, authority: string): Source => ({ title, url, authority });
@@ -39,7 +40,7 @@ const portal = (label: string, url: string, note?: string): ApplicationChannel =
 const eGov = (label: string, url: string, note?: string): ApplicationChannel => ({ type: "e-government", label, url, note });
 const office = (label: string, note?: string): ApplicationChannel => ({ type: "in-person", label, note });
 const phone = (label: string, note?: string): ApplicationChannel => ({ type: "phone", label, note });
-const legislation = (number: string, title: string): Source => src(title, `https://www.mevzuat.gov.tr/mevzuatmetin/1.5.${number}.pdf`, "Mevzuat Bilgi Sistemi");
+const legislation = (number: string, title: string, series = "1.5"): Source => src(title, `https://www.mevzuat.gov.tr/MevzuatMetin/${series}.${number}.pdf`, "Mevzuat Bilgi Sistemi");
 
 const S = {
   socialAid: src("Sosyal Yardımlar Genel Müdürlüğü - Sıkça Sorulan Sorular", "https://www.aile.gov.tr/sss/sosyal-yardimlar-genel-mudurlugu/", "Aile ve Sosyal Hizmetler Bakanlığı"),
@@ -49,32 +50,42 @@ const S = {
   childGuide: src("Çocuk Hizmetleri Rehberi", "https://aile.gov.tr/media/278421/hizmet_rehber_cocuk_hizmetleri.pdf", "Aile ve Sosyal Hizmetler Bakanlığı"),
   disabilityReports: src("Engelliler İçin Sağlık Kurulu Raporları", "https://www.aile.gov.tr/sss/engelli-ve-yasli-hizmetleri-genel-mudurlugu/engelliler-icin-saglik-kurulu-raporlari/", "Aile ve Sosyal Hizmetler Bakanlığı"),
   homeCare: src("Evde Bakım Yardımı Yönetmeliği", "https://www.aile.gov.tr/eyhgm/mevzuat/ulusal-mevzuat/yonetmelikler/evde-bakim-yardimi-yonetmeligi-1/", "Aile ve Sosyal Hizmetler Bakanlığı"),
+  homeCare2026: src("Evde Bakım Yardımı Yönetmeliğinde 2026 Değişikliği", "https://www.resmigazete.gov.tr/eskiler/2026/01/20260116-1.htm", "Resmî Gazete"),
   sgk: src("Sosyal Güvenlik Kurumu e-Devlet hizmetleri", "https://www.turkiye.gov.tr/sosyal-guvenlik-kurumu", "e-Devlet / Sosyal Güvenlik Kurumu"),
   sgkMalulluk: src("Malullük", "https://www.sgk.gov.tr/Content/Post/e09fc8f2-f550-4cd7-840c-a812d94d0f62/Malulluk-2022-05-14-09-10-33", "Sosyal Güvenlik Kurumu"),
   sgkOlum: src("Ölüm Aylığı", "https://www.sgk.gov.tr/Content/Post/70fa4a38-aaf1-4f86-aa55-54fdbf4e2481/Olum-Ayligi-2025-02-26-02-56-02", "Sosyal Güvenlik Kurumu"),
+  disabledRetirement2025: src("7538 sayılı Kanun - Engelli emekliliği geçiş değişikliği", "https://www.resmigazete.gov.tr/eskiler/2025/01/20250115-1.htm", "Resmî Gazete"),
   nvi: src("NVİ e-Başvurular", "https://nvi.gov.tr/e-basvurular", "Nüfus ve Vatandaşlık İşleri Genel Müdürlüğü"),
   nviEGov: src("NVİ e-Devlet hizmetleri", "https://www.turkiye.gov.tr/nufus-ve-vatandaslik-isleri-genel-mudurlugu", "e-Devlet / Nüfus ve Vatandaşlık İşleri Genel Müdürlüğü"),
   nviId: src("T.C. Kimlik Kartı Sıkça Sorulan Sorular", "https://www.nvi.gov.tr/sss-kimlik-karti", "Nüfus ve Vatandaşlık İşleri Genel Müdürlüğü"),
   meb: src("Millî Eğitim Bakanlığı e-Devlet hizmetleri", "https://www.turkiye.gov.tr/milli-egitim-bakanligi", "e-Devlet / Millî Eğitim Bakanlığı"),
   eokul: src("e-Okul Yönetim Bilgi Sistemi", "https://e-okul.meb.gov.tr/", "Millî Eğitim Bakanlığı"),
   osymYks: src("2026 YKS Kılavuzu ve Başvuru Bilgileri", "https://www.osym.gov.tr/2026yks-basvurularin-alinmasi", "ÖSYM"),
+  osymYksGuideIndex: src("2026 YKS Kılavuzu", "https://www.osym.gov.tr/2026yuksekogretim-kurumlari-sinavi-yks-kilavuzu", "ÖSYM"),
   osymGuide: src("2026 YKS Başvuru Kılavuzu", "https://dokuman.osym.gov.tr/pdfdokuman/2026/YKS/basvuru_kilavuz06022026.pdf", "ÖSYM"),
+  osymYksResults: src("2026 YKS Sonuçları", "https://www.osym.gov.tr/2026-yks-sonuclari-aciklandi", "ÖSYM"),
+  osymYksPlacement: src("2026 YKS Yerleştirme Sonuçları", "https://www.osym.gov.tr/2026-yks-yerlestirme-sonuclari-aciklandi", "ÖSYM"),
+  mebLgs: src("2026 LGS Başvuru ve Uygulama Kılavuzu Duyurusu", "https://odsgm.meb.gov.tr/www/sinavla-ogrenci-alacak-ortaogretim-kurumlarina-iliskin-merkezi-sinav-basvuru-ve-uygulama-kilavuzu-yayimlandi/icerik/1560", "Millî Eğitim Bakanlığı"),
+  mebLgsGuide: src("2026 LGS Başvuru ve Uygulama Kılavuzu", "https://odsgm.meb.gov.tr/meb_iys_dosyalar/2026_04/69cfb9daaf8f2557696260_LGS_Basvuru_ve_Uygulama_K%C4%B1lavuzu_2026.pdf", "Millî Eğitim Bakanlığı"),
   yok: src("Yükseköğretim Kurulu e-Devlet hizmetleri", "https://www.turkiye.gov.tr/yuksekogretim-kurulu-baskanligi", "e-Devlet / YÖK"),
-  yokTransfer: src("YÖK Ek Madde 1 Yatay Geçiş Uygulama İlkeleri", "https://www.yok.gov.tr/ogrenci/guz-ve-bahar-donemi-ek-madde-1-uygulama-ilkeleri", "Yükseköğretim Kurulu"),
+  yokTransfer: src("YÖK Ek Madde 1 Yatay Geçiş Uygulama İlkeleri", "https://egitim.yok.gov.tr/documentFiles/1779278338729.guz-ve-bahar-donemi-ek-madde-1-uygulama-ilkeleri.pdf", "Yükseköğretim Kurulu"),
   gsb: src("Gençlik ve Spor Bakanlığı", "https://www.gsb.gov.tr/", "Gençlik ve Spor Bakanlığı"),
   gsbEGov: src("Gençlik ve Spor Bakanlığı e-Devlet hizmetleri", "https://www.turkiye.gov.tr/genclik-ve-spor-bakanligi", "e-Devlet / Gençlik ve Spor Bakanlığı"),
   tkgm: src("Tapu İşlemlerinde Dikkat Edilecek Hususlar", "https://www.tkgm.gov.tr/tapu-islemlerinde-dikkat-edilecek-hususlar", "Tapu ve Kadastro Genel Müdürlüğü"),
   webTapu: src("Web Tapu", "https://www.tkgm.gov.tr/tapu-db/webtapu", "Tapu ve Kadastro Genel Müdürlüğü"),
   tkgmFaq: src("TKGM Sıkça Sorulan Sorular", "https://www.tkgm.gov.tr/sss", "Tapu ve Kadastro Genel Müdürlüğü"),
-  building: src("Planlı Alanlar İmar Yönetmeliği", "https://webdosya.csb.gov.tr/db/tabiat/icerikler/planli-20210811131259.pdf", "Çevre, Şehircilik ve İklim Değişikliği Bakanlığı"),
+  plannedAreas: src("Planlı Alanlar İmar Yönetmeliği", "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.23722.pdf", "Mevzuat Bilgi Sistemi"),
+  spatialPlans: src("Mekânsal Planlar Yapım Yönetmeliği", "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.19788.pdf", "Mevzuat Bilgi Sistemi"),
   risky: src("Riskli Yapılar - Sıkça Sorulan Sorular", "https://csb.gov.tr/sss-detay/3096", "Çevre, Şehircilik ve İklim Değişikliği Bakanlığı"),
-  riskyReg: src("6306 Sayılı Kanunun Uygulama Yönetmeliği", "https://webdosya.csb.gov.tr/db/altyapi/icerikler/7.5.16849-20230131125117.pdf", "Çevre, Şehircilik ve İklim Değişikliği Bakanlığı"),
+  riskyReg: src("6306 Sayılı Kanunun Uygulama Yönetmeliği", "https://www.mevzuat.gov.tr/MevzuatMetin/yonetmelik/7.5.16849.pdf", "Mevzuat Bilgi Sistemi"),
   gib: src("Gelir İdaresi Başkanlığı e-Devlet hizmetleri", "https://www.turkiye.gov.tr/gelir-idaresi-baskanligi", "e-Devlet / Gelir İdaresi Başkanlığı"),
   gibMtv: src("MTV ve Trafik İdari Para Cezaları", "https://istanbul.gib.gov.tr/vergi-konulari/1_bireysel/4_motorlu_tasitlar_vergisi_mtv_ve_trafik_idari_para_cezalari_tpc/4", "Gelir İdaresi Başkanlığı"),
   licenseReg: src("İşyeri Açma ve Çalışma Ruhsatlarına İlişkin Yönetmelik", "https://icisleri.gov.tr/kurumlar/icisleri.gov.tr/IcSite/strateji/yikob-panel/mevzuat/Atiflar/6-_-Isyeri-Acma-ve-Calisma-Ruhsatlarina-Iliskin-Yonetmelik.pdf", "İçişleri Bakanlığı"),
   eMunicipality: src("E-Belediye Bilgi Sistemi", "https://icisleri.gov.tr/e-belediye-bilgi-sistemi", "İçişleri Bakanlığı"),
   agriculture: src("Tarım Reformu Genel Müdürlüğü e-Hizmetler", "https://www.tarimorman.gov.tr/TRGM/Menu/49/E-Hizmetler", "Tarım ve Orman Bakanlığı"),
   agricultureOffices: src("İl Tarım ve Orman Müdürlükleri", "https://www.tarimorman.gov.tr/Iletisim/Il_Mudurlukleri/", "Tarım ve Orman Bakanlığı"),
+  cks2026: src("2026 Üretim Yılı ÇKS Başvuru Takvimi", "https://sivas.tarimorman.gov.tr/Sayfalar/Detay.aspx?TermStoreId=368e785b-af33-487d-a98d-c11d5495130b&TermId=778cbf3b-4e47-427a-b741-eb0ab1e00d68&UrlSuffix=827/2026-Uretim-Yili-Ciftci-Kayit-Sistemi-_cks_-Basvurulari-Basliyor", "Tarım ve Orman Bakanlığı"),
+  cksProductUpdate2026: src("2026 Üretim Yılı ÇKS Ürün Güncelleme Takvimi", "https://mus.tarimorman.gov.tr/Sayfalar/Detay.aspx?OgeId=357&Liste=Duyuru", "Tarım ve Orman Bakanlığı"),
   forest: src("Orman Genel Müdürlüğü Kamu Hizmet Başvurusu", "https://www.ogm.gov.tr/tr/kamu-hizmet-basvurusu", "Orman Genel Müdürlüğü"),
   municipalities: src("Yerel Yönetimlerin Sunduğu e-Hizmetler", "https://www.turkiye.gov.tr/belediyeler", "e-Devlet / Yerel Yönetimler"),
   water: src("Su ve Kanalizasyon İşletmelerinin e-Hizmetleri", "https://www.turkiye.gov.tr/su-ve-kanalizasyon-sirketleri", "e-Devlet / Yerel Hizmet Kurumları"),
@@ -98,6 +109,7 @@ const S = {
   msbPersonnel: src("MSB Personel Temin Sistemi", "https://personeltemin.msb.gov.tr/", "Millî Savunma Bakanlığı"),
   msbPersonnelInfo: src("MSB Personel Temini Başvuru ve Giriş Koşulları", "https://personeltemin.msb.gov.tr/Anasayfa/Icerikweb/MDS02?menuItem=1000000", "Millî Savunma Bakanlığı"),
   osymMsu: src("2026-MSÜ Kılavuz ve Başvuru Bilgileri", "https://www.osym.gov.tr/2026msu-kilavuz-ve-basvuru-bilgileri", "ÖSYM"),
+  osymMsuGuide: src("2026-MSÜ Başvuru Kılavuzu", "https://dokuman.osym.gov.tr/pdfdokuman/2026/MSU/kilavuz_msd06012026.pdf", "ÖSYM"),
   msuSelection: src("MSÜ 2026 Askerî Öğrenci Temini Seçim Aşamaları", "https://personeltemin.msb.gov.tr/AnaSayfa/DuyuruDetay/?id=2ce1749e-372e-4d51-a805-0c91f4f16952", "Millî Savunma Bakanlığı"),
   jandarmaStudent: src("2026 JSGA Güvenlik Bilimleri Fakültesi ve JAMYO Öğrenci Temini", "https://www.jandarma.gov.tr/2026-yili-guvenlik-bilimleri-fakultesi-ve-jandarma-astsubay-meslek-yuksekokuluna-ogrenci-temini", "Jandarma Genel Komutanlığı"),
   jandarmaExpert: src("2026 Jandarma Uzman Erbaş Temini", "https://jandarma.gov.tr/2026-yili-uzman-erbas-temini", "Jandarma Genel Komutanlığı"),
@@ -113,15 +125,15 @@ const L = {
   population: legislation("5490", "5490 sayılı Nüfus Hizmetleri Kanunu"),
   education: legislation("1739", "1739 sayılı Millî Eğitim Temel Kanunu"),
   higherEducation: legislation("2547", "2547 sayılı Yükseköğretim Kanunu"),
-  landRegistry: legislation("2644", "2644 sayılı Tapu Kanunu"),
+  landRegistry: legislation("2644", "2644 sayılı Tapu Kanunu", "1.3"),
   cadastre: legislation("3402", "3402 sayılı Kadastro Kanunu"),
   zoning: legislation("3194", "3194 sayılı İmar Kanunu"),
   transformation: legislation("6306", "6306 sayılı Kanun"),
-  taxProcedure: legislation("213", "213 sayılı Vergi Usul Kanunu"),
+  taxProcedure: legislation("213", "213 sayılı Vergi Usul Kanunu", "1.4"),
   municipality: legislation("5393", "5393 sayılı Belediye Kanunu"),
   agriculture: legislation("5488", "5488 sayılı Tarım Kanunu"),
   pasture: legislation("4342", "4342 sayılı Mera Kanunu"),
-  forest: legislation("6831", "6831 sayılı Orman Kanunu"),
+  forest: legislation("6831", "6831 sayılı Orman Kanunu", "1.3"),
   information: legislation("4982", "4982 sayılı Bilgi Edinme Hakkı Kanunu"),
   petition: legislation("3071", "3071 sayılı Dilekçe Hakkının Kullanılmasına Dair Kanun"),
   administrativeProcedure: legislation("2577", "2577 sayılı İdari Yargılama Usulü Kanunu"),
@@ -151,6 +163,18 @@ function genericSteps(draft: RouteDraft): string[] {
 }
 
 function reviewDraft(ctx: LeafContext): RouteDraft {
+  const blockerByLabel: Record<string, string> = {
+    "Çocuk destekleri": "Aranan desteğin adı (nakdî yardım, SED, eğitim, koruma veya başka program), çocuğun yaşı, hane durumu ve il belirtilmelidir.",
+    "Yaşlı sosyal destekleri": "Evde destek, bakım, 65 yaş aylığı, ulaşım veya başka hizmetten hangisinin arandığı; yaş, gelir/hane ve il bilgisi belirtilmelidir.",
+    "Vergi indirimi / muafiyet süreçleri": "Verginin ve avantajın tam adı, engellilik raporu/ÇÖZGER türü, çalışma statüsü ve işlemi yapan kurum belirtilmelidir.",
+    "Ulaşım hakları": "Şehir içi toplu taşıma, TCDD, havayolu veya başka ulaşım türü; kart/indirim türü ve il belirtilmelidir.",
+    "Faaliyet izni": "Faaliyetin sektör/NACE türü, işyeri adresi, özel alan statüsü ve istenen izin adı belirtilmelidir.",
+    "Genel kamu izni": "İzin konusu, başvuracak kişi/kuruluş, faaliyet yeri ve özel mevzuat belirtilmelidir.",
+    "Özel amaçlı izin": "İznin amacı, faaliyet/alan, başvuracak kişi/kuruluş ve yetkili sektör kurumu belirtilmelidir.",
+    "Sertifika": "Sertifikanın tam adı, meslek/sektör, başvuracak kişi/kuruluş ve düzenleyen kurum belirtilmelidir.",
+    "Yetki belgesi": "Yetki belgesinin tam adı, sektör/faaliyet, şirket/kişi statüsü ve düzenleyen kurum belirtilmelidir.",
+    "Resmî statü başvurusu": "İstenen statünün hukuki adı, başvuracak kişi/kuruluş, dayanak program ve yetkili kurum belirtilmelidir."
+  };
   return {
     summary: `${ctx.label} başlığı tek başına görevli merci, belge ve süreyi güvenle belirlemek için yeterince özgül değildir. İşlem türü ve varsa sektör/kurum belirtilmeden kesin yönlendirme yayımlanmaz.`,
     verificationStatus: "needs-review",
@@ -163,7 +187,8 @@ function reviewDraft(ctx: LeafContext): RouteDraft {
     legalBasis: ["İşleme özgü kanun, yönetmelik veya ilan henüz belirlenmedi"],
     sources: [S.cimer],
     freshnessRisk: "high",
-    caution: "Bu kayıt veri envanterinde tamamlanmış bir doğrulama uyarısıdır; canlıda kesin yönlendirme olarak yayımlanmaz."
+    caution: "Bu kayıt veri envanterinde tamamlanmış bir doğrulama uyarısıdır; canlıda kesin yönlendirme olarak yayımlanmaz.",
+    publicationBlocker: blockerByLabel[ctx.label] || "İşlemin tam adı, uygulayan kurum/sektör, işlem veya karar tarihi ve il/ilçe bilgisi olmadan görevli merci, süre, belge ve üst başvuru yolu doğrulanamaz."
   };
 }
 
@@ -184,17 +209,18 @@ function socialDraft(ctx: LeafContext): RouteDraft {
   };
 
   if (ctx.label === "Doğum yardımı") return {
-    summary: "Yeni doğum yardımı başvurusu hak sahibinin e-Devlet hesabından yapılır; elektronik başvuru imkânı olmayanlara Aile ve Sosyal Hizmetler İl Müdürlüğü veya Sosyal Hizmet Merkezi destek verir.",
+    summary: "1 Ocak 2025 ve sonrasında canlı doğan Türk vatandaşı çocuk için yeni doğum yardımı hak sahibinin e-Devlet hesabından istenir; e-Devlet kullanamayanlara İl Müdürlüğü veya Sosyal Hizmet Merkezi başvuru desteği verir.",
     verificationStatus: "verified",
     competentAuthorities: ["Aile ve Sosyal Hizmetler Bakanlığı", "Aile ve Sosyal Hizmetler İl Müdürlüğü / Sosyal Hizmet Merkezi"],
     applicationChannels: [eGov("Doğum Yardımı Başvuru", "https://www.turkiye.gov.tr/aile-ve-sosyal-hizmetler-bakanligi"), office("İl Müdürlüğü veya Sosyal Hizmet Merkezi", "e-Devlet kullanamayanlar için başvuru desteği")],
-    requiredDocuments: ["Başvuru sahibinin kimlik doğrulaması", "Çocuğun nüfus kaydının tamamlanmış olması", "Sistemde istenirse hak sahipliği ve ikamet bilgileri"],
-    deadlineAndAppeal: "Hak ve başvuru koşulları çocuğun doğum tarihine ve yardım türüne göre güncel düzenlemeden kontrol edilmelidir; kesilen düzenli yardım için yeniden başvuru imkânı resmî SSS'de ayrıca açıklanır.",
+    requiredDocuments: ["Başvuru sahibinin kimlik doğrulaması", "Çocuğun nüfus kaydının tamamlanmış olması", "Hak sahibi ile çocuğun Türkiye'de ikamet kaydı", "Sistemde istenirse velayet/hak sahipliği bilgileri"],
+    deadlineAndAppeal: "İlk çocuk için tek seferlik ödeme iade edilmişse çocuğun 12'nci ayı dolmadan yeniden başvuru yapılabilir. İkinci ve sonraki çocukların düzenli ödemesi kesilip iade edilmişse çocuk 60 aylık olmadan yeniden başlatma istenebilir; iade edilen eski aylar geriye dönük ödenmez.",
     escalation: ["İl Müdürlüğü / Sosyal Hizmet Merkezinden kayıt incelemesi", "Bakanlığın resmî başvuru kanalı"],
     locationLogic: "Hak sahibi ve çocuğun Türkiye'de ikamet koşulu güncel yardım düzeninde kontrol edilir; fizikî destek ikamet ilindeki birimden alınır.",
     legalBasis: ["633 sayılı KHK", "Doğum Yardımı Yönetmeliği ve güncel uygulama esasları"],
     sources: [S.birthAid, S.familyEGov, L.socialServices],
-    freshnessRisk: "high"
+    freshnessRisk: "high",
+    currentCycleNote: "21 Ağustos 2026 kontrolünde tutarlar: ilk çocuk için bir defalık 5.000 TL; ikinci çocuk için başvuru ayından 60'ıncı aya kadar aylık 1.500 TL; üçüncü ve sonraki çocuklar için aynı dönemde aylık 5.000 TL. Çekilmeyen ödeme altı ay sonunda iade edilir; işlem günü resmî ekrandaki tutar yeniden kontrol edilmelidir."
   };
 
   if (ctx.label === "Sosyal ve Ekonomik Destek (SED)") return {
@@ -254,7 +280,8 @@ function disabilityDraft(ctx: LeafContext): RouteDraft {
     locationLogic: "İtiraz ikamet edilen il veya raporun alındığı ilin İl Sağlık Müdürlüğüne yapılabilir; sevk edilecek hastaneyi Müdürlük belirler.",
     legalBasis: ["Erişkinler İçin Engellilik Değerlendirmesi Hakkında Yönetmelik", "Çocuklar İçin Özel Gereksinim Değerlendirmesi Hakkında Yönetmelik"],
     sources: [S.disabilityReports, L.disability],
-    freshnessRisk: "high"
+    freshnessRisk: "high",
+    currentCycleNote: "30 günlük itiraz, hastaneye değil ikamet edilen veya raporun alındığı İl Sağlık Müdürlüğüne yapılır. Müdürlük farklı yetkili hastaneye sevk eder; raporlar farklı kalırsa hakem hastane süreci işler. ÇÖZGER için çocuk adına bakım veren kişi de itiraz edebilir."
   };
 
   if (ctx.label === "Engelli kimlik kartı") return {
@@ -277,12 +304,14 @@ function disabilityDraft(ctx: LeafContext): RouteDraft {
     competentAuthorities: ["Aile ve Sosyal Hizmetler İl Müdürlüğü", "Sosyal Hizmet Merkezi"],
     applicationChannels: [office("İkamet yerindeki İl Müdürlüğü veya Sosyal Hizmet Merkezi"), eGov("Aile ve Sosyal Hizmetler Bakanlığı hizmetleri", "https://www.turkiye.gov.tr/aile-ve-sosyal-hizmetler-bakanligi")],
     requiredDocuments: ["Kimlik ve ikamet bilgileri", "Güncel uygun engelli sağlık kurulu raporu/ÇÖZGER", "Hane gelir ve mal varlığı bilgileri", "Vasilik kararı gerekiyorsa karar", "IBAN ve kurumca istenen ek belgeler"],
-    deadlineAndAppeal: "Genel başvuru için tek son gün yoktur. Evde bakım yardımının kontrol sonucu sonlandırılmasına karşı tebliğden itibaren 30 gün içinde değerlendirmeyi yapan İl Müdürlüğü veya Sosyal Hizmet Merkezine itiraz edilebilir.",
+    deadlineAndAppeal: "İlk başvuruda bildirilen belgeler 30 gün içinde tamamlanmalıdır. Ret veya kontrol sonucu sonlandırma kararına karşı tebliğden itibaren 30 gün içinde değerlendirmeyi yapan İl Müdürlüğü/Sosyal Hizmet Merkezine itiraz edilir; dosya ikinci heyetçe incelenir ve bu karar Yönetmelik uyarınca kesindir.",
     escalation: ["İkinci heyet incelemesi için süresinde itiraz", "Nihai karara karşı tebliğde gösterilen idari yargı yolu"],
-    locationLogic: "Fiilî ikamet ve hanenin bulunduğu yerde sosyal inceleme yapılır; adres değişikliği bir ay içinde bildirilmelidir.",
+    locationLogic: "Fiilî ikamet ve hanenin bulunduğu yerde sosyal inceleme yapılır. İl dışı adres değişikliğinde yardım durdurulur; nakil/yeni il işlemi 90 gün içinde tamamlanmazsa yardım sonlandırılır. Bildirim yükümlülüğü doğuran diğer değişiklikler bir ay içinde bildirilmelidir.",
     legalBasis: ["2828 sayılı Sosyal Hizmetler Kanunu", "Evde Bakım Yardımı Yönetmeliği"],
-    sources: [S.homeCare, S.disabilityReports, L.socialServices],
-    freshnessRisk: "high"
+    sources: [S.homeCare, S.homeCare2026, S.disabilityReports, L.socialServices],
+    freshnessRisk: "high",
+    currentCycleNote: "16 Ocak 2026 değişikliğiyle hanedeki ikinci ve sonraki bakıma ihtiyacı olan her engelli kişi gelir hesabında iki kişi sayılır; öğrenim kredisi, doğum yardımı ve 3308 sayılı Kanun kapsamındaki stajyer ücretleri gelir hesabı dışında bırakılmıştır. Gelir sınırı kişi başına net asgari ücretin üçte ikisidir; tutar başvuru gününde yeniden hesaplanmalıdır.",
+    caution: "Yedek bakıcıyla bakım yılda en fazla 30 gün, kurumda geçici bakım yılda en fazla 30 gün; gündüz hizmet merkezi ayda en fazla 72 saat olabilir. Hak doğuran/sona erdiren koşul ve güncel gelir tutarı yerel heyetçe dosya üzerinde doğrulanır."
   };
 
   if (["RAM başvurusu", "Özel eğitim değerlendirmesi", "Eğitim destekleri"].includes(ctx.label)) return {
@@ -297,13 +326,30 @@ function disabilityDraft(ctx: LeafContext): RouteDraft {
     legalBasis: ["5378 sayılı Engelliler Hakkında Kanun", "Özel Eğitim Hizmetleri Yönetmeliği"],
     sources: [S.meb, S.disabilityReports, L.disability, L.education],
     freshnessRisk: "medium",
-    caution: ctx.label === "Eğitim destekleri" ? "Destek türü belirtilmediği için bu yaprak kesin yardım yönlendirmesi olarak yayımlanmaz." : undefined
+    caution: ctx.label === "Eğitim destekleri" ? "Destek türü belirtilmediği için bu yaprak kesin yardım yönlendirmesi olarak yayımlanmaz." : undefined,
+    publicationBlocker: ctx.label === "Eğitim destekleri" ? "Özel eğitim okul/kurum desteği, rehabilitasyon desteği, taşıma, burs veya başka bir programdan hangisinin arandığı; öğrencinin yaşı, eğitim kademesi ve ili belirtilmelidir." : undefined
   };
 
   return reviewDraft(ctx);
 }
 
 function sgkDraft(ctx: LeafContext): RouteDraft {
+  if (ctx.label === "Engelli emekliliği") return {
+    summary: "Engellilik nedeniyle yaşlılık aylığı SGK tarafından ilk sigortalılık tarihi, 4/a-4/b-4/c statüsü, prim günleri ve SGK Sağlık Kurulunun çalışma gücü kaybı tespiti birlikte değerlendirilerek bağlanır; vergi indirimi belgesi tek başına yeni aylık hakkı kurmaz.",
+    verificationStatus: "verified",
+    competentAuthorities: ["Sosyal Güvenlik İl Müdürlüğü / Sosyal Güvenlik Merkezi", "Sağlık değerlendirmesinde SGK Sağlık Kurulu"],
+    applicationChannels: [eGov("SGK hizmet dökümü ve aylık başvuru hizmetleri", "https://www.turkiye.gov.tr/sosyal-guvenlik-kurumu"), office("Sigortalı dosyasının bulunduğu veya yetkili SGK ünitesi")],
+    requiredDocuments: ["Kimlik ve tahsis talebi", "İlk sigortalılık tarihi ile 4/a-4/b-4/c hizmet dökümü", "Birden fazla statü varsa hizmet birleştirme kayıtları", "SGK sevki üzerine istenen sağlık kurulu raporu, epikriz ve tetkikler", "Geçiş hükmü ileri sürülüyorsa eski vergi indirimi/engellilik ve tahsis kayıtları"],
+    deadlineAndAppeal: "Sürekli açık yıllık bir başvuru takvimi yoktur; koşullar tamamlandığında SGK'ya tahsis talebi verilir. Ret veya sağlık kurulu kararı için yazıdaki kurum içi itiraz/yeniden inceleme süresi ve görevli iş mahkemesi yolu karar türüne göre ayrıca uygulanır.",
+    escalation: ["SGK ünitesinden sigortalılık statüsü ve hesap cetvelinin yazılı açıklaması", "SGK sağlık kurulu/itiraz sağlık kurulu yolu uygulanıyorsa süresinde itiraz", "Görevli iş mahkemesi"],
+    locationLogic: "e-Devlet kayıt kontrolü ulusaldır; tahsis ve sağlık sevki sigortalı dosyasının bulunduğu/yetkili SGK ünitesince yürütülür.",
+    legalBasis: ["5510 sayılı Kanun m.28 ve Geçici m.10", "7538 sayılı Kanun m.15"],
+    sources: [S.sgk, L.sgk, S.disabledRetirement2025],
+    freshnessRisk: "high",
+    currentCycleNote: "15 Ocak 2025'te yayımlanan 7538 sayılı Kanun, 5510 Geçici m.10'daki yeni vergi-indirimi temelli 4/a başvuru geçişini kaldırdı; daha önce bu yolla bağlanmış aylıklar devam eder. Güncel m.28'de SGK çalışma gücü kaybı %50-59 için 16 yıl/4.320 gün, %40-49 için 18 yıl/4.680 gün; sigortalılıktan önceki ağır hastalık/engellilik nedeniyle malullük aylığı alamayan belirli kişiler için 15 yıl/3.960 gün öngörülür. Geçici m.10 kapsamındaki 4/a geçişinde 15 yıl/3.600 gün kuralı ayrıca dosya tarihine göre incelenir.",
+    caution: "Bu eşikler bütün kişiler için tek formül değildir. İlk sigorta tarihi, son sigortalılık statüsü, hizmet birleştirmesi ve kaybın başlangıç tarihi görülmeden kişiye kesin hak tarihi veya aylık tutarı söylenemez."
+  };
+
   const isMalul = ctx.label === "Malulen emeklilik";
   const isDeath = ["Dul aylığı", "Yetim aylığı", "Ölüm aylığı"].includes(ctx.label);
   const isBorrow = ["Askerlik borçlanması", "Doğum borçlanması"].includes(ctx.label);
@@ -314,7 +360,7 @@ function sgkDraft(ctx: LeafContext): RouteDraft {
     : "Sosyal Güvenlik İl Müdürlüğü / Sosyal Güvenlik Merkezi";
   return {
     summary: ctx.label + " işlemi sigortalılık statüsü ve kişisel hizmet kaydına göre SGK tarafından değerlendirilir" + (ctx.label === "Gelir testi" ? "; gelir testi başvurusu ise ikamet yerindeki SYDV'ye yapılır." : "."),
-    verificationStatus: ctx.label === "Engelli emekliliği" ? "needs-review" : "verified",
+    verificationStatus: "verified",
     competentAuthorities: [authority],
     applicationChannels: [eGov("SGK " + ctx.label + " hizmetleri", "https://www.turkiye.gov.tr/sosyal-guvenlik-kurumu"), office(authority)],
     requiredDocuments: isMalul
@@ -337,10 +383,7 @@ function sgkDraft(ctx: LeafContext): RouteDraft {
       : "e-Devlet ulusal kanaldır; fizikî işlem sigortalının dosyasının bulunduğu veya en yakın yetkili SGK ünitesinde yürütülür.",
     legalBasis: ["5510 sayılı Sosyal Sigortalar ve Genel Sağlık Sigortası Kanunu", ...(isBorrow ? ["Sosyal Sigorta İşlemleri Yönetmeliği"] : [])],
     sources: [S.sgk, L.sgk, ...(isMalul ? [S.sgkMalulluk] : []), ...(isDeath ? [S.sgkOlum] : [])],
-    freshnessRisk: ["Engelli emekliliği", "Yaşlılık emekliliği", "Emekli aylığı", "GSS"].includes(ctx.label) ? "high" : "medium",
-    caution: ctx.label === "Engelli emekliliği"
-      ? "Bu ifade birden fazla sigortalılık ve vergi/çalışma gücü rejimini kapsar; başlangıç tarihi ve statü bilinmeden kesin koşul yayımlanmaz."
-      : undefined
+    freshnessRisk: ["Yaşlılık emekliliği", "Emekli aylığı", "GSS"].includes(ctx.label) ? "high" : "medium"
   };
 }
 
@@ -419,23 +462,46 @@ function educationDraft(ctx: LeafContext): RouteDraft {
   };
 
   if (exam) {
-    const osym = ["YKS", "Sınav sonucu itirazı", "Yerleştirme işlemleri"].includes(ctx.label);
+    if (["Sınav sonucu itirazı", "Yerleştirme işlemleri"].includes(ctx.label)) return {
+      summary: `${ctx.label} başlığı sınavın adı ve yılı belirtilmeden yetkili kurumu, elektronik kanalı ve kısa süreyi güvenle belirlemeye yetmez; bu genel rota yayıma kapalıdır.`,
+      verificationStatus: "needs-review",
+      competentAuthorities: ["Sınavı yapan ve sonucu/yerleştirmeyi açıklayan kurum (sınav adı bilinmeden belirlenemez)"],
+      applicationChannels: [{ type: "other", label: "Sınav ve dönem belirlenene kadar yayıma kapalı" }],
+      requiredDocuments: ["Sınavın tam adı", "Sınav yılı/dönemi", "Aday ve sonuç belgesi", "Sonucun açıklandığı tarih", "İtiraz edilecek soru/puan/yerleştirme işlemi"],
+      deadlineAndAppeal: "MEB, ÖSYM, üniversite ve diğer kurumların sınavlarında farklı ve çok kısa süreler vardır; sınav belirlenmeden gün sayısı yayımlanmaz.",
+      escalation: ["İlgili yıl kılavuzundaki inceleme/itiraz yolu", "Merkezî MEB/ÖSYM sınavıysa İYUK m.20/B kapsamındaki 10 günlük dava süresinin ayrıca kontrolü"],
+      locationLogic: "Yetki sınavı yapan kurum ve ilgili yıl kılavuzuna göre belirlenir.",
+      legalBasis: ["İlgili sınavın özel mevzuatı ve yıl kılavuzu", "Merkezî MEB/ÖSYM sınavlarında 2577 sayılı İYUK m.20/B"],
+      sources: [S.meb, S.osymYksGuideIndex, L.administrativeProcedure],
+      freshnessRisk: "high",
+      caution: "Başka bir sınavın itiraz veya yerleştirme süresi örnek alınamaz.",
+      publicationBlocker: "Sınavın tam adı, yılı/dönemi, sonucu açıklayan kurum ve işlem tarihi gereklidir."
+    };
+
+    const yks = ctx.label === "YKS";
     return {
-      summary: ctx.label + " işlemi ilgili yıl kılavuzunda ilan edilen elektronik sistem ve takvim üzerinden yürütülür; sınav/sonuç itirazlarında kılavuzdaki özel kısa süreler esas alınır.",
+      summary: yks
+        ? "2026 YKS başvuru, sınav, tercih ve sonuç işlemleri ÖSYM AİS üzerinden; kılavuz ve duyurulardaki dönemsel takvimle yürütülür."
+        : "2026 LGS başvurusu e-Okul üzerinden okul müdürlüğünce onaylanır; sınav ve itiraz işlemleri MEB'in yıl kılavuzu ve e-İtiraz sistemi üzerinden yürütülür.",
       verificationStatus: "verified",
-      competentAuthorities: [osym ? "Ölçme, Seçme ve Yerleştirme Merkezi Başkanlığı (ÖSYM)" : "Millî Eğitim Bakanlığı"],
-      applicationChannels: osym
+      competentAuthorities: [yks ? "Ölçme, Seçme ve Yerleştirme Merkezi Başkanlığı (ÖSYM)" : "Millî Eğitim Bakanlığı Ölçme, Değerlendirme ve Sınav Hizmetleri Genel Müdürlüğü"],
+      applicationChannels: yks
         ? [portal("ÖSYM Aday İşlemleri Sistemi", "https://ais.osym.gov.tr/"), portal("ÖSYM duyuru ve kılavuzları", "https://www.osym.gov.tr/")]
-        : [portal("MEB sınav/tercih ekranları", "https://www.meb.gov.tr/"), portal("e-Okul", "https://e-okul.meb.gov.tr/")],
+        : [portal("e-Okul", "https://e-okul.meb.gov.tr/"), portal("MEB e-İtiraz", "https://eitiraz.meb.gov.tr/")],
       requiredDocuments: ["T.C. kimlik/aday bilgileri", "İlgili yıl kılavuzunda istenen eğitim ve fotoğraf bilgileri", "İtirazda evrak referans numarası, imzalı dilekçe ve gerekiyorsa inceleme ücreti dekontu"],
-      deadlineAndAppeal: osym
-        ? "2026 YKS kılavuzunda sonuç inceleme talebi sonuçların açıklanmasından sonra 10 gün; sınav sorusu itirazı sınavdan sonra 3 iş günü olarak düzenlenmiştir. İYUK m.20/B kapsamındaki dava süresi 10 gündür ve idari itiraz bu dava süresini durdurmaz; her yeni dönem kılavuzu ayrıca kontrol edilmelidir."
-        : "LGS başvuru, tercih ve itiraz süresi ilgili yıl MEB kılavuzunda ilan edilir; eski yıl tarihleri kullanılmaz.",
-      escalation: ["Kılavuzdaki usulle süresinde sonuç/soru inceleme talebi", osym ? "2577 sayılı Kanun m.20/B kapsamındaki özel yargı yolu" : "MEB kılavuzunda belirtilen komisyon/il müdürlüğü", "Kararda bildirilen yargı yolu"],
+      deadlineAndAppeal: yks
+        ? "2026 YKS'de başvuru 6 Şubat-2 Mart, ücret son günü 3 Mart; geç başvuru 10-12 Mart; TYT 20 Haziran, AYT/YDT 21 Hazirandır. Soru itirazı 3 iş günü, sonuç incelemesi 10 gündür. İYUK m.20/B dava süresi 10 gündür ve idari başvuru bu süreyi durdurmaz."
+        : "2026 LGS başvurusu 23 Mart-10 Nisan; giriş belgesi 3 Haziran, sınav 13 Haziran, sonuç 10 Temmuzdur. Soru/cevap veya sonuca e-İtiraz üzerinden 5 takvim günü içinde, 75 TL (KDV dâhil) inceleme ücretiyle başvurulur. İYUK m.20/B dava süresi 10 gündür ve idari itiraz bu süreyi durdurmaz.",
+      escalation: ["Kılavuzdaki usulle süresinde sonuç/soru inceleme talebi", "2577 sayılı Kanun m.20/B kapsamındaki özel yargı yolu"],
       locationLogic: "Elektronik başvuru ulusaldır; fizikî başvuru merkezi veya okul bilgisi kılavuzda belirlenir.",
-      legalBasis: [osym ? "6114 sayılı ÖSYM Hizmetleri Hakkında Kanun" : "1739 sayılı Millî Eğitim Temel Kanunu", "İlgili yıl sınav ve yerleştirme kılavuzu", ...(osym ? ["2577 sayılı İYUK m.20/B"] : [])],
-      sources: osym ? [S.osymYks, S.osymGuide, L.administrativeProcedure] : [S.meb, S.eokul, L.education],
-      freshnessRisk: "high"
+      legalBasis: [yks ? "6114 sayılı ÖSYM Hizmetleri Hakkında Kanun" : "1739 sayılı Millî Eğitim Temel Kanunu", "2026 sınav kılavuzu", "2577 sayılı İYUK m.20/B"],
+      sources: yks
+        ? [S.osymYks, S.osymYksGuideIndex, S.osymGuide, S.osymYksResults, S.osymYksPlacement, L.administrativeProcedure]
+        : [S.mebLgs, S.mebLgsGuide, S.eokul, L.administrativeProcedure],
+      freshnessRisk: "high",
+      currentCycleNote: yks
+        ? "2026 YKS yerleştirme sonuçları 18 Ağustos 2026'da açıklandı. Üniversite kayıtları 24-28 Ağustos, e-Kayıt 24-26 Ağustos 2026'dır. Başvuru/sınav ücreti her oturum için 700 TL; geç başvuruda ücret %50 artırımlıdır. Yeni dönem için bu tarihler kullanılmaz."
+        : "2026 LGS başvuru, sınav ve sonuç takvimi 21 Ağustos 2026 itibarıyla kapanmıştır; sonraki adaylar yeni yıl kılavuzunu beklemelidir."
     };
   }
 
@@ -470,7 +536,8 @@ function educationDraft(ctx: LeafContext): RouteDraft {
     legalBasis: ["2547 sayılı Yükseköğretim Kanunu", "Yükseköğretim Kurumlarında Önlisans ve Lisans Düzeyindeki Programlar Arasında Geçiş Yönetmeliği", "İlgili üniversite yönetmeliği/ilanı"],
     sources: [S.yok, L.higherEducation, ...(ctx.label === "Yatay geçiş" ? [S.yokTransfer] : [])],
     freshnessRisk: "high",
-    caution: ctx.label === "Öğrenci affı" ? "Öğrenci affı yalnız özel kanun ve dönemsel üniversite duyurusu varsa uygulanır; sürekli açık bir başvuru değildir." : undefined
+    caution: ctx.label === "Öğrenci affı" ? "Öğrenci affı yalnız özel kanun ve dönemsel üniversite duyurusu varsa uygulanır; sürekli açık bir başvuru değildir." : undefined,
+    publicationBlocker: ctx.label === "Öğrenci affı" ? "Yürürlükteki özel af kanunu/geçici madde, kapsadığı ayrılış tarihleri, üniversite/program ve açık başvuru takvimi bulunmadan rota yayımlanamaz." : undefined
   };
 
   if (funding) return {
@@ -485,7 +552,9 @@ function educationDraft(ctx: LeafContext): RouteDraft {
     legalBasis: ["351 sayılı Yüksek Öğrenim Kredi ve Yurt Hizmetleri Kanunu", "İlgili yıl burs/kredi yönetmeliği ve duyurusu"],
     sources: [S.gsb, S.gsbEGov],
     freshnessRisk: "high",
-    caution: ctx.label === "Kamu bursları" ? "Kurum/program belirtilmediği için tek ve kesin burs rotası yayımlanmaz." : undefined
+    caution: ctx.label === "Kamu bursları" ? "Kurum/program belirtilmediği için tek ve kesin burs rotası yayımlanmaz." : undefined,
+    currentCycleNote: ctx.label === "Kamu bursları" ? undefined : "2026-2027 KYK burs/kredi başvurusu yalnız GSB'nin yeni dönem duyurusu yayımlanıp e-Devlet hizmeti açıldığında yapılabilir; geçmiş yıl tarihleri veya haber sitelerindeki tahminler başvuru takvimi olarak kullanılmaz.",
+    publicationBlocker: ctx.label === "Kamu bursları" ? "Bursu veren kamu kurumu, program adı, eğitim düzeyi ve 2026 başvuru ilanı/takvimi belirtilmelidir." : undefined
   };
 
   return reviewDraft(ctx);
@@ -567,7 +636,7 @@ function zoningDraft(ctx: LeafContext): RouteDraft {
     escalation: ["Belediye/il özel idaresinin yetkili üst birimi ve meclis/encümen süreci gerekiyorsa o merci", "Çevre, Şehircilik ve İklim Değişikliği İl Müdürlüğü görev alanı içindeyse", "İdari yargı"],
     locationLogic: "Yetki taşınmazın konumuna, büyükşehir/ilçe belediyesi görev paylaşımına ve özel alan statüsüne göre belirlenir.",
     legalBasis: ["3194 sayılı İmar Kanunu", building ? "Planlı Alanlar İmar Yönetmeliği" : "Mekânsal Planlar Yapım Yönetmeliği", "5216/5393 sayılı Kanunlar"],
-    sources: [S.building, S.municipalities, L.zoning],
+    sources: [building ? S.plannedAreas : S.spatialPlans, S.municipalities, L.zoning, L.administrativeProcedure],
     freshnessRisk: "high"
   };
 }
@@ -591,7 +660,12 @@ function taxDraft(ctx: LeafContext): RouteDraft {
     legalBasis: ["213 sayılı Vergi Usul Kanunu", "6183 sayılı Amme Alacaklarının Tahsil Usulü Hakkında Kanun", ...(ctx.label === "MTV" || ctx.label === "Araç vergi borcu" ? ["197 sayılı Motorlu Taşıtlar Vergisi Kanunu"] : []), ...(ctx.label.includes("harcı") || ctx.label === "Diğer kamu harçları" ? ["492 sayılı Harçlar Kanunu"] : [])],
     sources: [S.gib, L.taxProcedure, ...(ctx.label === "MTV" || ctx.label === "Araç vergi borcu" || paymentProblem ? [S.gibMtv] : [])],
     freshnessRisk: "high",
-    caution: ctx.label === "Vergi yapılandırma" ? "Sürekli açık bir yapılandırma yoktur; ancak yürürlükte özel kanun ve GİB duyurusu varsa başvuru yapılabilir." : ctx.label === "Diğer kamu harçları" ? "Harç türü belirtilmeden görevli kurum ve ödeme kanalı kesinleştirilemez." : undefined
+    caution: ctx.label === "Vergi yapılandırma" ? "Sürekli açık bir yapılandırma yoktur; ancak yürürlükte özel kanun ve GİB duyurusu varsa başvuru yapılabilir." : ctx.label === "Diğer kamu harçları" ? "Harç türü belirtilmeden görevli kurum, 2026 tarifesi ve ödeme kanalı kesinleştirilemez." : "Parasal tutar sabit metinden değil, 2026 tarifesi ile Dijital Vergi Dairesindeki işlem günü tahakkukundan alınmalıdır.",
+    publicationBlocker: ctx.label === "Vergi yapılandırma"
+      ? "Yürürlükteki özel yapılandırma kanunu, kapsanan borç/dönem ve GİB'in açık 2026 başvuru takvimi gereklidir."
+      : ctx.label === "Diğer kamu harçları"
+        ? "Harç türü, işlemi yapan kurum, 2026 tarife kalemi ve muafiyet statüsü belirtilmelidir."
+        : undefined
   };
 }
 
@@ -630,11 +704,12 @@ function agricultureDraft(ctx: LeafContext): RouteDraft {
     legalBasis: ["6831 sayılı Orman Kanunu", "Orman Kanununun 16, 17/3 veya 18 inci maddesine dayalı ilgili izin yönetmeliği"],
     sources: [S.forest, L.forest],
     freshnessRisk: "high",
-    caution: ctx.label === "Ormanla ilgili başvuru" ? "Talebin kesim, kadastro, izin, tahsis veya ihbar türü belirtilmeden kesin rota yayımlanmaz." : undefined
+    caution: ctx.label === "Ormanla ilgili başvuru" ? "Talebin kesim, kadastro, izin, tahsis veya ihbar türü belirtilmeden kesin rota yayımlanmaz." : undefined,
+    publicationBlocker: ctx.label === "Ormanla ilgili başvuru" ? "Kesim, kadastro, 2/B, izin, tahsis, suç/ihbar veya başka bir işlem türü ile alanın il/ilçesi ve statüsü belirtilmelidir." : undefined
   };
   return {
     summary: ctx.label + " işlemi Tarım ve Orman Bakanlığının güncel kayıt/destek sistemi ile kayıtlı olunan İl/İlçe Tarım ve Orman Müdürlüğü üzerinden yürütülür.",
-    verificationStatus: meadow ? "local-check" : "verified",
+    verificationStatus: meadow ? "local-check" : support ? "needs-review" : "verified",
     competentAuthorities: [meadow ? "İl Mera Komisyonu ve İl Tarım ve Orman Müdürlüğü" : "Kayıtlı olunan İl/İlçe Tarım ve Orman Müdürlüğü"],
     applicationChannels: [eGov(ctx.label + " e-Hizmeti", "https://www.turkiye.gov.tr/tarim-ve-orman-bakanligi"), portal("Tarım Reformu e-Hizmetleri", "https://www.tarimorman.gov.tr/TRGM/Menu/49/E-Hizmetler"), office("İl/İlçe Tarım ve Orman Müdürlüğü")],
     requiredDocuments: cks
@@ -644,14 +719,19 @@ function agricultureDraft(ctx: LeafContext): RouteDraft {
         : animal
           ? ["Kimlik", "İşletme ve hayvan bilgileri", "Küpe/pasaport/veteriner sağlık belgeleri", "Nakil veya kayıt değişikliğini gösteren belge"]
           : ["Kimlik", "Mera ve hayvan/işletme bilgisi", "Muhtarlık/otlatma/kiralama evrakı", "İhlal için yer, tarih ve deliller"],
-    deadlineAndAppeal: cks || support
-      ? "ÇKS ve destek işlemleri üretim yılı takvimine bağlıdır. 2026 ürün güncellemesi gibi dönemsel tarihler her yıl yeniden ilan edilir; eski yıl tarihi kullanılmaz."
+    deadlineAndAppeal: cks
+      ? "2026 üretim yılı ilk kayıt/güncelleme başvurusu 1 Eylül-31 Aralık 2025; ürün bilgisi güncellemesi 15 Mart-15 Nisan 2026 arasında yapılmıştır. Sonradan edinilen/kiralanan araziye ilişkin özel süre varsa yalnız güncel İl/İlçe Müdürlüğü duyurusu uygulanır."
+      : support
+        ? "Bitkisel, hayvancılık ve kırsal kalkınma desteklerinin her birinde ayrı karar, çağrı, kayıt koşulu ve son gün vardır; program adı olmadan tek 2026 takvimi yayımlanmaz."
       : "Hayvan ve mera bildirim süreleri işlem türüne göre özel mevzuatta düzenlenir; tutanak/karar tebliğindeki itiraz yolu esas alınır.",
     escalation: ["İl Tarım ve Orman Müdürlüğü", meadow ? "İl Mera Komisyonu/Valilik" : "Bakanlığın ilgili genel müdürlüğü", "Kararda gösterilen idari/yargısal yol"],
     locationLogic: meadow ? "Meranın bulunduğu ilin komisyonu ve yerel tahsis/kullanım kararı uygulanır." : "İşletme veya arazinin kayıtlı olduğu İl/İlçe Müdürlüğü yetkilidir; bazı e-Devlet işlemleri yalnız mevcut kaydı olanlara açıktır.",
     legalBasis: [cks || support ? "5488 sayılı Tarım Kanunu" : animal ? "5996 sayılı Veteriner Hizmetleri, Bitki Sağlığı, Gıda ve Yem Kanunu" : "4342 sayılı Mera Kanunu", ...(cks ? ["Çiftçi Kayıt Sistemi Yönetmeliği"] : [])],
-    sources: [S.agriculture, S.agricultureOffices, meadow ? L.pasture : L.agriculture],
-    freshnessRisk: "high"
+    sources: [S.agriculture, S.agricultureOffices, ...(cks ? [S.cks2026, S.cksProductUpdate2026] : []), meadow ? L.pasture : L.agriculture],
+    freshnessRisk: "high",
+    currentCycleNote: cks ? "21 Ağustos 2026 itibarıyla 2026 ÇKS ilk kayıt/güncelleme ve ürün güncelleme dönemleri kapanmıştır. Yeni işlemde 2027 üretim yılı duyurusu beklenmeli; e-Devlet/TarımCebimde ekranındaki açık dönem ayrıca kontrol edilmelidir." : undefined,
+    caution: support ? "Destek üst başlığı tek başına hak, tutar, belge ve takvim üretmez; yalnız programın yürürlükteki 2026 kararı/çağrısı kullanılabilir." : undefined,
+    publicationBlocker: support ? "Destek programının tam adı, üretim/hayvan/proje türü, il, çağrı numarası ve açık 2026 başvuru takvimi belirtilmelidir." : undefined
   };
 }
 
@@ -772,20 +852,18 @@ function appealDraft(ctx: LeafContext): RouteDraft {
   const fine = ctx.label === "İdari para cezasına itiraz" || ctx.label === "Trafik cezasına itiraz";
   const traffic = ctx.label === "Trafik cezasına itiraz";
   if (fine) return {
-    summary: ctx.label + " için yaptırım kararının türü, tebliğ tarihi ve özel kanunu kontrol edilir; genel kabahatlerde sulh ceza hâkimliği, trafik para cezasında güncel görev kuralı ve UYAP kanalı uygulanır.",
+    summary: ctx.label + " için yaptırım kararının türü, tebliğ/tefhim tarihi ve özel kanunu kontrol edilir; aksine özel hüküm yoksa Kabahatler Kanunu m.27 yolu ve yetkili sulh ceza hâkimliği esas alınır.",
     verificationStatus: "verified",
-    competentAuthorities: [traffic ? "Trafik Mahkemesi bulunan yerde Trafik Mahkemesi; bulunmayan yerde yetkili Sulh Ceza Hâkimliği" : "Aksine özel hüküm yoksa yetkili Sulh Ceza Hâkimliği"],
+    competentAuthorities: ["Aksine özel hüküm yoksa yetkili Sulh Ceza Hâkimliği"],
     applicationChannels: [portal("UYAP Vatandaş Portal", "https://vatandas.uyap.gov.tr/"), office("Yetkili adliye tevzi/birim"), { type: "post", label: "Usulüne uygun posta başvurusu", note: "Süre ve mahkeme yetkisi ayrıca kontrol edilmelidir." }],
     requiredDocuments: ["İdari yaptırım/ceza karar tutanağı", "Tebligat ve tebliğ tarihi", "Kimlik", "İtiraz dilekçesi", "Fotoğraf, kayıt ve diğer deliller"],
-    deadlineAndAppeal: traffic
-      ? "EGM'nin güncel açıklamasında trafik idari para cezasına karşı tebliğden itibaren 15 gün içinde başvuru belirtilir. Özel yaptırım veya tebligat biçimi süreyi etkileyebilir; işlem günü güncel mevzuatı tekrar kontrol edin."
-      : "5326 sayılı Kanunun güncel 27. maddesindeki genel başvuru süresi ve yaptırımın özel kanunu birlikte kontrol edilir; özel kanun farklı görev/süre öngörebilir.",
+    deadlineAndAppeal: "5326 sayılı Kanun m.27'de idarî para cezası ve mülkiyetin kamuya geçirilmesi kararına karşı tebliğ veya tefhimden itibaren en geç 15 gün öngörülür. Mücbir sebeple kaçırılırsa sebebin kalkmasından itibaren 7 gün içinde başvuru imkânı vardır. Trafik dâhil özel kanunda farklı görev/süre varsa özel hüküm uygulanır.",
     escalation: ["Sulh ceza hâkimliği kararına karşı kararın bildirdiği süre ve merciye itiraz", "UYAP üzerinden dosya/karar takibi"],
     locationLogic: "Yetki, kararı veren idari birim ve fiilin işlendiği yer/özel kanun kuralına göre belirlenir; UYAP tevzi bilgisi kontrol edilmelidir.",
     legalBasis: ["5326 sayılı Kabahatler Kanunu m.27", ...(traffic ? ["2918 sayılı Karayolları Trafik Kanunu"] : [])],
     sources: [S.uyap, L.misdemeanors, ...(traffic ? [S.traffic] : [])],
     freshnessRisk: "high",
-    caution: "Mülkiyetin kamuya geçirilmesi, trafikten men, ehliyet geri alma veya özel kanundaki yaptırımlar aynı rota olmayabilir."
+    caution: "Aynı işlemde idarî yargının görev alanına giren başka bir karar da varsa Kabahatler Kanunu m.27/8 nedeniyle uyuşmazlık idarî yargıda birlikte görülebilir. Trafikten men, ehliyet geri alma veya özel kanundaki başka yaptırımlar bu basit para cezası rotasıyla aynı olmayabilir."
   };
   return {
     summary: ctx.label + " için önce yazılı işlem/ret/tebligat ve özel kanundaki zorunlu başvuru yolu incelenir; genel üst makam başvurusu İYUK m.11 koşullarına tabidir.",
@@ -793,7 +871,7 @@ function appealDraft(ctx: LeafContext): RouteDraft {
     competentAuthorities: ["İşlemi yapan idari makamın üst makamı; üst makam yoksa işlemi yapan makam", "Uyuşmazlığın türüne göre görevli idare veya vergi mahkemesi"],
     applicationChannels: [office("Kararı veren veya üst idari makamın evrak birimi"), portal("Kurumun resmî e-başvuru/KEP kanalı", "https://www.turkiye.gov.tr/"), portal("UYAP Vatandaş Portal", "https://vatandas.uyap.gov.tr/")],
     requiredDocuments: ["İşlem/ret/tebligat", "Tebliğ tarihi", "Gerekçeli dilekçe", "Talebi destekleyen resmî belgeler", "Vekil varsa yetki belgesi"],
-    deadlineAndAppeal: "Özel kanunda ayrı süre yoksa İYUK'taki genel dava süreleri uygulanabilir; ancak vergi, ihale, merkezî sınav, imar ve diğer özel alanlarda farklı kısa süre/usul vardır. İYUK m.11 başvurusu dava açma süresi içinde yapılır ve uygun şartlarda süreyi durdurur; özel usullerde uygulanmayabilir.",
+    deadlineAndAppeal: "Özel kanunda ayrı süre yoksa yazılı bildirimi izleyen günden itibaren Danıştay/idare mahkemesinde 60, vergi mahkemesinde 30 günlük genel süre uygulanır. İYUK m.11 başvurusu dava süresi içinde yapılır ve süreyi durdurur; 30 günde cevap verilmezse ret sayılır, kalan süre yeniden işler. İhale/ivedi yargı, merkezî sınav, vergi, imar ve başka özel alanlarda farklı kısa süre vardır; örneğin m.20/B merkezî sınav davalarında süre 10 gündür ve m.11 uygulanmaz.",
     escalation: ["Özel mevzuatta zorunlu itiraz/ön başvuru varsa önce o yol", "İYUK m.11 koşullarında üst makama başvuru", "Süresinde görevli idari yargı mercii"],
     locationLogic: "Görev ve yetki işlemi yapan kurum, işlemin konusu, özel kanun ve idari yargı çevresine göre belirlenir.",
     legalBasis: ["2577 sayılı İdari Yargılama Usulü Kanunu m.7, m.10 ve m.11", "İşlemin özel kanunu"],
@@ -850,7 +928,11 @@ function militaryServiceDraft(ctx: LeafContext): RouteDraft {
     deadlineAndAppeal: healthAppeal
       ? "Kesinleşmiş askerlik sağlık raporlarına tebliğ veya teslim tarihinden itibaren 30 gün içinde itiraz edilebilir; kesinleşmemiş rapora itiraz edilemez."
       : ctx.label === "Bedelli celp değişikliği"
-        ? "2026 duyurusunda değişiklik talebi sevk tarihinden 10 gün öncesine kadar, aynı yıl içindeki açık kontenjanlar için ve en fazla üç defa öngörülmüştür; her yılın duyurusu yeniden kontrol edilir."
+        ? "Celp/sevk değişikliği yalnız Askerliğim ekranında açık kontenjan ve güncel MSB duyurusunun izin verdiği dönem için yapılabilir; ekranda görünmeyen tarih veya kontenjan için kesin hak varsayılmaz."
+        : ctx.label === "Bedelli askerlik başvurusu"
+          ? "Yoklama tamamlandıktan sonra başvuru yapılır; ödeme, başvurudan itibaren iki ay içinde ve ödeme tarihinde geçerli tutar üzerinden peşin yapılır. Yoklama kaçağı/saklı/bakaya kaydı olanlarda ek bedel ve yalnız askerlik şubesinden yürütülen işlemler bulunabilir."
+          : ctx.label === "Dövizle askerlik"
+            ? "Uzaktan eğitim, konsolosluk belge incelemesi ve ödeme birlikte tamamlanmadan başvuru tamamlanmış sayılmaz. Ödeme peşindir; tutar ödeme günündeki memur aylık katsayısı ve TCMB döviz alış kuruyla hesaplanır."
         : paid || classification || deferment
           ? "Başvuru, ödeme, sınıflandırma, celp ve erteleme süreleri dönemsel MSB duyurusu ve kişinin statüsüne göre değişir; işlem günü Askerliğim ekranı ve güncel duyuru esas alınır."
           : adminFine
@@ -874,9 +956,13 @@ function militaryServiceDraft(ctx: LeafContext): RouteDraft {
       ...(ctx.label === "Dövizle askerlik" ? [S.msbDoviz] : [])
     ],
     freshnessRisk: statusDocument ? "low" : "high",
-    currentCycleNote: ctx.label === "Bedelli celp değişikliği"
-      ? "2026 yılına özgü kontenjan, on günlük son sınır ve en fazla üç değişiklik kuralı yeni yıl duyurusunda değişebilir."
-      : undefined
+    currentCycleNote: ctx.label === "Bedelli askerlik başvurusu"
+      ? "Bedelli tutarı sabit içerik olarak tutulmaz: 7179 sayılı Kanun m.9'daki gösterge ile ödeme günündeki memur aylık katsayısı üzerinden MSB tarafından hesaplanan tutar esas alınır. Askerliğim ekranındaki tahakkuk dışındaki eski tutarla ödeme yapılmamalıdır."
+      : ctx.label === "Dövizle askerlik"
+        ? "Döviz tutarı sabit değildir; TL karşılığın ödeme günündeki TCMB döviz alış kuruyla avro veya konvertibl para karşılığı kullanılır. Konsolosluğun aynı gün bildirdiği tutar ve transfer masrafları kontrol edilmelidir."
+        : ctx.label === "Bedelli celp değişikliği"
+          ? "Kontenjan ve değişiklik yetkisi dönemsel olduğundan yalnız Askerliğim ekranında o gün sunulan seçenek güvenlidir."
+          : undefined
   };
 }
 
@@ -892,9 +978,9 @@ function msuPersonnelDraft(ctx: LeafContext): RouteDraft {
     escalation: ["ÖSYM işlemleri için kılavuzdaki itiraz/inceleme kanalı", "MSB Personel Temin Çağrı Takip/iletişim kanalı", "Duyuruda gösterilen idari/yargısal yol"],
     locationLogic: "Başvuru ulusal elektronik sistemlerdedir; seçim aşaması yeri ve tarihi aday çağrı belgesinde belirlenir.",
     legalBasis: ["6114 sayılı ÖSYM Hizmetleri Hakkında Kanun", "İlgili yıl MSÜ ve YKS kılavuzları", "Millî Savunma Üniversitesi ve askerî öğrenci teminine ilişkin güncel mevzuat"],
-    sources: [S.osymMsu, S.msbPersonnel, S.msuSelection],
+    sources: [S.osymMsu, S.osymMsuGuide, S.msbPersonnel, S.msuSelection, L.administrativeProcedure],
     freshnessRisk: "high",
-    currentCycleNote: "2026-MSÜ dönemi başvuru ve seçim aşamalarına ilişkin tarihler geçmiş olabilir; yeni aday yalnız bir sonraki dönem kılavuzunu esas almalıdır."
+    currentCycleNote: "2026-MSÜ başvuruları 5-29 Ocak, ödeme son günü 30 Ocak, geç başvuru 3 Şubat; sınav 1 Mart 2026'da yapılmıştır. Ücret 700 TL, geç başvuruda %50 artırımlıdır. MSB seçim aşamaları okul türüne göre 14 Temmuz-7 Ağustos 2026 arasında tamamlanmıştır. Soru itirazı 3 iş günü, sonuç incelemesi 10 gün; İYUK m.20/B dava süresi 10 gündür ve idari başvuru bu süreyi durdurmaz. Yeni aday yalnız sonraki dönem kılavuzunu kullanmalıdır."
   };
   const civilian = ctx.label === "Sivil memur";
   return {
@@ -1013,6 +1099,9 @@ function toRoute(ctx: LeafContext, draft: RouteDraft, used: Set<string>): RouteR
     caution: draft.caution,
     currentCycleNote: draft.currentCycleNote,
     sources: draft.sources,
+    publicationBlocker: draft.verificationStatus === "needs-review"
+      ? draft.publicationBlocker || "Kesin rota için işlem/program adı, yetkili kurum, dönem ve yer bilgisi gereklidir."
+      : undefined,
     lastVerified: LAST_VERIFIED,
     freshnessRisk: draft.freshnessRisk,
     timeSensitive: draft.freshnessRisk === "high"

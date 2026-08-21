@@ -11,6 +11,15 @@ const expectedPhysicalMilitaryBranches = 397;
 const publishedSlugs = new Set(publishedRoutes.map(route => route.slug));
 const pathKeys = new Set(routes.map(route => route.pathKey));
 const slugs = new Set(routes.map(route => route.slug));
+const auditDate = "2026-08-21";
+const staleSourceFragments = [
+  "/mevzuatmetin/1.5.213.pdf",
+  "/mevzuatmetin/1.5.2644.pdf",
+  "/mevzuatmetin/1.5.6831.pdf",
+  "yok.gov.tr/ogrenci/guz-ve-bahar-donemi-ek-madde-1-uygulama-ilkeleri",
+  "webdosya.csb.gov.tr/db/altyapi/icerikler/7.5.16849-20230131125117.pdf",
+  "webdosya.csb.gov.tr/db/tabiat/icerikler/planli-20210811131259.pdf"
+];
 
 assert(countLeaves(menuTree) === expectedLeaves, `Menü yaprağı sayısı ${expectedLeaves} değil.`);
 assert(routes.length === expectedLeaves, "Her menü yaprağı için tam bir rota envanteri kaydı bulunmalı.");
@@ -33,18 +42,31 @@ for (const route of routes) {
   assert(route.escalation.length > 0, `Üst başvuru yolu eksik: ${route.pathKey}`);
   assert(route.legalBasis.length > 0, `Hukuki dayanak eksik: ${route.pathKey}`);
   assert(route.sources.length > 0, `Resmî kaynak eksik: ${route.pathKey}`);
+  assert(route.lastVerified === auditDate, `Son doğrulama tarihi ${auditDate} değil: ${route.pathKey}`);
 
   for (const source of route.sources) {
     const url = new URL(source.url);
     assert(url.protocol === "https:", `HTTPS olmayan kaynak: ${source.url}`);
     assert(url.hostname === "turkiye.gov.tr" || url.hostname.endsWith(".gov.tr"), `Resmî/kamusal alan adı dışında kaynak: ${source.url}`);
+    assert(!staleSourceFragments.some(fragment => source.url.toLowerCase().includes(fragment)), `Eski/kırık kaynak yeniden kullanılmış: ${source.url}`);
   }
 
   if (route.verificationStatus === "needs-review") {
     assert(!publishedSlugs.has(route.slug), `Doğrulanmamış rota canlıya sızdı: ${route.pathKey}`);
+    assert((route.publicationBlocker?.length || 0) >= 40, `Yayımlama engeli/eksik kapsam açıklanmamış: ${route.pathKey}`);
   } else {
     assert(publishedSlugs.has(route.slug), `Doğrulanmış rota canlı listede yok: ${route.pathKey}`);
+    assert(!route.publicationBlocker, `Canlı rotada yayımlama engeli kalmış: ${route.pathKey}`);
   }
+}
+
+const routeByLabel = (label: string) => routes.find(route => route.title === `${label} için nereye başvurulur?`);
+assert(routeByLabel("Engelli emekliliği")?.verificationStatus === "verified", "Engelli emekliliği 2025 geçiş değişikliğiyle doğrulanmadı.");
+assert(routeByLabel("Evde bakım yardımı")?.verificationStatus === "local-check", "Evde bakım yardımı yerel heyet kontrolünde tutulmalı.");
+assert(routeByLabel("Sınav sonucu itirazı")?.verificationStatus === "needs-review", "Genel sınav itirazı sınav adı olmadan yayımlanmamalı.");
+assert(routeByLabel("Yerleştirme işlemleri")?.verificationStatus === "needs-review", "Genel yerleştirme rotası sınav adı olmadan yayımlanmamalı.");
+for (const label of ["Bitkisel üretim destekleri", "Kırsal kalkınma destekleri", "Hayvancılık destekleri"]) {
+  assert(routeByLabel(label)?.verificationStatus === "needs-review", `${label} program adı olmadan yayımlanmamalı.`);
 }
 
 assert(militaryBranches.length === expectedMilitaryDistrictPages, `Askerlik şubesi ilçe sayfası sayısı ${expectedMilitaryDistrictPages} değil.`);

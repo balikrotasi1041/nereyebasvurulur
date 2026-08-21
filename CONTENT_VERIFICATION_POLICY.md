@@ -37,6 +37,7 @@ Bloglar, forumlar, haber siteleri ve kullanıcı yorumları tek başına bir ba�
 ### Doğrulama bekliyor
 
 - Resmî kaynak zinciri tamamlanmamıştır.
+- Başlığın güvenli bir rotaya dönüşmesi için gereken işlem/program, kurum, dönem ve yer bilgisi `publicationBlocker` alanında açıkça kaydedilir.
 - Canlı sitede kesin yönlendirme olarak yayımlanmaz.
 
 ## 4. Özel dikkat gerektiren alanlar
@@ -51,6 +52,7 @@ Aşağıdaki bilgiler tek kaynağa dayanılarak yayımlanmamalıdır:
 - acil durum, ceza veya yaptırım doğurabilecek yönlendirmeler.
 
 Belirsizlik varsa kesin hüküm yerine `kontrol gerekli` uyarısı kullanılır.
+Katsayı, kur, tarife veya dönemsel ilanla değişen tutarlar sabit içerikten değil, işlem günündeki resmî tahakkuk/başvuru ekranından alınır; eski dönem tutarı yeni dönem için taşınmaz.
 
 ## 5. Değişiklik takibi
 

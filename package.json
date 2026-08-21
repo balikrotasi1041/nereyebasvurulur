@@ -8,6 +8,8 @@
     "deploy": "wrangler deploy",
     "check": "tsc --noEmit",
     "verify": "tsx scripts/verify-data.ts",
+    "audit:risk": "tsx scripts/generate-risk-audit.ts",
+    "audit:sources": "tsx scripts/check-source-links.ts",
     "refresh:military-branches": "node scripts/fetch-military-branches.mjs",
     "validate": "pnpm run check && pnpm run verify && pnpm run cf:check",
     "cf:check": "wrangler deploy --dry-run"
