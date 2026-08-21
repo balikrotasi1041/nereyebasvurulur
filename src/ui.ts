@@ -11,10 +11,10 @@ const styles = `
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;overflow-wrap:anywhere}
-button,input,select{font:inherit}
+button,input,select,textarea{font:inherit}
 button,a,select{-webkit-tap-highlight-color:transparent}
 a{color:inherit;text-decoration:none}
-a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(36,88,214,.24);outline-offset:2px}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid rgba(36,88,214,.24);outline-offset:2px}
 .wrap{width:min(1160px,calc(100% - 28px));margin:auto}
 
 header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:30;backdrop-filter:saturate(150%) blur(10px)}
@@ -24,6 +24,8 @@ header{background:rgba(255,255,255,.96);border-bottom:1px solid var(--line);posi
 .nav{display:flex;gap:6px;align-items:center}
 .nav a{font-size:.88rem;color:#526174;padding:10px 11px;border-radius:10px;min-height:42px;display:inline-flex;align-items:center}
 .nav a:hover{background:#f3f5f8}
+.nav a.nav-cta{background:var(--blue);color:#fff;font-weight:800}
+.nav a.nav-cta:hover{background:var(--blue2)}
 .mobile-label{display:none}
 
 .hero{padding:46px 0 22px}
@@ -213,14 +215,14 @@ function esc(value: string): string {
   return String(value).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[c] || c));
 }
 
-function shell(title: string, description: string, body: string, opts: { canonical?: string; noindex?: boolean; admin?: boolean; jsonLd?: unknown[] } = {}): string {
+export function shell(title: string, description: string, body: string, opts: { canonical?: string; noindex?: boolean; admin?: boolean; jsonLd?: unknown[]; styles?: string } = {}): string {
   const canonical = opts.canonical || "https://nereyebasvurulur.com/";
   const robots = opts.noindex ? "noindex,nofollow" : "index,follow";
   const structuredData = (opts.jsonLd || []).map(value => `<script type="application/ld+json">${JSON.stringify(value).replace(/</g, "\\u003c")}</script>`).join("");
   const nav = opts.admin
     ? `<a href="/admin/dashboard/">Dashboard</a><a href="/admin/data/">Veri</a><a href="/admin/askerlik-subeleri/">Şubeler</a><a href="/">Siteye dön</a>`
-    : `<a href="/askerlik-subeleri/"><span class="desktop-label">Askerlik şubeleri</span><span class="mobile-label">Şubeler</span></a><a class="hide-mobile" href="/ara">Arama</a><a href="/admin/dashboard/">Yönetim</a>`;
-  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${esc(canonical)}">${structuredData}<style>${styles}</style></head><body><header><div class="wrap head"><a class="brand" href="/">Nereye <span>Başvurulur?</span></a><nav class="nav" aria-label="Ana menü">${nav}</nav></div></header>${body}<footer><div class="wrap">Nereye Başvurulur? · Resmî kaynaklarla doğrulanan yönlendirmeler. Son işlem öncesi ilgili kurum ve güncel mevzuatı kontrol edin.</div></footer></body></html>`;
+    : `<a class="nav-cta" href="/dilekce-olustur/"><span class="desktop-label">Dilekçe oluştur</span><span class="mobile-label">Dilekçe</span></a><a href="/askerlik-subeleri/"><span class="desktop-label">Askerlik şubeleri</span><span class="mobile-label">Şubeler</span></a><a class="hide-mobile" href="/ara">Arama</a><a class="hide-mobile" href="/admin/dashboard/">Yönetim</a>`;
+  return `<!doctype html><html lang="tr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#ffffff"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><meta name="robots" content="${robots}"><link rel="canonical" href="${esc(canonical)}">${structuredData}<style>${styles}${opts.styles || ""}</style></head><body><header><div class="wrap head"><a class="brand" href="/">Nereye <span>Başvurulur?</span></a><nav class="nav" aria-label="Ana menü">${nav}</nav></div></header>${body}<footer><div class="wrap">Nereye Başvurulur? · Resmî kaynaklarla doğrulanan yönlendirmeler. Son işlem öncesi ilgili kurum ve güncel mevzuatı kontrol edin.</div></footer></body></html>`;
 }
 
 function menuJson(menu: MenuNode[]): string {

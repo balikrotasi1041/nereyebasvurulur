@@ -20,6 +20,7 @@ import {
   renderRoute,
   renderSearch
 } from "./ui";
+import { renderPetitionBuilder } from "./petition";
 
 type Env = {
   ADMIN_USERNAME?: string;
@@ -148,6 +149,7 @@ function sitemap(): string {
   const militaryDate = militaryBranches[0]?.lastVerified || homeDate;
   const entries = [
     `<url><loc>${SITE_ORIGIN}/</loc><lastmod>${xmlEscape(homeDate)}</lastmod></url>`,
+    `<url><loc>${SITE_ORIGIN}/dilekce-olustur/</loc><lastmod>2026-08-21</lastmod></url>`,
     ...publishedRoutes.map(route => `<url><loc>${SITE_ORIGIN}/konu/${xmlEscape(route.slug)}/</loc><lastmod>${xmlEscape(route.lastVerified)}</lastmod></url>`),
     `<url><loc>${SITE_ORIGIN}/askerlik-subeleri/</loc><lastmod>${xmlEscape(militaryDate)}</lastmod></url>`,
     ...militaryProvinces.map(province => `<url><loc>${SITE_ORIGIN}/askerlik-subeleri/${xmlEscape(province.slug)}/</loc><lastmod>${xmlEscape(militaryDate)}</lastmod></url>`),
@@ -208,12 +210,16 @@ export default {
     }
 
     if (path === "/health") {
-      return new Response(JSON.stringify({ status: "ok", release: "v3-military-branch-directory", publicLaunch: true, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, ...stats() }), {
+      return new Response(JSON.stringify({ status: "ok", release: "v4-petition-builder", publicLaunch: true, petitionBuilder: true, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, ...stats() }), {
         headers: { "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }
       });
     }
 
     if (path === "/") return html(renderHome(menuTree, publishedRoutes.length, militaryBranches.length, uniqueMilitaryBranchCount));
+
+    if (path === "/dilekce-olustur" || path === "/dilekce-olustur/") {
+      return html(renderPetitionBuilder());
+    }
 
     if (path === "/ara" || path === "/ara/") {
       const query = (url.searchParams.get("q") || "").slice(0, 160);

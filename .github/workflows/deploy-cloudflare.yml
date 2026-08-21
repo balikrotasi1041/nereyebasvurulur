@@ -46,11 +46,19 @@ jobs:
             echo "::error::Search-engine verification tags are not visible on the live homepage."
             exit 1
           fi
-          curl --fail --show-error --silent "${base}/health" | grep -Fq '"status":"ok"'
+          curl --fail --show-error --silent "${base}/health" -o /tmp/health.json
+          grep -Fq '"status":"ok"' /tmp/health.json
+          grep -Fq '"petitionBuilder":true' /tmp/health.json
           curl --fail --show-error --silent "${base}/robots.txt" | grep -Fq 'Sitemap: https://nereyebasvurulur.com/sitemap.xml'
-          curl --fail --show-error --silent "${base}/sitemap.xml" | grep -Fq '<urlset'
+          curl --fail --show-error --silent "${base}/sitemap.xml" -o /tmp/sitemap.xml
+          grep -Fq '<urlset' /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/dilekce-olustur/</loc>' /tmp/sitemap.xml
+          curl --fail --show-error --silent "${base}/dilekce-olustur/?deploy-check=${GITHUB_SHA}" -o /tmp/petition.html
+          grep -Fq 'id="petitionRequest"' /tmp/petition.html
+          grep -Fq 'Word olarak indir (.doc)' /tmp/petition.html
+          grep -Fq 'Bilgileriniz size ait kalır.' /tmp/petition.html
           test "$(curl --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
-          echo "Live homepage, Google/Yandex verification tags, health, robots, sitemap and IndexNow key verified."
+          echo "Live homepage, petition builder, Google/Yandex verification tags, health, robots, sitemap and IndexNow key verified."
 
       - name: Notify IndexNow
         shell: bash
