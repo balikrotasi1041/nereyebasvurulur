@@ -2,7 +2,10 @@
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nereyebasvurulur",
   "main": "src/index.ts",
-  "compatibility_date": "2026-08-20",
+  "compatibility_date": "2026-08-23",
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "workers_dev": false,
   "routes": [
     {
@@ -15,6 +18,15 @@
     }
   ],
   "observability": {
-    "enabled": true
+    "enabled": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.05
+    }
   }
 }

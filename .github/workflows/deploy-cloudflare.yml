@@ -21,11 +21,30 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Run production quality gates
+        run: |
+          pnpm run validate
+          pnpm run audit:sources
+
       - name: Deploy Worker to Cloudflare
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: 5bafb073b0ff52a7b1f5a4626301ec82
-        run: npx --yes wrangler@latest deploy
+        run: pnpm exec wrangler deploy --keep-vars --message "main ${GITHUB_SHA}"
 
       - name: Verify production
         shell: bash
@@ -33,10 +52,14 @@ jobs:
           set -euo pipefail
           base="https://nereyebasvurulur.com"
           verified=0
-          for attempt in $(seq 1 20); do
-            if curl --fail --show-error --silent --location "${base}/?deploy-check=${GITHUB_SHA}" -o /tmp/home.html; then
+          for attempt in $(seq 1 30); do
+            if curl --fail --show-error --silent --location "${base}/?deploy-check=${GITHUB_SHA}" -o /tmp/home.html \
+              && curl --fail --show-error --silent "${base}/health?deploy-check=${GITHUB_SHA}" -o /tmp/health.json; then
               if grep -Fq 'name="google-site-verification" content="5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU"' /tmp/home.html \
-                && grep -Fq 'name="yandex-verification" content="3fa0665bc8ba3bb6"' /tmp/home.html; then
+                && grep -Fq 'name="yandex-verification" content="3fa0665bc8ba3bb6"' /tmp/home.html \
+                && grep -Fq '"release":"v5-problem-intents-2026-08-23"' /tmp/health.json \
+                && grep -Fq '"routes":252' /tmp/health.json \
+                && grep -Fq '"published":231' /tmp/health.json; then
                 verified=1
                 break
               fi
@@ -44,22 +67,37 @@ jobs:
             sleep 5
           done
           if [ "$verified" -ne 1 ]; then
-            echo "::error::Search-engine verification tags are not visible on the live homepage."
+            echo "::error::The expected production release did not become visible on the live domain."
             exit 1
           fi
-          curl --fail --show-error --silent "${base}/health" -o /tmp/health.json
           grep -Fq '"status":"ok"' /tmp/health.json
           grep -Fq '"petitionBuilder":true' /tmp/health.json
+          grep -Fq '"qualityRadar":true' /tmp/health.json
+          grep -Fq '"firstWaveProblems":40' /tmp/health.json
           curl --fail --show-error --silent "${base}/robots.txt" | grep -Fq 'Sitemap: https://nereyebasvurulur.com/sitemap.xml'
           curl --fail --show-error --silent "${base}/sitemap.xml" -o /tmp/sitemap.xml
           grep -Fq '<urlset' /tmp/sitemap.xml
           grep -Fq '<loc>https://nereyebasvurulur.com/dilekce-olustur/</loc>' /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/konu/bozuk-kusurlu-urun-satici-kabul-etmiyor/</loc>' /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/konu/kayip-calinti-telefon-imei-kapatma/</loc>' /tmp/sitemap.xml
+          curl --fail --show-error --silent "${base}/konu/bozuk-kusurlu-urun-satici-kabul-etmiyor/?deploy-check=${GITHUB_SHA}" -o /tmp/consumer.html
+          grep -Fq 'Bozuk veya kusurlu ürün kabul edilmiyorsa nereye başvurulur?' /tmp/consumer.html
+          grep -Fq 'Yıllık parasal eşik:' /tmp/consumer.html
+          grep -Fq 'Dilekçe oluştur' /tmp/consumer.html
+          curl --fail --show-error --silent "${base}/konu/kayip-calinti-telefon-imei-kapatma/?deploy-check=${GITHUB_SHA}" -o /tmp/imei.html
+          grep -Fq 'Kayıp veya çalıntı telefonun IMEI' /tmp/imei.html
+          grep -Fq 'turkiye.gov.tr' /tmp/imei.html
           curl --fail --show-error --silent "${base}/dilekce-olustur/?deploy-check=${GITHUB_SHA}" -o /tmp/petition.html
           grep -Fq 'id="petitionRequest"' /tmp/petition.html
           grep -Fq 'Word olarak indir (.doc)' /tmp/petition.html
           grep -Fq 'Bilgileriniz size ait kalır.' /tmp/petition.html
+          curl --fail --show-error --silent --head "${base}/" -o /tmp/headers.txt
+          grep -Eiq '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/headers.txt
+          grep -Eiq '^content-security-policy:' /tmp/headers.txt
+          grep -Eiq '^x-content-type-options: nosniff' /tmp/headers.txt
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' "${base}/admin/dashboard/")" = '401'
           test "$(curl --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
-          echo "Live homepage, petition builder, Google/Yandex verification tags, health, robots, sitemap and IndexNow key verified."
+          echo "Expected release, first-wave routes, petition builder, security headers, admin protection, search verification, health, robots, sitemap and IndexNow key verified."
 
       - name: Notify IndexNow
         shell: bash

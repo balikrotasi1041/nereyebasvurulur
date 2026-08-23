@@ -1,4 +1,5 @@
 import { buildRouteCatalog, linkVerifiedRoutes } from "./route-catalog";
+import type { ThresholdKey } from "./thresholds";
 
 export type Source = {
   title: string;
@@ -15,6 +16,14 @@ export type ApplicationChannel = {
 
 export type VerificationStatus = "verified" | "local-check" | "needs-review";
 export type FreshnessRisk = "low" | "medium" | "high";
+export type Urgency = "normal" | "time-limited" | "urgent";
+
+export type PetitionReference = {
+  subject: string;
+  authority: string;
+  suggestedType: string;
+  note?: string;
+};
 
 export type RouteRecord = {
   pathKey: string;
@@ -24,10 +33,14 @@ export type RouteRecord = {
   category: string;
   section: string;
   aliases: string[];
+  intentKey: string;
+  parentHub: string;
+  canonicalIntent: string;
   verificationStatus: VerificationStatus;
   competentAuthorities: string[];
   applicationChannels: ApplicationChannel[];
   requiredDocuments: string[];
+  evidenceChecklist: string[];
   deadlineAndAppeal: string;
   escalation: string[];
   locationLogic: string;
@@ -39,6 +52,13 @@ export type RouteRecord = {
   sources: Source[];
   lastVerified: string;
   freshnessRisk: FreshnessRisk;
+  urgency: Urgency;
+  reviewCadence: number;
+  thresholdKey?: ThresholdKey;
+  eGovernmentAvailable: boolean;
+  petitionRequired: boolean;
+  petitionReference?: PetitionReference;
+  sourceConflicts: string[];
   timeSensitive: boolean;
 };
 
@@ -122,11 +142,48 @@ const rawMenuTree: MenuNode[] = [
     branch("Sokak Hayvanları", [leaf("Yaralı hayvan"), leaf("Sokak hayvanı bildirimi")]),
     branch("Toplu Taşıma", [leaf("Hat / sefer sorunu"), leaf("Durak sorunu")])
   ]),
+  branch("Tüketici Hakları ve Alışveriş", [
+    branch("Ayıplı Mal ve Teslim", [
+      leaf("Bozuk veya kusurlu ürün", "bozuk-kusurlu-urun-satici-kabul-etmiyor"),
+      leaf("Değişim talebinin reddi", "degisim-talebi-kabul-edilmiyor"),
+      leaf("Yanlış ürün teslimi", "yanlis-urun-gonderildi"),
+      leaf("Eksik ürün teslimi", "eksik-urun-gonderildi"),
+      leaf("Sahte veya ayıplı ürün", "sahte-ayipli-urun-satildi"),
+      leaf("Kusurlu veya eksik mobilya teslimi", "mobilya-kusurlu-eksik-teslim-edildi"),
+      leaf("Arızalı cep telefonu", "cep-telefonu-arizali-cikti"),
+      leaf("İkinci el üründe gizli ayıp", "ikinci-el-arac-urunde-gizli-ayip")
+    ]),
+    branch("İade, Cayma ve Ön Ödeme", [
+      leaf("İnternetten alınan ürünü iade", "internetten-alinan-urun-iade-edilmiyor"),
+      leaf("Para iadesinin yapılmaması", "para-iadesi-yapilmiyor"),
+      leaf("Ayakkabı veya kıyafet iadesi", "ayakkabi-kiyafet-iadesi-kabul-edilmiyor"),
+      leaf("Kapora iadesi", "kapora-geri-alinamiyor"),
+      leaf("Cayma hakkının kullandırılmaması", "cayma-hakki-kullandirilmiyor")
+    ]),
+    branch("Garanti ve Yetkili Servis", [
+      leaf("Garanti kapsamında ücretsiz onarım", "garanti-kapsaminda-ucretsiz-tamir-yapilmiyor"),
+      leaf("Yetkili servisin tamir etmemesi", "yetkili-servis-urunu-tamir-etmiyor"),
+      leaf("Serviste ürünün kaybolması veya zarar görmesi", "serviste-urun-kayboldu-zarar-gordu")
+    ]),
+    branch("E-Ticaret, Sipariş ve Kargo", [
+      leaf("Siparişin gönderilmemesi", "siparis-gonderilmiyor"),
+      leaf("Kargoda ürün kaybı", "kargoda-urun-kayboldu"),
+      leaf("Kargoda ürün hasarı", "kargoda-urun-hasar-gordu"),
+      leaf("Teslim edildi görünen kargonun ulaşmaması", "kargo-teslim-edildi-gorunuyor-ulasmadi"),
+      leaf("Ön ödemeli ürün veya hizmetin teslim edilmemesi", "on-odemeli-urun-hizmet-teslim-edilmedi"),
+      leaf("Mesafeli satışta satıcıya ulaşılamaması", "mesafeli-satista-saticiya-ulasilamiyor")
+    ]),
+    branch("Tüketici Hakem Heyeti", [
+      leaf("Tüketici Hakem Heyetine başvuru", "tuketici-hakem-heyetine-basvuru"),
+      leaf("Tüketici Hakem Heyeti kararına itiraz", "tuketici-hakem-heyeti-kararina-itiraz"),
+      leaf("Tüketici Hakem Heyeti kararının uygulanmaması", "tuketici-hakem-heyeti-karari-uygulanmiyor")
+    ])
+  ]),
   branch("Elektrik, Su, Doğalgaz ve Haberleşme", [
     branch("Elektrik", [leaf("Elektrik kesintisi"), leaf("Sokak aydınlatması"), leaf("Direk / kablo tehlikesi"), leaf("Dağıtım sorunu")]),
     branch("Su / Kanalizasyon", [leaf("Su kesintisi"), leaf("Su arızası"), leaf("Kanalizasyon"), leaf("Su baskını / taşkın altyapısı")]),
     branch("Doğalgaz", [leaf("Gaz kesintisi"), leaf("Dağıtım hizmeti"), leaf("Acil gaz durumu")]),
-    branch("Telefon / İnternet", [leaf("Altyapı"), leaf("Hizmet sorunu"), leaf("Numara / hat işlemleri"), leaf("BTK'ya taşınan başvurular")])
+    branch("Telefon / İnternet", [leaf("Altyapı"), leaf("Hizmet sorunu"), leaf("Numara / hat işlemleri"), leaf("BTK'ya taşınan başvurular"), leaf("Kayıp/çalıntı telefon IMEI kapatma", "kayip-calinti-telefon-imei-kapatma")])
   ]),
   branch("Bilgi Edinme, Dilekçe ve Resmî Belge", [
     leaf("Bilgi edinme başvurusu"),
@@ -184,7 +241,7 @@ const rawMenuTree: MenuNode[] = [
 
 const catalog = buildRouteCatalog(rawMenuTree);
 export const routes = catalog.routes;
-export const publishedRoutes = routes.filter(route => route.verificationStatus !== "needs-review");
+export const publishedRoutes = routes.filter(route => route.verificationStatus !== "needs-review" && route.sourceConflicts.length === 0);
 export const menuTree = linkVerifiedRoutes(rawMenuTree, publishedRoutes);
 export const routeBySlug = new Map(publishedRoutes.map(route => [route.slug, route]));
 

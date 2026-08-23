@@ -86,7 +86,23 @@ Bir rota `Doğrulandı` olarak yayımlanmadan önce en az:
 
 kayıtlı olmalıdır.
 
-## 8. Askerlik şubesi konum kayıtları
+Problem bazlı rotalarda bunlara ek olarak `intentKey`, `parentHub`, `canonicalIntent`, `evidenceChecklist`, `urgency`, `reviewCadence` ve uygulanıyorsa `thresholdKey` zorunludur. e-Devlet hizmeti bulunduğu işaretlenen kayıtta doğrudan hizmet bağlantısı; yazılı dilekçe gereken kayıtta konu, merci ve önerilen dilekçe türü bulunur. Yıllık değişen parasal sınırlar sayfa metinlerinde kopyalanmaz, merkezî eşik kaydından okunur.
+
+## 8. Kalite radarı
+
+Kalite radarı her rotayı aşağıdaki eksikler için ayrı ayrı işaretler:
+
+- güvenilir resmî kaynak bulunmaması,
+- doğrudan resmî başvuru veya işlem bağlantısının bulunmaması,
+- itiraz/üst başvuru yolunun bulunmaması,
+- mevcut olduğu belirtilen e-Devlet köprüsünün bulunmaması,
+- gerekli olduğu belirtilen dilekçe referansının bulunmaması,
+- `lastVerified` tarihinin rota `reviewCadence` süresini aşması,
+- çözümlenmemiş resmî kaynak çelişkisi.
+
+Çelişkili kaynak bulunan rota kesin sonuç yayımlamaz. Kalite radarı yayın öncesi testte ilk dalga için sıfır eksik koşuluyla, yönetim panelinde ise bütün envanteri sürekli görünür kılacak biçimde çalışır.
+
+## 9. Askerlik şubesi konum kayıtları
 
 Askerlik şubesi sayfalarında il ve ilçe envanteri İçişleri Bakanlığının Valilikler ve Kaymakamlıklar kaydından, sorumlu şube adı ile adres/telefon/e-posta bilgileri MSB Askeralma Genel Müdürlüğünün resmî “Askerlik Şubeleri İletişim Bilgileri” aramasından alınır.
 

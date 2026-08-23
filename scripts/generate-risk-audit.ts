@@ -3,8 +3,8 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, resolve } from "node:path";
 import { routes } from "../src/data";
 
-const AUDIT_DATE = "2026-08-21";
-const outputPath = resolve("docs/route-risk-audit-2026-08-21.md");
+const AUDIT_DATE = "2026-08-23";
+const outputPath = resolve("docs/route-risk-audit-2026-08-23.md");
 const inventory = routes.filter(route =>
   route.verificationStatus === "needs-review"
   || route.verificationStatus === "local-check"

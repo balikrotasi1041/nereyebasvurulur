@@ -2,12 +2,17 @@ import type {
   ApplicationChannel,
   FreshnessRisk,
   MenuNode,
+  PetitionReference,
   RouteRecord,
   Source,
+  Urgency,
   VerificationStatus
 } from "./data";
+import type { ThresholdKey } from "./thresholds";
+import { consumerDraft } from "./consumer-routes";
+import { telecomDraft } from "./telecom-routes";
 
-const LAST_VERIFIED = "2026-08-21";
+const LEGACY_LAST_VERIFIED = "2026-08-21";
 
 type LeafContext = {
   pathKey: string;
@@ -17,22 +22,36 @@ type LeafContext = {
   legacySlug?: string;
 };
 
-type RouteDraft = {
+export type RouteDraft = {
+  title?: string;
   summary: string;
   aliases?: string[];
+  intentKey?: string;
+  parentHub?: string;
+  canonicalIntent?: string;
   verificationStatus: VerificationStatus;
   competentAuthorities: string[];
   applicationChannels: ApplicationChannel[];
   requiredDocuments: string[];
+  evidenceChecklist?: string[];
   deadlineAndAppeal: string;
   escalation: string[];
   locationLogic: string;
+  steps?: string[];
   legalBasis: string[];
   sources: Source[];
   freshnessRisk: FreshnessRisk;
   caution?: string;
   currentCycleNote?: string;
   publicationBlocker?: string;
+  urgency?: Urgency;
+  reviewCadence?: number;
+  thresholdKey?: ThresholdKey;
+  eGovernmentAvailable?: boolean;
+  petitionRequired?: boolean;
+  petitionReference?: PetitionReference;
+  sourceConflicts?: string[];
+  lastVerified?: string;
 };
 
 const src = (title: string, url: string, authority: string): Source => ({ title, url, authority });
@@ -582,7 +601,7 @@ function landDraft(ctx: LeafContext): RouteDraft {
     summary: ctx.label + " işlemi Web Tapu üzerinden başlatılabilir; işlem ve taşınmazın niteliğine göre yetkili tapu veya kadastro müdürlüğü belgeleri kontrol eder ve fizikî imza/inceleme isteyebilir.",
     verificationStatus: cadastre ? "local-check" : "verified",
     competentAuthorities: [cadastre ? "Taşınmazın bulunduğu Kadastro Müdürlüğü / Kadastro Mahkemesi" : "Tapu Müdürlüğü"],
-    applicationChannels: [portal("Web Tapu", "https://webtapu.tkgm.gov.tr/"), phone("Alo 181 / e-Randevu"), office(cadastre ? "Yetkili Kadastro Müdürlüğü" : "Tapu Müdürlüğü")],
+    applicationChannels: [eGov("Web Tapu İşlemleri", "https://www.turkiye.gov.tr/tkgm-web-tapu"), phone("Alo 181 / e-Randevu"), office(cadastre ? "Yetkili Kadastro Müdürlüğü" : "Tapu Müdürlüğü")],
     requiredDocuments: transaction
       ? ["Tarafların kimlik belgeleri", "Temsil varsa vekâlet/vesayet/yetki belgesi", "Taşınmaz bilgisi", "İşleme göre DASK, veraset belgesi, banka yazısı veya değerleme raporu", "Harç ve döner sermaye ödeme bilgisi"]
       : cadastre
@@ -763,7 +782,7 @@ function utilityDraft(ctx: LeafContext): RouteDraft {
   const electricity = ["Elektrik kesintisi", "Sokak aydınlatması", "Direk / kablo tehlikesi", "Dağıtım sorunu"].includes(ctx.label);
   const water = ["Su kesintisi", "Su arızası", "Kanalizasyon", "Su baskını / taşkın altyapısı"].includes(ctx.label);
   const gas = ["Gaz kesintisi", "Dağıtım hizmeti", "Acil gaz durumu"].includes(ctx.label);
-  const telecom = ["Altyapı", "Hizmet sorunu", "Numara / hat işlemleri", "BTK'ya taşınan başvurular"].includes(ctx.label);
+  const telecom = ["Altyapı", "Hizmet sorunu", "Numara / hat işlemleri", "BTK'ya taşınan başvurular", "Kayıp/çalıntı telefon IMEI kapatma"].includes(ctx.label);
   const emergency = ["Direk / kablo tehlikesi", "Acil gaz durumu", "Su baskını / taşkın altyapısı"].includes(ctx.label);
   if (water) return {
     summary: ctx.label + " bildirimi adresin hizmet alanındaki belediye su ve kanalizasyon idaresi/işletmecisine yapılır; acil can güvenliği riski ayrıca 112'ye bildirilir.",
@@ -804,19 +823,7 @@ function utilityDraft(ctx: LeafContext): RouteDraft {
     sources: [S.gas, S.epdkPortal],
     freshnessRisk: ctx.label === "Acil gaz durumu" ? "high" : "medium"
   };
-  if (telecom) return {
-    summary: ctx.label + " için önce abonesi olunan veya hizmet talep edilen işletmecinin şikâyet sistemi kullanılır; çözülemeyen kayıt BTK Tüketici Şikâyet Bildirim Sistemine taşınır.",
-    verificationStatus: "verified",
-    competentAuthorities: ["Yetkilendirilmiş elektronik haberleşme işletmecisi", "Bilgi Teknolojileri ve İletişim Kurumu"],
-    applicationChannels: [portal("İşletmecinin resmî şikâyet sistemi", "https://tuketici.btk.gov.tr/"), eGov("BTK Tüketici Şikâyet Bildirim Sistemi", "https://www.turkiye.gov.tr/btk-tuketici-sikayet-bildirim-sistemi-4764")],
-    requiredDocuments: ["Abone/hat numarası", "Açık adres (altyapı/kapsama için)", "Sorunun tarihleri ve teknik belirtileri", "İşletmeci başvuru numarası ve cevabı", "Fatura/sözleşme veya ekran görüntüsü gerekiyorsa"],
-    deadlineAndAppeal: "İşletmecinin güncel şikâyet cevap süresi ve BTK sistemindeki yeniden değerlendirme adımı ilgili usul ve esaslardan kontrol edilir; özel tüketici/yargı süreleri ayrıca saklıdır.",
-    escalation: ["İşletmecinin şikâyet/itiraz kanalı", "BTK Tüketici Şikâyet Bildirim Sistemi", "Uyuşmazlığın niteliğine göre tüketici hakem heyeti/mahkemesi veya diğer görevli merci"],
-    locationLogic: "İşletmeci abonelik/hat kaydıyla; altyapı ve kapsama talebinde açık adres ve işletmeci bilgisiyle belirlenir.",
-    legalBasis: ["5809 sayılı Elektronik Haberleşme Kanunu", "Elektronik Haberleşme Sektörüne İlişkin Tüketici Hakları Yönetmeliği", "Tüketici Şikâyetlerinin Çözümüne İlişkin Usul ve Esaslar"],
-    sources: [S.btk, S.btkComplaint],
-    freshnessRisk: "medium"
-  };
+  if (telecom) return telecomDraft(ctx);
   return reviewDraft(ctx);
 }
 
@@ -984,6 +991,7 @@ function msuPersonnelDraft(ctx: LeafContext): RouteDraft {
   };
   const civilian = ctx.label === "Sivil memur";
   return {
+    title: ctx.label === "Uzman erbaş" ? "TSK uzman erbaş temini için nereye başvurulur?" : undefined,
     summary: ctx.label + " temini yalnız MSB'nin açık ilan ve başvuru kılavuzu bulunduğunda Personel Temin Sistemi üzerinden yapılır; sürekli açık başvuru değildir.",
     verificationStatus: "verified",
     competentAuthorities: ["Millî Savunma Bakanlığı Personel Temin Dairesi Başkanlığı"],
@@ -1006,6 +1014,7 @@ function jandarmaDraft(ctx: LeafContext): RouteDraft {
   const followup = ctx.section === "Başvuru Sonrası";
   const authority = coast ? "Sahil Güvenlik Komutanlığı ve ilanda belirtilen temin birimi" : "Jandarma Genel Komutanlığı / Jandarma ve Sahil Güvenlik Akademisi Personel Temin Merkezi";
   return {
+    title: jExpert ? "Jandarma uzman erbaş temini için nereye başvurulur?" : undefined,
     summary: ctx.label + " işlemi ilgili yılın Jandarma veya Sahil Güvenlik temin kılavuzu ve J.Gn.K.lığı Personel - JSGA Öğrenci Temin Sistemi üzerinden yürütülür.",
     verificationStatus: "verified",
     competentAuthorities: [authority],
@@ -1027,6 +1036,7 @@ function jandarmaDraft(ctx: LeafContext): RouteDraft {
 }
 
 const routeResolver: Record<string, (ctx: LeafContext) => RouteDraft> = {
+  "Tüketici Hakları ve Alışveriş": consumerDraft,
   "Sosyal Yardım ve Aile Hizmetleri": socialDraft,
   "Engellilik, Bakım ve Özel Gereksinim": disabilityDraft,
   "Sosyal Güvenlik ve Emeklilik": sgkDraft,
@@ -1079,22 +1089,27 @@ function uniqueSlug(ctx: LeafContext, used: Set<string>): string {
 
 function toRoute(ctx: LeafContext, draft: RouteDraft, used: Set<string>): RouteRecord {
   const slug = uniqueSlug(ctx, used);
+  const intentKey = draft.intentKey || `legacy.${slug}`;
   return {
     pathKey: ctx.pathKey,
     slug,
-    title: titleFor(ctx.label),
+    title: draft.title || titleFor(ctx.label),
     summary: draft.summary,
     category: ctx.category,
     section: ctx.section,
     aliases: Array.from(new Set([ctx.label, ctx.section, ctx.category, ...(draft.aliases || [])])),
+    intentKey,
+    parentHub: draft.parentHub || slugify(ctx.category),
+    canonicalIntent: draft.canonicalIntent || intentKey,
     verificationStatus: draft.verificationStatus,
     competentAuthorities: draft.competentAuthorities,
     applicationChannels: draft.applicationChannels,
     requiredDocuments: draft.requiredDocuments,
+    evidenceChecklist: draft.evidenceChecklist || draft.requiredDocuments,
     deadlineAndAppeal: draft.deadlineAndAppeal,
     escalation: draft.escalation,
     locationLogic: draft.locationLogic,
-    steps: genericSteps(draft),
+    steps: draft.steps || genericSteps(draft),
     legalBasis: draft.legalBasis,
     caution: draft.caution,
     currentCycleNote: draft.currentCycleNote,
@@ -1102,8 +1117,15 @@ function toRoute(ctx: LeafContext, draft: RouteDraft, used: Set<string>): RouteR
     publicationBlocker: draft.verificationStatus === "needs-review"
       ? draft.publicationBlocker || "Kesin rota için işlem/program adı, yetkili kurum, dönem ve yer bilgisi gereklidir."
       : undefined,
-    lastVerified: LAST_VERIFIED,
+    lastVerified: draft.lastVerified || LEGACY_LAST_VERIFIED,
     freshnessRisk: draft.freshnessRisk,
+    urgency: draft.urgency || "normal",
+    reviewCadence: draft.reviewCadence || (draft.freshnessRisk === "high" ? 30 : draft.freshnessRisk === "medium" ? 180 : 365),
+    thresholdKey: draft.thresholdKey,
+    eGovernmentAvailable: draft.eGovernmentAvailable ?? draft.applicationChannels.some(channel => channel.type === "e-government"),
+    petitionRequired: draft.petitionRequired || false,
+    petitionReference: draft.petitionReference,
+    sourceConflicts: draft.sourceConflicts || [],
     timeSensitive: draft.freshnessRisk === "high"
   };
 }

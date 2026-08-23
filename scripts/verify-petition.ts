@@ -18,6 +18,11 @@ assertMatch(/id="identityNumber"[^>]*pattern="\[0-9\]\{11\}"/, "İsteğe bağlı
 assertMatch(/Word olarak indir \(\.doc\)/, "Word indirme eylemi eksik.");
 assertMatch(/Yazdır \/ PDF kaydet/, "PDF/yazdırma eylemi eksik.");
 assertMatch(/Metni kopyala/, "Metin kopyalama eylemi eksik.");
+assertMatch(/new URLSearchParams\(window\.location\.search\)/, "Rota parametrelerini okuyan dilekçe ön doldurma köprüsü eksik.");
+assertMatch(/params\.get\("merci"\)/, "Dilekçe merci ön doldurma parametresi eksik.");
+assertMatch(/params\.get\("konu"\)/, "Dilekçe konu ön doldurma parametresi eksik.");
+assertMatch(/params\.get\("kaynak"\)/, "Kaynak rotaya dönüş parametresi eksik.");
+assertMatch(/id="sourceRouteLink"/, "Dilekçeden kaynak rotaya dönüş bağlantısı eksik.");
 assertMatch(/Bilgileriniz size ait kalır\./, "Yerel işlem gizlilik açıklaması eksik.");
 assertMatch(/MevzuatMetin\/1\.5\.3071\.pdf/, "3071 sayılı Kanun resmî kaynak bağlantısı eksik.");
 assertMatch(/3071 sayılı Kanun uyarınca ad-soyad, imza ve iş veya ikametgâh adresi zorunludur\./, "Kanuni zorunlu alan açıklaması eksik.");
