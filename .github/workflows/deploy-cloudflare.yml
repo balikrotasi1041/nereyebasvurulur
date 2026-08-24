@@ -57,7 +57,9 @@ jobs:
               && curl --fail --show-error --silent "${base}/health?deploy-check=${GITHUB_SHA}" -o /tmp/health.json; then
               if grep -Fq 'name="google-site-verification" content="5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU"' /tmp/home.html \
                 && grep -Fq 'name="yandex-verification" content="3fa0665bc8ba3bb6"' /tmp/home.html \
-                && grep -Fq '"release":"v5-problem-intents-2026-08-23"' /tmp/health.json \
+                && grep -Fq '"release":"v6-security-hardening-2026-08-24"' /tmp/health.json \
+                && grep -Fq '"scannerProbeBlocking":true' /tmp/health.json \
+                && grep -Fq '"versionedEdgeCache":true' /tmp/health.json \
                 && grep -Fq '"routes":252' /tmp/health.json \
                 && grep -Fq '"published":231' /tmp/health.json; then
                 verified=1
@@ -67,13 +69,14 @@ jobs:
             sleep 5
           done
           if [ "$verified" -ne 1 ]; then
-            echo "::error::The expected production release did not become visible on the live domain."
+            echo "::error::The expected hardened production release did not become visible on the live domain."
             exit 1
           fi
           grep -Fq '"status":"ok"' /tmp/health.json
           grep -Fq '"petitionBuilder":true' /tmp/health.json
           grep -Fq '"qualityRadar":true' /tmp/health.json
           grep -Fq '"firstWaveProblems":40' /tmp/health.json
+          grep -Fq '"ipBlocklist":false' /tmp/health.json
           curl --fail --show-error --silent "${base}/robots.txt" | grep -Fq 'Sitemap: https://nereyebasvurulur.com/sitemap.xml'
           curl --fail --show-error --silent "${base}/sitemap.xml" -o /tmp/sitemap.xml
           grep -Fq '<urlset' /tmp/sitemap.xml
@@ -96,8 +99,16 @@ jobs:
           grep -Eiq '^content-security-policy:' /tmp/headers.txt
           grep -Eiq '^x-content-type-options: nosniff' /tmp/headers.txt
           test "$(curl --silent --output /dev/null --write-out '%{http_code}' "${base}/admin/dashboard/")" = '401'
+          test "$(curl --silent --output /tmp/probe.txt --write-out '%{http_code}' "${base}/wp-login.php")" = '404'
+          grep -Fq 'Not Found' /tmp/probe.txt
+          curl --fail --show-error --silent --dump-header /tmp/cache1 --output /dev/null "${base}/"
+          sleep 1
+          curl --fail --show-error --silent --dump-header /tmp/cache2 --output /dev/null "${base}/"
+          tr -d '\r' < /tmp/cache2 | grep -Eiq '^x-edge-cache: HIT$'
+          curl --fail --show-error --silent --dump-header /tmp/searchheaders --output /dev/null "${base}/ara?q=guvenlik-test"
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^cache-control: private, no-store$'
           test "$(curl --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
-          echo "Expected release, first-wave routes, petition builder, security headers, admin protection, search verification, health, robots, sitemap and IndexNow key verified."
+          echo "Hardened release, scanner blocking, edge cache, private search, routes, petition builder, security headers, admin protection, health, robots, sitemap and IndexNow key verified."
 
       - name: Notify IndexNow
         shell: bash
