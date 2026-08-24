@@ -25,9 +25,20 @@ import { renderPetitionBuilder } from "./petition";
 const encoder = new TextEncoder();
 const INDEXNOW_KEY = "b1493a8a691bb36804ec62b677f59d5b";
 const SITE_ORIGIN = "https://nereyebasvurulur.com";
-const RELEASE = "v5-problem-intents-2026-08-23";
+const RELEASE = "v6-security-hardening-2026-08-24";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
 const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
+const PUBLIC_HTML_CACHE_CONTROL = "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400";
+
+const SCANNER_PROBE_PATTERNS = [
+  /(^|\/)(wp-admin|wp-content|wp-includes)(\/|$)/i,
+  /(^|\/)(wp-login\.php|xmlrpc\.php|wlwmanifest\.xml)$/i,
+  /(^|\/)(wordpress|wp1|wp2|wp3|wp4|wp5)(\/|$)/i,
+  /(^|\/)(phpmyadmin|pma|adminer)(\/|$)/i,
+  /(^|\/)(\.git|\.svn|\.hg)(\/|$)/i,
+  /(^|\/)(\.env|\.env\.[^/]+)$/i,
+  /(^|\/)(vendor\/phpunit|cgi-bin)(\/|$)/i
+];
 
 function optionalTextBinding(env: Env, name: string): string | undefined {
   const value: unknown = Reflect.get(env, name);
@@ -93,6 +104,7 @@ function securityHeaders(headers: Headers, admin = false): Headers {
   headers.set("strict-transport-security", "max-age=31536000; includeSubDomains");
   headers.set("x-content-type-options", "nosniff");
   headers.set("x-permitted-cross-domain-policies", "none");
+  headers.set("x-dns-prefetch-control", "off");
   headers.set("referrer-policy", "strict-origin-when-cross-origin");
   headers.set("x-frame-options", "DENY");
   headers.set("cross-origin-opener-policy", "same-origin");
@@ -121,12 +133,12 @@ function withSearchEngineVerification(body: string): string {
   );
 }
 
-function html(body: string, status = 200, admin = false): Response {
+function html(body: string, status = 200, admin = false, cacheable = true): Response {
   return new Response(withSearchEngineVerification(body), {
     status,
     headers: securityHeaders(new Headers({
       "content-type": "text/html; charset=utf-8",
-      "cache-control": admin ? "private, no-store" : "no-store, max-age=0"
+      "cache-control": admin || !cacheable ? "private, no-store" : PUBLIC_HTML_CACHE_CONTROL
     }), admin)
   });
 }
@@ -202,7 +214,7 @@ function stats() {
   };
 }
 
-export default {
+const appHandler = {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
     const path = decodeURIComponent(url.pathname);
@@ -240,7 +252,7 @@ export default {
     }
 
     if (path === "/health") {
-      return new Response(JSON.stringify({ status: "ok", release: RELEASE, publicLaunch: true, petitionBuilder: true, qualityRadar: true, firstWaveProblems: 40, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, ...stats() }), {
+      return new Response(JSON.stringify({ status: "ok", release: RELEASE, publicLaunch: true, petitionBuilder: true, qualityRadar: true, firstWaveProblems: 40, indexNowKeyHosted: true, googleVerificationMeta: true, yandexVerificationMeta: true, scannerProbeBlocking: true, versionedEdgeCache: true, ipBlocklist: false, ...stats() }), {
         headers: securityHeaders(new Headers({ "content-type": "application/json; charset=utf-8", "cache-control": "no-store" }))
       });
     }
@@ -253,7 +265,7 @@ export default {
 
     if (path === "/ara" || path === "/ara/") {
       const query = (url.searchParams.get("q") || "").slice(0, 160);
-      return html(renderSearch(query, searchRoutes(query), searchMilitaryBranches(query)));
+      return html(renderSearch(query, searchRoutes(query), searchMilitaryBranches(query)), 200, false, false);
     }
 
     if (path === "/askerlik-subeleri" || path === "/askerlik-subeleri/") {
@@ -264,19 +276,19 @@ export default {
     if (militaryDetailMatch) {
       const record = militaryBranchByPath.get(`${militaryDetailMatch[1]}/${militaryDetailMatch[2]}`);
       const province = militaryProvinceBySlug.get(militaryDetailMatch[1]);
-      return record && province ? html(renderMilitaryBranch(record, province)) : html(renderNotFound(), 404);
+      return record && province ? html(renderMilitaryBranch(record, province)) : html(renderNotFound(), 404, false, false);
     }
 
     const militaryProvinceMatch = path.match(/^\/askerlik-subeleri\/([^/]+)\/?$/);
     if (militaryProvinceMatch) {
       const province = militaryProvinceBySlug.get(militaryProvinceMatch[1]);
-      return province ? html(renderMilitaryProvince(province)) : html(renderNotFound(), 404);
+      return province ? html(renderMilitaryProvince(province)) : html(renderNotFound(), 404, false, false);
     }
 
     if (path.startsWith("/konu/")) {
       const slug = path.slice("/konu/".length).replace(/\/$/, "");
       const route = routeBySlug.get(slug);
-      return route ? html(renderRoute(route)) : html(renderNotFound(), 404);
+      return route ? html(renderRoute(route)) : html(renderNotFound(), 404, false, false);
     }
 
     if (path === "/admin" || path === "/admin/") {
@@ -301,6 +313,99 @@ export default {
       });
     }
 
-    return html(renderNotFound(), 404);
+    return html(renderNotFound(), 404, false, false);
+  }
+} satisfies ExportedHandler<Env>;
+
+function safePathname(url: URL): string | null {
+  try {
+    return decodeURIComponent(url.pathname);
+  } catch {
+    return null;
+  }
+}
+
+function isScannerProbe(path: string): boolean {
+  return SCANNER_PROBE_PATTERNS.some(pattern => pattern.test(path));
+}
+
+function scannerProbeResponse(): Response {
+  return new Response("Not Found", {
+    status: 404,
+    headers: securityHeaders(new Headers({
+      "content-type": "text/plain; charset=utf-8",
+      "cache-control": "public, max-age=86400",
+      "x-robots-tag": "noindex, nofollow"
+    }))
+  });
+}
+
+function isPublicCacheCandidate(request: Request, url: URL, path: string): boolean {
+  if (request.method !== "GET") return false;
+  if (request.headers.has("Authorization")) return false;
+  if (url.search) return false;
+  if (path === "/health" || path === "/ara" || path === "/ara/") return false;
+  if (path === "/admin" || path.startsWith("/admin/")) return false;
+  return path === "/"
+    || path === "/robots.txt"
+    || path === "/sitemap.xml"
+    || path === `/${INDEXNOW_KEY}.txt`
+    || path === "/dilekce-olustur"
+    || path === "/dilekce-olustur/"
+    || path === "/askerlik-subeleri"
+    || path.startsWith("/askerlik-subeleri/")
+    || path.startsWith("/konu/");
+}
+
+function edgeCacheKey(url: URL): Request {
+  const keyUrl = new URL(url.origin + url.pathname);
+  keyUrl.searchParams.set("__release", RELEASE);
+  return new Request(keyUrl.toString(), { method: "GET" });
+}
+
+function withEdgeCacheMarker(response: Response, value: "HIT" | "MISS"): Response {
+  const headers = new Headers(response.headers);
+  headers.set("x-edge-cache", value);
+  return new Response(response.body, {
+    status: response.status,
+    statusText: response.statusText,
+    headers
+  });
+}
+
+export default {
+  async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
+    const url = new URL(request.url);
+    const path = safePathname(url);
+    if (path === null) {
+      return new Response("Bad Request", {
+        status: 400,
+        headers: securityHeaders(new Headers({ "content-type": "text/plain; charset=utf-8", "cache-control": "no-store" }))
+      });
+    }
+
+    if (isScannerProbe(path)) return scannerProbeResponse();
+
+    if (path === "/favicon.ico") {
+      return new Response(null, {
+        status: 204,
+        headers: securityHeaders(new Headers({ "cache-control": "public, max-age=86400" }))
+      });
+    }
+
+    const cacheable = isPublicCacheCandidate(request, url, path);
+    if (!cacheable) return appHandler.fetch(request, env);
+
+    const cache = caches.default;
+    const cacheKey = edgeCacheKey(url);
+    const cached = await cache.match(cacheKey);
+    if (cached) return withEdgeCacheMarker(cached, "HIT");
+
+    const response = await appHandler.fetch(request, env);
+    if (response.status !== 200) return response;
+
+    const cacheCopy = response.clone();
+    ctx.waitUntil(cache.put(cacheKey, cacheCopy));
+    return withEdgeCacheMarker(response, "MISS");
   }
 } satisfies ExportedHandler<Env>;
