@@ -45,6 +45,12 @@ function html(body: string, method: string): Response {
   });
 }
 
+function withReleaseHeader(response: Response): Response {
+  const headers = new Headers(response.headers);
+  headers.set("x-security-layer", RELEASE);
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
 function relatedRoutes(item: MilitaryServiceAnnouncement): RelatedRoute[] {
   return item.relatedPathKeys
     .map(pathKey => routeByPathKey.get(pathKey))
@@ -60,7 +66,7 @@ function militaryAnnouncementsForRoute(slug: string): MilitaryServiceAnnouncemen
 
 async function transformedBaseResponse(request: Request, env: Env, ctx: ExecutionContext, transform: (body: string) => string): Promise<Response> {
   const response = await baseHandler.fetch(request, env, ctx);
-  if (request.method === "HEAD" || response.status !== 200 || !(response.headers.get("content-type") || "").includes("text/html")) return response;
+  if (request.method === "HEAD" || response.status !== 200 || !(response.headers.get("content-type") || "").includes("text/html")) return withReleaseHeader(response);
   const body = transform(await response.text());
   const headers = new Headers(response.headers);
   headers.delete("content-length");
@@ -71,9 +77,9 @@ async function transformedBaseResponse(request: Request, env: Env, ctx: Executio
 
 async function sitemapResponse(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const response = await baseHandler.fetch(request, env, ctx);
-  if (response.status !== 200) return response;
+  if (response.status !== 200) return withReleaseHeader(response);
   const xml = await response.text();
-  if (!xml.includes("</urlset>")) return response;
+  if (!xml.includes("</urlset>")) return withReleaseHeader(response);
   const entries = [
     `<url><loc>${SITE_ORIGIN}/askerlik-subeleri/duyurular/</loc><lastmod>${militaryLastModified}</lastmod></url>`,
     ...militaryServiceAnnouncements.map(item => `<url><loc>${SITE_ORIGIN}/duyuru/${item.slug}/</loc><lastmod>${item.lastModified}</lastmod></url>`)
@@ -87,7 +93,7 @@ async function sitemapResponse(request: Request, env: Env, ctx: ExecutionContext
 
 async function healthResponse(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const response = await baseHandler.fetch(request, env, ctx);
-  if (response.status !== 200) return response;
+  if (response.status !== 200) return withReleaseHeader(response);
   try {
     const data = await response.json() as Record<string, unknown>;
     const body = JSON.stringify({
@@ -102,7 +108,7 @@ async function healthResponse(request: Request, env: Env, ctx: ExecutionContext)
     headers.set("x-security-layer", RELEASE);
     return new Response(request.method === "HEAD" ? null : body, { status: 200, headers });
   } catch {
-    return response;
+    return withReleaseHeader(response);
   }
 }
 
@@ -111,8 +117,8 @@ export default {
     const url = new URL(request.url);
     const path = url.pathname;
 
-    if (request.method !== "GET" && request.method !== "HEAD") return baseHandler.fetch(request, env, ctx);
-    if (url.hostname === "www.nereyebasvurulur.com") return baseHandler.fetch(request, env, ctx);
+    if (request.method !== "GET" && request.method !== "HEAD") return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
+    if (url.hostname === "www.nereyebasvurulur.com") return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
 
     if (path === "/askerlik-subeleri/duyurular" || path === "/askerlik-subeleri/duyurular/") {
       return html(renderMilitaryServiceListPage(), request.method);
@@ -141,6 +147,6 @@ export default {
       if (linked.length) return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryRouteAnnouncementSection(linked)));
     }
 
-    return baseHandler.fetch(request, env, ctx);
+    return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
   }
 } satisfies ExportedHandler<Env>;
