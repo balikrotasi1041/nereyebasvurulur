@@ -1,0 +1,67 @@
+name: Announcement production smoke
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    if: github.head_ref == 'ci/announcement-production-smoke'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Verify live announcement flow
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://nereyebasvurulur.com"
+
+          for attempt in $(seq 1 20); do
+            if curl --fail --silent --show-error "${base}/health?announcement-smoke=${GITHUB_SHA}" -o /tmp/health.json \
+              && grep -Fq '"announcementFeed":true' /tmp/health.json \
+              && grep -Fq '"announcements":7' /tmp/health.json; then
+              break
+            fi
+            if [ "$attempt" = 20 ]; then
+              echo "::error::Announcement-enabled production release not visible."
+              exit 1
+            fi
+            sleep 5
+          done
+
+          curl --fail --silent --show-error "${base}/duyurular/?smoke=${GITHUB_SHA}" -o /tmp/list.html
+          grep -Fq '<h1>Resmî Duyurular</h1>' /tmp/list.html
+          grep -Fq '<link rel="canonical" href="https://nereyebasvurulur.com/duyurular/">' /tmp/list.html
+          grep -Fq '2026-2027 GSB yurt başvuruları başladı' /tmp/list.html
+          grep -Fq '2026-YKS yerleştirme sonuçları açıklandı' /tmp/list.html
+
+          curl --fail --silent --show-error "${base}/duyuru/2026-gsb-yurt-basvurulari-basladi/?smoke=${GITHUB_SHA}" -o /tmp/gsb.html
+          grep -Fq '<link rel="canonical" href="https://nereyebasvurulur.com/duyuru/2026-gsb-yurt-basvurulari-basladi/">' /tmp/gsb.html
+          grep -Fq '29 Ağustos 2026 23.59' /tmp/gsb.html
+          grep -Fq 'https://www.gsb.gov.tr/tr/haber-detay/302633-bakan-bak-gsb-yurt-basvurularinin-basladigini-duyurdu' /tmp/gsb.html
+          grep -Fq 'İlgili başvuru rehberleri' /tmp/gsb.html
+
+          curl --fail --silent --show-error "${base}/duyuru/2026-msu-harp-okullari-sonuc-duyurusu/?smoke=${GITHUB_SHA}" -o /tmp/msu.html
+          grep -Fq '2026 MSÜ Harp Okulları sonuç duyurusu yayımlandı' /tmp/msu.html
+          grep -Fq 'İlgili başvuru rehberleri' /tmp/msu.html
+
+          curl --fail --silent --show-error "${base}/konu/msu-askeri-ogrenci-basvurusu-nereye-yapilir/?smoke=${GITHUB_SHA}" -o /tmp/msu-route.html
+          grep -Fq 'Bu konuyla ilgili güncel resmî duyurular' /tmp/msu-route.html
+          grep -Fq '2026 MSÜ Harp Okulları sonuç duyurusu yayımlandı' /tmp/msu-route.html
+
+          curl --fail --silent --show-error "${base}/?announcement-smoke=${GITHUB_SHA}" -o /tmp/home.html
+          grep -Fq 'Son resmî duyurular' /tmp/home.html
+          grep -Fq 'href="/duyurular/"' /tmp/home.html
+
+          curl --fail --silent --show-error "${base}/sitemap.xml?announcement-smoke=${GITHUB_SHA}" -o /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/duyurular/</loc>' /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/duyuru/2026-gsb-yurt-basvurulari-basladi/</loc>' /tmp/sitemap.xml
+          count=$(grep -o '<loc>https://nereyebasvurulur.com/duyuru/' /tmp/sitemap.xml | wc -l | tr -d ' ')
+          test "$count" = '7'
+
+          test "$(curl --silent --output /dev/null --write-out '%{http_code}' "${base}/duyuru/boyle-bir-duyuru-yok/")" = '404'
+          echo "Live announcement list, details, official links, canonical URLs, route cross-links, homepage exposure and sitemap verified."
