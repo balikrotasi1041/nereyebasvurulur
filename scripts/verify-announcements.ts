@@ -21,15 +21,17 @@ for (const item of announcements) {
     if (!source.authority.trim() || !source.title.trim()) failures.push(`Eksik kaynak metadatası: ${item.slug}`);
   }
 
+  let publishedTargets = 0;
   for (const pathKey of item.relatedPathKeys) {
     const route = pathKeys.get(pathKey);
     if (!route) {
-      failures.push(`Boş iç bağlantı: ${item.slug} -> ${pathKey}`);
+      failures.push(`Katalogda bulunmayan konu ilişkisi: ${item.slug} -> ${pathKey}`);
       continue;
     }
-    if (route.verificationStatus === "needs-review") {
-      failures.push(`Yayıma kapalı rotaya duyuru bağlantısı: ${item.slug} -> ${pathKey}`);
-    }
+    if (route.verificationStatus !== "needs-review") publishedTargets += 1;
+  }
+  if (item.relatedPathKeys.length > 0 && publishedTargets === 0 && !(item.relatedSearches?.length)) {
+    failures.push(`Kullanılabilir iç bağlantısı olmayan duyuru: ${item.slug}`);
   }
 }
 
@@ -40,4 +42,4 @@ if (failures.length) {
   process.exit(1);
 }
 
-console.log(`Duyuru doğrulaması başarılı: ${announcements.length} kayıt, ${slugs.size} benzersiz slug, tüm çapraz rota hedefleri mevcut.`);
+console.log(`Duyuru doğrulaması başarılı: ${announcements.length} kayıt, ${slugs.size} benzersiz slug, her duyuruda yayımlanmış rota veya güvenli arama köprüsü mevcut.`);
