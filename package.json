@@ -17,11 +17,12 @@
     "verify:petition": "tsx scripts/verify-petition.ts",
     "verify:quality": "tsx scripts/verify-quality-radar.ts",
     "verify:announcements": "tsx scripts/verify-announcements.ts",
+    "verify:military-announcements": "tsx scripts/verify-military-service-announcements.ts",
     "audit:collisions": "tsx scripts/check-route-collisions.ts",
     "audit:risk": "tsx scripts/generate-risk-audit.ts",
     "audit:sources": "tsx scripts/check-source-links.ts",
     "refresh:military-branches": "node scripts/fetch-military-branches.mjs",
-    "validate": "pnpm run types:check && pnpm run check && pnpm run verify && pnpm run verify:petition && pnpm run verify:quality && pnpm run verify:announcements && pnpm run audit:collisions && pnpm run cf:check",
+    "validate": "pnpm run types:check && pnpm run check && pnpm run verify && pnpm run verify:petition && pnpm run verify:quality && pnpm run verify:announcements && pnpm run verify:military-announcements && pnpm run audit:collisions && pnpm run cf:check",
     "cf:check": "wrangler deploy --dry-run"
   },
   "devDependencies": {
