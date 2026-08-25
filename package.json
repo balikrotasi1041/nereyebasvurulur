@@ -11,7 +11,7 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "types:generate": "wrangler types --include-runtime false",
-    "types:check": "wrangler types --include-runtime false --check",
+    "types:check": "wrangler types --include-runtime false && wrangler types --include-runtime false --check",
     "check": "tsc --noEmit",
     "verify": "tsx scripts/verify-data.ts",
     "verify:petition": "tsx scripts/verify-petition.ts",
