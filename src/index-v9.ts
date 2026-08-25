@@ -138,6 +138,10 @@ export default {
     if (path === "/sitemap.xml") return sitemapResponse(request, env, ctx);
     if (path === "/health") return healthResponse(request, env, ctx);
 
+    if (path === "/") {
+      return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryServiceGeneralFeedSection(4)));
+    }
+
     if (path === "/duyurular" || path === "/duyurular/") {
       return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryServiceGeneralFeedSection(4)));
     }
