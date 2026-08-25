@@ -57,11 +57,12 @@ jobs:
               && curl --fail --show-error --silent "${base}/health?deploy-check=${GITHUB_SHA}" -o /tmp/health.json; then
               if grep -Fq 'name="google-site-verification" content="5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU"' /tmp/home.html \
                 && grep -Fq 'name="yandex-verification" content="3fa0665bc8ba3bb6"' /tmp/home.html \
-                && grep -Fq '"release":"v6-security-hardening-2026-08-24"' /tmp/health.json \
+                && grep -Fq '"release":"v8-bot-hardening-2026-08-25"' /tmp/health.json \
                 && grep -Fq '"scannerProbeBlocking":true' /tmp/health.json \
-                && grep -Fq '"versionedEdgeCache":true' /tmp/health.json \
-                && grep -Fq '"routes":252' /tmp/health.json \
-                && grep -Fq '"published":231' /tmp/health.json; then
+                && grep -Fq '"legacyScriptProbeBlocking":true' /tmp/health.json \
+                && grep -Fq '"sensitiveFileProbeBlocking":true' /tmp/health.json \
+                && grep -Fq '"publicHealthMinimized":true' /tmp/health.json \
+                && grep -Fq '"versionedEdgeCache":true' /tmp/health.json; then
                 verified=1
                 break
               fi
@@ -69,20 +70,22 @@ jobs:
             sleep 5
           done
           if [ "$verified" -ne 1 ]; then
-            echo "::error::The expected hardened production release did not become visible on the live domain."
+            echo "::error::The expected v8 hardened production release did not become visible on the live domain."
             exit 1
           fi
           grep -Fq '"status":"ok"' /tmp/health.json
-          grep -Fq '"petitionBuilder":true' /tmp/health.json
-          grep -Fq '"qualityRadar":true' /tmp/health.json
-          grep -Fq '"firstWaveProblems":40' /tmp/health.json
+          grep -Fq '"announcementFeed":true' /tmp/health.json
           grep -Fq '"ipBlocklist":false' /tmp/health.json
-          curl --fail --show-error --silent "${base}/robots.txt" | grep -Fq 'Sitemap: https://nereyebasvurulur.com/sitemap.xml'
+          curl --fail --show-error --silent "${base}/robots.txt" -o /tmp/robots.txt
+          grep -Fq 'Disallow: /admin/' /tmp/robots.txt
+          grep -Fq 'Disallow: /health' /tmp/robots.txt
+          grep -Fq 'Sitemap: https://nereyebasvurulur.com/sitemap.xml' /tmp/robots.txt
           curl --fail --show-error --silent "${base}/sitemap.xml" -o /tmp/sitemap.xml
           grep -Fq '<urlset' /tmp/sitemap.xml
           grep -Fq '<loc>https://nereyebasvurulur.com/dilekce-olustur/</loc>' /tmp/sitemap.xml
           grep -Fq '<loc>https://nereyebasvurulur.com/konu/bozuk-kusurlu-urun-satici-kabul-etmiyor/</loc>' /tmp/sitemap.xml
           grep -Fq '<loc>https://nereyebasvurulur.com/konu/kayip-calinti-telefon-imei-kapatma/</loc>' /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/duyurular/</loc>' /tmp/sitemap.xml
           curl --fail --show-error --silent "${base}/konu/bozuk-kusurlu-urun-satici-kabul-etmiyor/?deploy-check=${GITHUB_SHA}" -o /tmp/consumer.html
           grep -Fq 'Bozuk veya kusurlu ürün kabul edilmiyorsa nereye başvurulur?' /tmp/consumer.html
           grep -Fq 'Yıllık parasal eşik:' /tmp/consumer.html
@@ -98,23 +101,32 @@ jobs:
           grep -Eiq '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/headers.txt
           grep -Eiq '^content-security-policy:' /tmp/headers.txt
           grep -Eiq '^x-content-type-options: nosniff' /tmp/headers.txt
+          grep -Eiq '^x-security-layer: v8-bot-hardening-2026-08-25' /tmp/headers.txt
           test "$(curl --silent --output /dev/null --write-out '%{http_code}' "${base}/admin/dashboard/")" = '401'
           test "$(curl --silent --output /tmp/probe.txt --write-out '%{http_code}' "${base}/wp-login.php")" = '404'
           grep -Fq 'Not Found' /tmp/probe.txt
+          test "$(curl --silent --output /tmp/randomphp.txt --write-out '%{http_code}' "${base}/UuAFIYGYKdefault.php")" = '404'
+          grep -Fq 'Not Found' /tmp/randomphp.txt
+          test "$(curl --silent --output /tmp/serverstatus.txt --write-out '%{http_code}' "${base}/server-status")" = '404'
+          curl --fail --show-error --silent --dump-header /tmp/healthheaders --output /dev/null "${base}/health"
+          tr -d '\r' < /tmp/healthheaders | grep -Eiq '^cache-control: no-store, max-age=0$'
+          tr -d '\r' < /tmp/healthheaders | grep -Eiq '^x-robots-tag: noindex, nofollow, noarchive$'
           curl --fail --show-error --silent --dump-header /tmp/cache1 --output /dev/null "${base}/"
           sleep 1
           curl --fail --show-error --silent --dump-header /tmp/cache2 --output /dev/null "${base}/"
           tr -d '\r' < /tmp/cache2 | grep -Eiq '^x-edge-cache: HIT$'
           curl --fail --show-error --silent --dump-header /tmp/searchheaders --output /dev/null "${base}/ara?q=guvenlik-test"
           tr -d '\r' < /tmp/searchheaders | grep -Eiq '^cache-control: private, no-store$'
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^x-robots-tag: noindex, follow, noarchive$'
           test "$(curl --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
-          echo "Hardened release, scanner blocking, edge cache, private search, routes, petition builder, security headers, admin protection, health, robots, sitemap and IndexNow key verified."
+          echo "V8 hardened release, generic probe blocking, minimized health, noindex search, edge cache, routes, petition builder, security headers, admin protection, robots, sitemap and IndexNow key verified."
 
       - name: Notify IndexNow
         shell: bash
         run: |
           python3 - <<'PY'
           import json
+          import urllib.error
           import urllib.request
           import xml.etree.ElementTree as ET
 
