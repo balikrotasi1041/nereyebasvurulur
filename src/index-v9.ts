@@ -64,6 +64,11 @@ function militaryAnnouncementsForRoute(slug: string): MilitaryServiceAnnouncemen
   return militaryServiceAnnouncements.filter(item => item.relatedPathKeys.includes(route.pathKey));
 }
 
+function renderMilitaryHubNotice(): string {
+  const current = militaryServiceAnnouncements.find(item => item.slug === "kasim-2026-siniflandirma-donemi-duyurusu") || militaryServiceAnnouncements[0];
+  return `<aside style="width:min(1160px,calc(100% - 28px));margin:16px auto 30px;padding:14px 16px;border:1px solid #cfdcf5;border-radius:14px;background:#f6f9ff;display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap"><div><strong style="display:block">Askeralma takvimi ve sevk duyuruları</strong><span style="display:block;margin-top:4px;color:#65758b;font-size:.88rem;line-height:1.45">${current ? current.title : "Normal tertip ve bedelli celp-sevk takvimlerini kontrol edin."}</span></div><a href="/askerlik-subeleri/duyurular/" style="display:inline-flex;min-height:42px;align-items:center;padding:9px 12px;border-radius:10px;background:#2458d6;color:#fff;text-decoration:none;font-weight:800">Güncel takvimi aç →</a></aside>`;
+}
+
 async function transformedBaseResponse(request: Request, env: Env, ctx: ExecutionContext, transform: (body: string) => string): Promise<Response> {
   const response = await baseHandler.fetch(request, env, ctx);
   if (request.method === "HEAD" || response.status !== 200 || !(response.headers.get("content-type") || "").includes("text/html")) return withReleaseHeader(response);
@@ -137,8 +142,16 @@ export default {
       return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryServiceGeneralFeedSection(4)));
     }
 
-    if (path === "/askerlik-subeleri" || path === "/askerlik-subeleri/" || path.startsWith("/askerlik-subeleri/")) {
+    if (path === "/askerlik-subeleri" || path === "/askerlik-subeleri/") {
       return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryServiceFeedSection(5)));
+    }
+
+    if (/^\/askerlik-subeleri\/[^/]+\/?$/.test(path)) {
+      return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryServiceFeedSection(3)));
+    }
+
+    if (/^\/askerlik-subeleri\/[^/]+\/[^/]+\/?$/.test(path)) {
+      return transformedBaseResponse(request, env, ctx, body => insertBeforeFooter(body, renderMilitaryHubNotice()));
     }
 
     const routeMatch = path.match(/^\/konu\/([^/]+)\/?$/);
