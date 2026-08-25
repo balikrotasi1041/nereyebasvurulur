@@ -19,6 +19,17 @@ const LATEST_ANNOUNCEMENT_DATE = announcements.map(item => item.lastModified).so
 const routeByPathKey = new Map(routes.map(route => [route.pathKey, route]));
 const routeBySlug = new Map(routes.map(route => [route.slug, route]));
 
+const OFFICIAL_LINK_REPLACEMENTS: Array<[string, string]> = [
+  [
+    "https://kygm.gsb.gov.tr/HaberDetaylari/1/10008/302637/yurt-basvurulari-basladi.aspx",
+    "https://www.gsb.gov.tr/tr/haber-detay/302633-bakan-bak-gsb-yurt-basvurularinin-basladigini-duyurdu"
+  ],
+  [
+    "https://www.gsb.gov.tr/tr/duyuru/302548-yurt-basvurulari-duyurusu",
+    "https://www.gsb.gov.tr/tr/haber-detay/302548-yurt-basvurulari-duyurusu"
+  ]
+];
+
 function securityHeaders(headers: Headers): Headers {
   headers.set("strict-transport-security", "max-age=31536000; includeSubDomains");
   headers.set("x-content-type-options", "nosniff");
@@ -29,12 +40,19 @@ function securityHeaders(headers: Headers): Headers {
   headers.set("cross-origin-opener-policy", "same-origin");
   headers.set("cross-origin-resource-policy", "same-origin");
   headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
-  headers.set("content-security-policy", "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline' application/ld+json; img-src 'self' data:; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests");
+  headers.set("content-security-policy", "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests");
   return headers;
 }
 
+function normalizeOfficialLinks(body: string): string {
+  let output = body;
+  for (const [from, to] of OFFICIAL_LINK_REPLACEMENTS) output = output.replaceAll(from, to);
+  return output;
+}
+
 function announcementHtml(body: string, method: string): Response {
-  return new Response(method === "HEAD" ? null : body, {
+  const normalized = normalizeOfficialLinks(body);
+  return new Response(method === "HEAD" ? null : normalized, {
     status: 200,
     headers: securityHeaders(new Headers({
       "content-type": "text/html; charset=utf-8",
