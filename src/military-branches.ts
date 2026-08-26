@@ -57,17 +57,23 @@ function normalize(value: string): string {
     .trim();
 }
 
+const militarySearchStopwords = new Set([
+  "askerlik", "subesi", "sube", "nerede", "nerededir", "nasil", "gidilir", "ulasirim", "ulasim", "telefonu", "telefon",
+  "numarasi", "iletisim", "bilgileri", "bilgisi", "konum", "konumu", "navigasyon", "adresi", "adres", "yol", "tarifi", "nedir",
+  "hangi", "icin", "bana", "ver", "goster", "ac", "bul"
+]);
+
 export function searchMilitaryBranches(query: string, limit = 60): MilitaryBranchRecord[] {
   const normalizedQuery = normalize(query);
   if (!normalizedQuery) return [];
-  const terms = normalizedQuery.split(" ").filter(term => !["askerlik", "subesi", "sube", "nerede", "nerededir", "nasil", "gidilir", "ulasirim", "telefonu", "nedir"].includes(term));
+  const terms = normalizedQuery.split(" ").filter(term => !militarySearchStopwords.has(term));
   if (!terms.length) return [];
 
   return militaryBranches
     .map(record => {
       const province = normalize(record.province);
       const district = normalize(record.district);
-      const haystack = normalize(`${record.province} ${record.district} ${record.branchName} ${record.address} ${record.phone}`);
+      const haystack = normalize(`${record.province} ${record.district} ${record.branchName} ${record.address} ${record.phone} ${record.email}`);
       let score = terms.reduce((total, term) => total + (haystack.includes(term) ? 2 : 0), 0);
       if (terms.includes(district)) score += 8;
       if (terms.includes(province)) score += 4;

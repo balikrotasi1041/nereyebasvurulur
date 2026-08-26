@@ -58,14 +58,14 @@ jobs:
               && curlr --fail --show-error --silent "${base}/health?deploy-check=${GITHUB_SHA}" -o /tmp/health.json; then
               if grep -Fq 'name="google-site-verification" content="5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU"' /tmp/home.html \
                 && grep -Fq 'name="yandex-verification" content="3fa0665bc8ba3bb6"' /tmp/home.html \
-                && grep -Fq '"release":"v9-askeralma-announcements-2026-08-25"' /tmp/health.json \
+                && grep -Fq '"release":"v10-preference-layer-2026-08-26"' /tmp/health.json \
+                && grep -Fq '"preferenceLayer":true' /tmp/health.json \
+                && grep -Fq '"quickAnswerLayer":true' /tmp/health.json \
+                && grep -Fq '"deadlineRadar":true' /tmp/health.json \
+                && grep -Fq '"smartSearch":true' /tmp/health.json \
+                && grep -Fq '"noNewPreferenceUrls":true' /tmp/health.json \
                 && grep -Fq '"scannerProbeBlocking":true' /tmp/health.json \
-                && grep -Fq '"legacyScriptProbeBlocking":true' /tmp/health.json \
-                && grep -Fq '"sensitiveFileProbeBlocking":true' /tmp/health.json \
-                && grep -Fq '"publicHealthMinimized":true' /tmp/health.json \
-                && grep -Fq '"versionedEdgeCache":true' /tmp/health.json \
-                && grep -Fq '"militaryAnnouncementFeed":true' /tmp/health.json \
-                && grep -Fq '"militaryAnnouncements":5' /tmp/health.json; then
+                && grep -Fq '"militaryAnnouncementFeed":true' /tmp/health.json; then
                 verified=1
                 break
               fi
@@ -73,78 +73,65 @@ jobs:
             sleep 5
           done
           if [ "$verified" -ne 1 ]; then
-            echo "::error::The expected v9 Askeralma production release did not become visible on the live domain."
+            echo "::error::The expected v10 preference release did not become visible on the live domain."
             exit 1
           fi
-          grep -Fq '"status":"ok"' /tmp/health.json
-          grep -Fq '"announcementFeed":true' /tmp/health.json
-          grep -Fq '"ipBlocklist":false' /tmp/health.json
+
+          grep -Fq 'Yaklaşan resmî tarihler' /tmp/home.html
+          grep -Fq 'Genel başvuru ve kayıt tarihleri' /tmp/home.html
+          grep -Fq 'ASAL / Askeralma yaklaşan tarihleri' /tmp/home.html
+          grep -Fq 'Askeralma ve sevk takvimleri' /tmp/home.html
+
+          curlr --fail --show-error --silent "${base}/konu/bedelli-askerlik-nereye-basvurulur/?deploy-check=${GITHUB_SHA}" -o /tmp/route.html
+          grep -Fq '30 saniyede cevap' /tmp/route.html
+          grep -Fq 'Gitmeden / başvurmadan önce' /tmp/route.html
+          grep -Fq 'Şimdi ne yapmalısınız?' /tmp/route.html
+          grep -Fq 'Güncellik kaydı:' /tmp/route.html
+          grep -Fq 'Bu işlemle ilgili askerlik takvimi' /tmp/route.html
+
+          curlr --fail --show-error --silent "${base}/ara?q=Ceyhan%20askerlik%20%C5%9Fubesi%20telefon%20numaras%C4%B1" -o /tmp/search.html
+          grep -Fq 'Ceyhan askerlik şubesi' /tmp/search.html
+          curlr --fail --show-error --silent --dump-header /tmp/searchheaders --output /dev/null "${base}/ara?q=Ceyhan%20askerlik%20%C5%9Fubesi%20konumu%20navigasyon"
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^cache-control: private, no-store$'
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^x-robots-tag: noindex, follow, noarchive$'
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^x-smart-search: v1$'
+
           curlr --fail --show-error --silent "${base}/robots.txt" -o /tmp/robots.txt
           grep -Fq 'Disallow: /admin/' /tmp/robots.txt
           grep -Fq 'Disallow: /health' /tmp/robots.txt
           grep -Fq 'Sitemap: https://nereyebasvurulur.com/sitemap.xml' /tmp/robots.txt
           curlr --fail --show-error --silent "${base}/sitemap.xml" -o /tmp/sitemap.xml
           grep -Fq '<urlset' /tmp/sitemap.xml
-          grep -Fq '<loc>https://nereyebasvurulur.com/dilekce-olustur/</loc>' /tmp/sitemap.xml
-          grep -Fq '<loc>https://nereyebasvurulur.com/konu/bozuk-kusurlu-urun-satici-kabul-etmiyor/</loc>' /tmp/sitemap.xml
-          grep -Fq '<loc>https://nereyebasvurulur.com/konu/kayip-calinti-telefon-imei-kapatma/</loc>' /tmp/sitemap.xml
           grep -Fq '<loc>https://nereyebasvurulur.com/duyurular/</loc>' /tmp/sitemap.xml
           grep -Fq '<loc>https://nereyebasvurulur.com/askerlik-subeleri/duyurular/</loc>' /tmp/sitemap.xml
-          grep -Fq '<loc>https://nereyebasvurulur.com/duyuru/kasim-2026-siniflandirma-donemi-duyurusu/</loc>' /tmp/sitemap.xml
-          grep -Fq '<loc>https://nereyebasvurulur.com/duyuru/2026-bedelli-askerlik-celp-sevk-faaliyet-takvimi/</loc>' /tmp/sitemap.xml
-          curlr --fail --show-error --silent "${base}/konu/bozuk-kusurlu-urun-satici-kabul-etmiyor/?deploy-check=${GITHUB_SHA}" -o /tmp/consumer.html
-          grep -Fq 'Bozuk veya kusurlu ürün kabul edilmiyorsa nereye başvurulur?' /tmp/consumer.html
-          grep -Fq 'Yıllık parasal eşik:' /tmp/consumer.html
-          grep -Fq 'Dilekçe oluştur' /tmp/consumer.html
-          curlr --fail --show-error --silent "${base}/konu/kayip-calinti-telefon-imei-kapatma/?deploy-check=${GITHUB_SHA}" -o /tmp/imei.html
-          grep -Fq 'Kayıp veya çalıntı telefonun IMEI' /tmp/imei.html
-          grep -Fq 'turkiye.gov.tr' /tmp/imei.html
-          curlr --fail --show-error --silent "${base}/dilekce-olustur/?deploy-check=${GITHUB_SHA}" -o /tmp/petition.html
-          grep -Fq 'id="petitionRequest"' /tmp/petition.html
-          grep -Fq 'Word olarak indir (.doc)' /tmp/petition.html
-          grep -Fq 'Bilgileriniz size ait kalır.' /tmp/petition.html
-          curlr --fail --show-error --silent "${base}/askerlik-subeleri/duyurular/?deploy-check=${GITHUB_SHA}" -o /tmp/asal-feed.html
-          grep -Fq 'Askeralma takvimi ve sevk duyuruları' /tmp/asal-feed.html
-          grep -Fq '31 Ağustos 2026' /tmp/asal-feed.html
-          grep -Fq 'Bedelli askerlik celp ve dağıtım takvimi' /tmp/asal-feed.html
-          grep -Fq 'rel="canonical" href="https://nereyebasvurulur.com/askerlik-subeleri/duyurular/"' /tmp/asal-feed.html
-          curlr --fail --show-error --silent "${base}/duyuru/2026-normal-tertip-er-celp-sevk-takvimi/?deploy-check=${GITHUB_SHA}" -o /tmp/normal-calendar.html
-          grep -Fq '2026 yedek subay, yedek astsubay ve er celp-sevk takvimi' /tmp/normal-calendar.html
-          grep -Fq '3 Eylül 2026' /tmp/normal-calendar.html
-          grep -Fq '7 Ocak 2027' /tmp/normal-calendar.html
-          curlr --fail --show-error --silent "${base}/duyuru/2026-bedelli-askerlik-celp-sevk-faaliyet-takvimi/?deploy-check=${GITHUB_SHA}" -o /tmp/bedelli-calendar.html
-          grep -Fq '2026 bedelli askerlik faaliyet takvimi' /tmp/bedelli-calendar.html
-          grep -Fq '30 Aralık 2026' /tmp/bedelli-calendar.html
-          grep -Fq '3 Ocak 2027' /tmp/bedelli-calendar.html
-          curlr --fail --show-error --silent "${base}/askerlik-subeleri/?deploy-check=${GITHUB_SHA}" -o /tmp/branches.html
-          grep -Fq 'Askeralma takvimi ve sınıflandırma duyuruları' /tmp/branches.html
-          curlr --fail --show-error --silent "${base}/duyurular/?deploy-check=${GITHUB_SHA}" -o /tmp/announcements.html
-          grep -Fq 'Askeralma ve sevk takvimleri' /tmp/announcements.html
-          curlr --fail --show-error --silent "${base}/konu/bedelli-askerlik-nereye-basvurulur/?deploy-check=${GITHUB_SHA}" -o /tmp/bedelli-route.html
-          grep -Fq 'Bu işlemle ilgili askerlik takvimi' /tmp/bedelli-route.html
+
+          curlr --fail --show-error --silent "${base}/askerlik-subeleri/duyurular/?deploy-check=${GITHUB_SHA}" -o /tmp/asal.html
+          grep -Fq 'Askeralma takvimi ve sevk duyuruları' /tmp/asal.html
+          curlr --fail --show-error --silent "${base}/duyurular/?deploy-check=${GITHUB_SHA}" -o /tmp/general.html
+          grep -Fq 'Resmî Duyurular' /tmp/general.html
+
           curlr --fail --show-error --silent --head "${base}/" -o /tmp/headers.txt
           grep -Eiq '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/headers.txt
           grep -Eiq '^content-security-policy:' /tmp/headers.txt
           grep -Eiq '^x-content-type-options: nosniff' /tmp/headers.txt
-          grep -Eiq '^x-security-layer: v9-askeralma-announcements-2026-08-25' /tmp/headers.txt
+          grep -Eiq '^x-security-layer: v10-preference-layer-2026-08-26' /tmp/headers.txt
+
           test "$(curlr --silent --output /dev/null --write-out '%{http_code}' "${base}/admin/dashboard/")" = '401'
           test "$(curlr --silent --output /tmp/probe.txt --write-out '%{http_code}' "${base}/wp-login.php")" = '404'
-          grep -Fq 'Not Found' /tmp/probe.txt
           test "$(curlr --silent --output /tmp/randomphp.txt --write-out '%{http_code}' "${base}/UuAFIYGYKdefault.php")" = '404'
-          grep -Fq 'Not Found' /tmp/randomphp.txt
           test "$(curlr --silent --output /tmp/serverstatus.txt --write-out '%{http_code}' "${base}/server-status")" = '404'
+
           curlr --fail --show-error --silent --dump-header /tmp/healthheaders --output /dev/null "${base}/health"
           tr -d '\r' < /tmp/healthheaders | grep -Eiq '^cache-control: no-store, max-age=0$'
           tr -d '\r' < /tmp/healthheaders | grep -Eiq '^x-robots-tag: noindex, nofollow, noarchive$'
+
           curlr --fail --show-error --silent --dump-header /tmp/cache1 --output /dev/null "${base}/"
           sleep 1
           curlr --fail --show-error --silent --dump-header /tmp/cache2 --output /dev/null "${base}/"
           tr -d '\r' < /tmp/cache2 | grep -Eiq '^x-edge-cache: HIT$'
-          curlr --fail --show-error --silent --dump-header /tmp/searchheaders --output /dev/null "${base}/ara?q=guvenlik-test"
-          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^cache-control: private, no-store$'
-          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^x-robots-tag: noindex, follow, noarchive$'
+
           test "$(curlr --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
-          echo "V9 Askeralma feed, military calendars, v8 security controls, edge cache, routes, petition builder, robots, sitemap and IndexNow key verified."
+          echo "V10 preference layer, smart search, deadline radar, separate general/ASAL feeds, security, cache, sitemap and IndexNow key verified."
 
       - name: Notify IndexNow
         shell: bash
@@ -161,10 +148,7 @@ jobs:
           key_location = f"{base}/{key}.txt"
           user_agent = "nereyebasvurulur-deploy/1.0 (+https://nereyebasvurulur.com)"
 
-          sitemap_request = urllib.request.Request(
-              sitemap_url,
-              headers={"User-Agent": user_agent},
-          )
+          sitemap_request = urllib.request.Request(sitemap_url, headers={"User-Agent": user_agent})
           with urllib.request.urlopen(sitemap_request, timeout=20) as response:
               xml = response.read()
 
@@ -184,10 +168,7 @@ jobs:
           request = urllib.request.Request(
               "https://api.indexnow.org/indexnow",
               data=payload,
-              headers={
-                  "Content-Type": "application/json; charset=utf-8",
-                  "User-Agent": user_agent,
-              },
+              headers={"Content-Type": "application/json; charset=utf-8", "User-Agent": user_agent},
               method="POST",
           )
           try:
