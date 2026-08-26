@@ -1,0 +1,100 @@
+name: V10 comment production deploy
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cloudflare-production
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    if: github.actor == 'balikrotasi1041' && github.event.issue.pull_request && github.event.issue.number == 19 && github.event.comment.body == 'deploy-v10-now-20260826'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v6
+        with:
+          ref: main
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.19.0
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install locked dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Run production quality gates
+        run: |
+          pnpm run validate
+          pnpm run audit:sources
+      - name: Deploy Worker to Cloudflare
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: 5bafb073b0ff52a7b1f5a4626301ec82
+        run: pnpm exec wrangler deploy --keep-vars --message "v10 comment ${GITHUB_SHA}"
+      - name: Verify V10 production
+        shell: bash
+        run: |
+          set -euo pipefail
+          base="https://nereyebasvurulur.com"
+          curlr() { curl --retry 5 --retry-delay 2 --retry-all-errors "$@"; }
+          verified=0
+          for attempt in $(seq 1 30); do
+            if curlr --fail --silent --location "${base}/?v10-comment=${GITHUB_RUN_ID}" -o /tmp/home.html && curlr --fail --silent "${base}/health?v10-comment=${GITHUB_RUN_ID}" -o /tmp/health.json; then
+              if grep -Fq '"release":"v10-preference-layer-2026-08-26"' /tmp/health.json && grep -Fq '"preferenceLayer":true' /tmp/health.json && grep -Fq '"quickAnswerLayer":true' /tmp/health.json && grep -Fq '"deadlineRadar":true' /tmp/health.json && grep -Fq '"smartSearch":true' /tmp/health.json; then
+                verified=1
+                break
+              fi
+            fi
+            sleep 5
+          done
+          test "$verified" = '1'
+          grep -Fq 'Yaklaşan resmî tarihler' /tmp/home.html
+          grep -Fq 'Genel başvuru ve kayıt tarihleri' /tmp/home.html
+          grep -Fq 'ASAL / Askeralma yaklaşan tarihleri' /tmp/home.html
+          curlr --fail --silent "${base}/konu/bedelli-askerlik-nereye-basvurulur/?v10-comment=${GITHUB_RUN_ID}" -o /tmp/route.html
+          grep -Fq '30 saniyede cevap' /tmp/route.html
+          grep -Fq 'Gitmeden / başvurmadan önce' /tmp/route.html
+          grep -Fq 'Şimdi ne yapmalısınız?' /tmp/route.html
+          grep -Fq 'Güncellik kaydı:' /tmp/route.html
+          curlr --fail --silent "${base}/ara?q=Ceyhan%20askerlik%20%C5%9Fubesi%20telefon%20numaras%C4%B1" -o /tmp/search.html
+          grep -Fq 'Ceyhan askerlik şubesi' /tmp/search.html
+          curlr --fail --silent --dump-header /tmp/searchheaders --output /dev/null "${base}/ara?q=Ceyhan%20askerlik%20%C5%9Fubesi%20konumu%20navigasyon"
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^x-robots-tag: noindex, follow, noarchive$'
+          tr -d '\r' < /tmp/searchheaders | grep -Eiq '^x-smart-search: v1$'
+          curlr --fail --silent "${base}/sitemap.xml" -o /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/duyurular/</loc>' /tmp/sitemap.xml
+          grep -Fq '<loc>https://nereyebasvurulur.com/askerlik-subeleri/duyurular/</loc>' /tmp/sitemap.xml
+          test "$(curlr --silent --output /dev/null --write-out '%{http_code}' "${base}/wp-login.php")" = '404'
+          echo "V10 production verified."
+      - name: Notify IndexNow
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          import json, urllib.error, urllib.request, xml.etree.ElementTree as ET
+          base = "https://nereyebasvurulur.com"
+          key = "b1493a8a691bb36804ec62b677f59d5b"
+          ua = "nereyebasvurulur-deploy/1.0 (+https://nereyebasvurulur.com)"
+          req = urllib.request.Request(f"{base}/sitemap.xml", headers={"User-Agent": ua})
+          with urllib.request.urlopen(req, timeout=20) as response: root = ET.fromstring(response.read())
+          ns = {"sm": "http://www.sitemaps.org/schemas/sitemap/0.9"}
+          urls = [n.text.strip() for n in root.findall("sm:url/sm:loc", ns) if n.text and n.text.strip()]
+          payload = json.dumps({"host":"nereyebasvurulur.com","key":key,"keyLocation":f"{base}/{key}.txt","urlList":urls}).encode()
+          req = urllib.request.Request("https://api.indexnow.org/indexnow", data=payload, headers={"Content-Type":"application/json; charset=utf-8","User-Agent":ua}, method="POST")
+          try:
+              with urllib.request.urlopen(req, timeout=30) as response: status=response.status
+          except urllib.error.HTTPError as exc:
+              status=exc.code
+              if status not in (200,202): raise
+          if status not in (200,202): raise SystemExit(f"IndexNow HTTP {status}")
+          print(f"IndexNow accepted {len(urls)} URLs with HTTP {status}.")
+          PY
