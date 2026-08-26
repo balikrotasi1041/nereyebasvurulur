@@ -1,7 +1,7 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "nereyebasvurulur",
-  "main": "src/index-v9.ts",
+  "main": "src/index-v10.ts",
   "compatibility_date": "2026-08-23",
   "compatibility_flags": [
     "nodejs_compat"
