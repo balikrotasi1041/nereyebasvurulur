@@ -5,7 +5,7 @@ import { renderSearch } from "./ui";
 import { insertBeforeFooter } from "./announcements";
 import { renderHomeDeadlineRadar, renderRoutePreferenceLayer, smartSearchRoutes } from "./preference-layer";
 
-const RELEASE = "v10-security-edge-2026-08-27";
+const RELEASE = "v10-preference-layer-2026-08-26";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
 const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
 
