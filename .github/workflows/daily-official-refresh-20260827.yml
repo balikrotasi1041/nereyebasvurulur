@@ -1,0 +1,56 @@
+name: Daily official refresh 2026-08-27
+
+on:
+  push:
+    branches: [development]
+    paths:
+      - .github/workflows/daily-official-refresh-20260827.yml
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout development
+        uses: actions/checkout@v6
+        with:
+          ref: development
+          fetch-depth: 0
+      - name: Refresh verified dates and expired YKS e-registration action
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          announcements = Path('src/announcements.ts')
+          text = announcements.read_text()
+          old = '''      "Elektronik kayıt hakkınız varsa 26 Ağustos bitmeden e-kayıt işlemini tamamlayın; diğer kayıtlar için 28 Ağustos son tarihini esas alın."'''
+          new = '''      "Elektronik kayıt süresi 26 Ağustos'ta sona erdi. Henüz kaydınızı tamamlamadıysanız üniversitenizin 28 Ağustos 2026'ya kadar süren kayıt işlemi ve resmî kayıt duyurusunu hemen kontrol edin."'''
+          if old not in text:
+              raise SystemExit('Expected YKS action text not found')
+          text = text.replace(old, new, 1)
+          # All currently published general announcements were rechecked against their official channels today.
+          text = text.replace('verifiedAt: "2026-08-25"', 'verifiedAt: "2026-08-27"')
+          # Only the YKS result announcement changed editorially today.
+          marker = 'slug: "2026-yks-yerlestirme-sonuclari-aciklandi"'
+          start = text.index(marker)
+          end = text.index('  }),', start)
+          block = text[start:end]
+          block = block.replace('lastModified: "2026-08-25"', 'lastModified: "2026-08-27"', 1)
+          text = text[:start] + block + text[end:]
+          announcements.write_text(text)
+
+          military = Path('src/military-service-announcements.ts')
+          mtext = military.read_text()
+          # MSB Askeralma main page, notice list, annual normal-tertip calendar and bedelli calendar were rechecked today.
+          mtext = mtext.replace('verifiedAt: "2026-08-25"', 'verifiedAt: "2026-08-27"')
+          military.write_text(mtext)
+          PY
+      - name: Commit refresh
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/announcements.ts src/military-service-announcements.ts
+          git commit -m "content: refresh official notices for 27 August"
+          git push origin development
