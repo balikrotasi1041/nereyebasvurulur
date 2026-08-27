@@ -5,9 +5,34 @@ import { renderSearch } from "./ui";
 import { insertBeforeFooter } from "./announcements";
 import { renderHomeDeadlineRadar, renderRoutePreferenceLayer, smartSearchRoutes } from "./preference-layer";
 
-const RELEASE = "v10-preference-layer-2026-08-26";
+const RELEASE = "v10-security-edge-2026-08-27";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
 const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
+
+const BLOCKED_IPS = new Set([
+  "20.220.10.235",
+  "172.212.194.58",
+  "158.158.100.150",
+  "34.168.106.157"
+]);
+
+const SCANNER_PATH_PREFIXES = [
+  "/wp-admin",
+  "/wp-content",
+  "/wp-includes",
+  "/wordpress",
+  "/test/wp-",
+  "/vendor/phpunit",
+  "/.env",
+  "/server-status"
+];
+
+function isScannerProbe(path: string): boolean {
+  const normalized = path.toLowerCase();
+  if (normalized === "/xmlrpc.php" || normalized === "/wp-login.php") return true;
+  if (SCANNER_PATH_PREFIXES.some(prefix => normalized.startsWith(prefix))) return true;
+  return normalized.endsWith(".php");
+}
 
 function securityHeaders(headers: Headers): Headers {
   headers.set("strict-transport-security", "max-age=31536000; includeSubDomains");
@@ -22,6 +47,16 @@ function securityHeaders(headers: Headers): Headers {
   headers.set("content-security-policy", "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests");
   headers.set("x-security-layer", RELEASE);
   return headers;
+}
+
+function blockedResponse(request: Request, reason: "ip" | "scanner"): Response {
+  const headers = securityHeaders(new Headers({
+    "content-type": "text/plain; charset=utf-8",
+    "cache-control": "no-store, max-age=0",
+    "x-robots-tag": "noindex, nofollow, noarchive",
+    "x-edge-security": reason
+  }));
+  return new Response(request.method === "HEAD" ? null : "Not Found", { status: 404, headers });
 }
 
 function withVerificationMeta(body: string): string {
@@ -97,7 +132,10 @@ async function healthResponse(request: Request, env: Env, ctx: ExecutionContext)
       quickAnswerLayer: true,
       deadlineRadar: true,
       smartSearch: true,
-      noNewPreferenceUrls: true
+      noNewPreferenceUrls: true,
+      scannerProbeBlocking: true,
+      abusiveIpBlocking: true,
+      blockedIpCount: BLOCKED_IPS.size
     });
     const headers = new Headers(response.headers);
     headers.delete("content-length");
@@ -112,6 +150,10 @@ export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const url = new URL(request.url);
     const path = url.pathname;
+    const clientIp = request.headers.get("cf-connecting-ip") || "";
+
+    if (BLOCKED_IPS.has(clientIp)) return blockedResponse(request, "ip");
+    if (isScannerProbe(path)) return blockedResponse(request, "scanner");
 
     if (request.method !== "GET" && request.method !== "HEAD") return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
     if (url.hostname === "www.nereyebasvurulur.com") return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
