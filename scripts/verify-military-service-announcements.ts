@@ -7,6 +7,7 @@ const pathKeys = new Map(routes.map(route => [route.pathKey, route]));
 const baseSlugs = new Set(announcements.map(item => item.slug));
 const slugs = new Set<string>();
 const allowedHosts = new Set(["www.msb.gov.tr", "msb.gov.tr", "www.turkiye.gov.tr", "turkiye.gov.tr"]);
+const EXPECTED_VERIFIED_AT = "2026-08-27";
 
 if (militaryServiceAnnouncements.length !== 5) failures.push(`Beklenen 5 Askeralma duyurusu yerine ${militaryServiceAnnouncements.length} kayıt var.`);
 
@@ -14,7 +15,7 @@ for (const item of militaryServiceAnnouncements) {
   if (slugs.has(item.slug) || baseSlugs.has(item.slug)) failures.push(`Tekrarlanan duyuru slug: ${item.slug}`);
   slugs.add(item.slug);
   if (!/^\d{4}-\d{2}-\d{2}$/.test(item.publishedAt) || !/^\d{4}-\d{2}-\d{2}$/.test(item.verifiedAt)) failures.push(`Geçersiz tarih biçimi: ${item.slug}`);
-  if (item.verifiedAt !== "2026-08-25") failures.push(`Beklenmeyen doğrulama tarihi: ${item.slug}`);
+  if (item.verifiedAt !== EXPECTED_VERIFIED_AT) failures.push(`Beklenmeyen doğrulama tarihi: ${item.slug}`);
   if (item.summary.length < 100 || item.details.length < 3 || item.actions.length < 2) failures.push(`Yetersiz içerik: ${item.slug}`);
   if (!item.sources.length) failures.push(`Resmî kaynak yok: ${item.slug}`);
 
