@@ -37,7 +37,7 @@ export const announcements: Announcement[] = [
     authority: "Gençlik ve Spor Bakanlığı / Kredi ve Yurtlar Genel Müdürlüğü",
     kind: "application",
     publishedAt: "2026-08-25",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "2026-2027 eğitim öğretim yılı için ilk kez yükseköğretim programına kayıt yaptıran öğrenciler ile ara sınıf öğrencilerinin GSB yurt başvuruları e-Devlet üzerinden alınmaya başladı.",
     details: [
@@ -71,8 +71,8 @@ export const announcements: Announcement[] = [
     authority: "ÖSYM",
     kind: "result",
     publishedAt: "2026-08-18",
-    verifiedAt: "2026-08-25",
-    lastModified: "2026-08-25",
+    verifiedAt: "2026-08-27",
+    lastModified: "2026-08-27",
     summary: "ÖSYM, 2026-YKS yükseköğretim programlarına merkezî yerleştirme işlemlerinin tamamlandığını ve sonuçların erişime açıldığını duyurdu.",
     details: [
       "Yerleştirme sonuçları 18 Ağustos 2026 saat 05.45'ten itibaren ÖSYM sonuç sistemi üzerinden erişime açıldı.",
@@ -82,7 +82,7 @@ export const announcements: Announcement[] = [
     actions: [
       "ÖSYM sonuç ekranından yerleştirme sonucunuzu kontrol edin.",
       "Yerleştiğiniz üniversitenin resmî kayıt duyurusunu ve istediği belgeleri kontrol edin.",
-      "Elektronik kayıt hakkınız varsa 26 Ağustos bitmeden e-kayıt işlemini tamamlayın; diğer kayıtlar için 28 Ağustos son tarihini esas alın."
+      "Elektronik kayıt süresi 26 Ağustos'ta sona erdi. Henüz kaydınızı tamamlamadıysanız üniversitenizin 28 Ağustos 2026'ya kadar süren kayıt işlemi ve resmî kayıt duyurusunu hemen kontrol edin."
     ],
     deadlineAt: "2026-08-28T23:59:00+03:00",
     deadlineLabel: "Üniversite kayıtları için 28 Ağustos 2026",
@@ -105,7 +105,7 @@ export const announcements: Announcement[] = [
     authority: "ÖSYM",
     kind: "guide",
     publishedAt: "2026-07-29",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "ÖSYM, 2026-YKS Yükseköğretim Programları ve Kontenjanları Kılavuzunu tercih işlemleriyle birlikte yayımladı. Tercih dönemi sona ermiş olsa da kılavuz 2026 yerleştirme sürecinin resmî başvuru kaydı olarak arşivde tutuluyor.",
     details: [
@@ -137,7 +137,7 @@ export const announcements: Announcement[] = [
     authority: "Millî Savunma Bakanlığı Personel Temin Daire Başkanlığı",
     kind: "result",
     publishedAt: "2026-08-17",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "MSB Personel Temin Sistemi, 2026 Millî Savunma Üniversitesi Harp Okulları sonuç duyurusunu 17 Ağustos 2026 tarihinde yayımladı.",
     details: [
@@ -167,7 +167,7 @@ export const announcements: Announcement[] = [
     authority: "Millî Savunma Bakanlığı Personel Temin Daire Başkanlığı",
     kind: "result",
     publishedAt: "2026-08-17",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "MSB Personel Temin Sistemi, 2026 MSÜ Astsubay Meslek Yüksekokulları sonuç duyurusunu 17 Ağustos 2026 tarihinde yayımladı.",
     details: [
@@ -197,7 +197,7 @@ export const announcements: Announcement[] = [
     authority: "Jandarma Genel Komutanlığı / JSGA Personel ve Öğrenci Temin Sistemi",
     kind: "exam-call",
     publishedAt: "2026-08-17",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "Jandarma Personel ve Öğrenci Temin Sistemi, 2026 JSGA Güvenlik Bilimleri Fakültesi öğrenci temini için sınav çağrısını 17 Ağustos 2026 tarihinde yayımladı.",
     details: [
@@ -226,7 +226,7 @@ export const announcements: Announcement[] = [
     authority: "Jandarma Genel Komutanlığı / JSGA Personel ve Öğrenci Temin Sistemi",
     kind: "exam-call",
     publishedAt: "2026-08-17",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "Jandarma Personel ve Öğrenci Temin Sistemi, 2026 Jandarma Astsubay Meslek Yüksekokulu öğrenci temini sınav çağrısını 17 Ağustos 2026 tarihinde yayımladı.",
     details: [

@@ -30,7 +30,7 @@ export const militaryServiceAnnouncements: MilitaryServiceAnnouncement[] = [
     kind: "application",
     track: "normal-tertip",
     publishedAt: "2026-07-27",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "Kasım 2026 sınıflandırma döneminde silahaltına alınmak isteyen yükümlülerin yoklama, askerlik hizmet tercihi ve celp tercihini 31 Ağustos 2026 dâhil tamamlaması gerekiyor.",
     details: [
@@ -67,7 +67,7 @@ export const militaryServiceAnnouncements: MilitaryServiceAnnouncement[] = [
     kind: "guide",
     track: "normal-tertip",
     publishedAt: "2026-01-02",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "MSB'nin 2026 yıllık sınıflandırma faaliyet takvimi, yedek subay/yedek astsubay adayları ve erler için Şubat, Mayıs, Ağustos ve Kasım sınıflandırma dönemlerinin sonuç ve sevk tarihlerini gösteriyor.",
     details: [
@@ -112,7 +112,7 @@ export const militaryServiceAnnouncements: MilitaryServiceAnnouncement[] = [
     kind: "result",
     track: "normal-tertip",
     publishedAt: "2026-07-30",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "Ağustos, Eylül ve Ekim 2026 dönemlerinde silahaltına alınacak yedek subay/astsubay adayları ile erlerin sınıflandırma sonuçları 30 Temmuz'da açıklandı; 25 Ağustos itibarıyla 2'nci ve 3'üncü grup er sevkleri sırada.",
     details: [
@@ -148,7 +148,7 @@ export const militaryServiceAnnouncements: MilitaryServiceAnnouncement[] = [
     kind: "guide",
     track: "bedelli",
     publishedAt: "2026-01-20",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "MSB'nin 2026 bedelli askerlik faaliyet takviminde 10 celp dönemi için sevk, yemin töreni ve terhis tarihleri yayımlandı. 25 Ağustos itibarıyla kalan sevkler 3 Eylül, 1 Ekim, 5 Kasım ve 3 Aralık 2026.",
     details: [
@@ -197,7 +197,7 @@ export const militaryServiceAnnouncements: MilitaryServiceAnnouncement[] = [
     kind: "result",
     track: "bedelli",
     publishedAt: "2026-01-22",
-    verifiedAt: "2026-08-25",
+    verifiedAt: "2026-08-27",
     lastModified: "2026-08-25",
     summary: "2026 yılında bedelli askerlik kapsamında silahaltına alınacak yükümlülerin celp dönemleri ve birlik yerleri 22 Ocak 2026'da belirlendi; kişisel sonuç e-Devlet veya askerlik şubesinden öğreniliyor.",
     details: [
