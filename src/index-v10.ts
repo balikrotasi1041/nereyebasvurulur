@@ -2,10 +2,18 @@ import baseHandler from "./index-v9";
 import { publishedRoutes, routeBySlug } from "./data";
 import { searchMilitaryBranches } from "./military-branches";
 import { renderSearch } from "./ui";
-import { insertBeforeFooter } from "./announcements";
+import { insertBeforeFooter, renderAnnouncementDetail } from "./announcements";
 import { renderHomeDeadlineRadar, renderRoutePreferenceLayer, smartSearchRoutes } from "./preference-layer";
+import {
+  injectSupplementalAnnouncementList,
+  injectSupplementalSitemap,
+  renderSupplementalHomeSection,
+  supplementalAnnouncementBySlug,
+  supplementalAnnouncements
+} from "./supplemental-announcements";
 
 const RELEASE = "v10-preference-layer-2026-08-26";
+const DAILY_RELEASE = "daily-official-audit-2026-08-28";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
 const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
 
@@ -46,6 +54,7 @@ function securityHeaders(headers: Headers): Headers {
   headers.set("permissions-policy", "camera=(), microphone=(), geolocation=()");
   headers.set("content-security-policy", "default-src 'self'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; frame-ancestors 'none'; form-action 'self'; upgrade-insecure-requests");
   headers.set("x-security-layer", RELEASE);
+  headers.set("x-daily-official-audit", DAILY_RELEASE);
   return headers;
 }
 
@@ -93,9 +102,22 @@ function searchResponse(body: string, method: string): Response {
   });
 }
 
+function supplementalAnnouncementResponse(body: string, method: string): Response {
+  return new Response(method === "HEAD" ? null : withVerificationMeta(withSearchNav(body)), {
+    status: 200,
+    headers: securityHeaders(new Headers({
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=300, s-maxage=1800, stale-while-revalidate=86400",
+      "x-announcement-feed": "v1",
+      "x-supplemental-announcement": "2026-08-28"
+    }))
+  });
+}
+
 function withReleaseHeader(response: Response): Response {
   const headers = new Headers(response.headers);
   headers.set("x-security-layer", RELEASE);
+  headers.set("x-daily-official-audit", DAILY_RELEASE);
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
@@ -111,7 +133,18 @@ async function transformHtmlResponse(
   const headers = new Headers(response.headers);
   headers.delete("content-length");
   headers.set("x-security-layer", RELEASE);
+  headers.set("x-daily-official-audit", DAILY_RELEASE);
   return new Response(body, { status: response.status, statusText: response.statusText, headers });
+}
+
+async function transformSitemapResponse(response: Response, request: Request): Promise<Response> {
+  if (response.status !== 200) return withReleaseHeader(response);
+  const xml = injectSupplementalSitemap(await response.text());
+  const headers = new Headers(response.headers);
+  headers.delete("content-length");
+  headers.set("x-daily-official-audit", DAILY_RELEASE);
+  headers.set("x-security-layer", RELEASE);
+  return new Response(request.method === "HEAD" ? null : xml, { status: 200, headers });
 }
 
 function injectRouteLayer(body: string, fragment: string): string {
@@ -135,11 +168,14 @@ async function healthResponse(request: Request, env: Env, ctx: ExecutionContext)
       noNewPreferenceUrls: true,
       scannerProbeBlocking: true,
       abusiveIpBlocking: true,
-      blockedIpCount: BLOCKED_IPS.size
+      blockedIpCount: BLOCKED_IPS.size,
+      dailyOfficialAudit: DAILY_RELEASE,
+      supplementalAnnouncements: supplementalAnnouncements.length
     });
     const headers = new Headers(response.headers);
     headers.delete("content-length");
     headers.set("x-security-layer", RELEASE);
+    headers.set("x-daily-official-audit", DAILY_RELEASE);
     return new Response(request.method === "HEAD" ? null : body, { status: 200, headers });
   } catch {
     return withReleaseHeader(response);
@@ -167,10 +203,22 @@ export default {
       return searchResponse(renderSearch(query, routeMatches, branchMatches), request.method);
     }
 
+    const announcementMatch = path.match(/^\/duyuru\/([a-z0-9-]+)\/?$/);
+    if (announcementMatch) {
+      const item = supplementalAnnouncementBySlug.get(announcementMatch[1]);
+      if (item) return supplementalAnnouncementResponse(renderAnnouncementDetail(item, []), request.method);
+    }
+
     const response = await baseHandler.fetch(request, env, ctx);
 
+    if (path === "/sitemap.xml") return transformSitemapResponse(response, request);
+
+    if (path === "/duyurular" || path === "/duyurular/") {
+      return transformHtmlResponse(response, request, body => injectSupplementalAnnouncementList(body));
+    }
+
     if (path === "/") {
-      return transformHtmlResponse(response, request, body => insertBeforeFooter(body, renderHomeDeadlineRadar(new Date())));
+      return transformHtmlResponse(response, request, body => insertBeforeFooter(insertBeforeFooter(body, renderSupplementalHomeSection()), renderHomeDeadlineRadar(new Date())));
     }
 
     const routeMatch = path.match(/^\/konu\/([^/]+)\/?$/);
