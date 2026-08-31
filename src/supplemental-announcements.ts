@@ -4,6 +4,62 @@ const A = (value: Announcement): Announcement => value;
 
 export const supplementalAnnouncements: Announcement[] = [
   A({
+    slug: "2026-dgs-tercihleri-basladi",
+    title: "2026-DGS tercihleri başladı",
+    authority: "ÖSYM",
+    kind: "application",
+    publishedAt: "2026-08-27",
+    verifiedAt: "2026-08-31",
+    lastModified: "2026-08-31",
+    summary: "ÖSYM, 2026-DGS tercih işlemlerini 27 Ağustos 2026 tarihinde açtı; adaylar tercihlerini 3 Eylül 2026 saat 23.59'a kadar Aday İşlemleri Sistemi üzerinden elektronik olarak yapabilecek.",
+    details: [
+      "2026-DGS tercih işlemleri 27 Ağustos-3 Eylül 2026 tarihleri arasında yürütülüyor ve son saat 3 Eylül 2026 saat 23.59 olarak açıklandı.",
+      "Tercihler ÖSYM Aday İşlemleri Sistemi üzerinden T.C. kimlik numarası ve aday şifresiyle bireysel olarak yapılıyor.",
+      "Yerleştirmede 2026-DGS Başvuru Kılavuzu ile ÖSYM'nin yayımladığı tercih bilgileri ve tablolar esas alınacak; tercih kodları ve program koşulları gönderimden önce kontrol edilmeli."
+    ],
+    actions: [
+      "ÖSYM'nin 2026-DGS tercih duyurusunu ve tercih tablolarını inceleyin.",
+      "Tercihlerinizi 3 Eylül 2026 saat 23.59'dan önce AİS üzerinden kaydedip son hâlini kontrol edin."
+    ],
+    deadlineAt: "2026-09-03T23:59:00+03:00",
+    deadlineLabel: "Tercihler 3 Eylül 2026 saat 23.59'da sona eriyor",
+    actionUrl: "https://ais.osym.gov.tr/",
+    actionLabel: "ÖSYM Aday İşlemleri Sistemini aç",
+    relatedPathKeys: [],
+    relatedSearches: ["DGS tercih", "Dikey Geçiş Sınavı", "ön lisans lisans geçiş"],
+    sources: [
+      { title: "2026-DGS: Tercihlerin Alınması", authority: "ÖSYM", url: "https://osym.gov.tr/2026-dgs-tercihlerin-alinmasi" }
+    ]
+  }),
+  A({
+    slug: "2026-kpss-lisans-sinava-giris-belgeleri",
+    title: "2026-KPSS Lisans sınava giriş belgeleri erişime açıldı",
+    authority: "ÖSYM",
+    kind: "exam-call",
+    publishedAt: "2026-08-27",
+    verifiedAt: "2026-08-31",
+    lastModified: "2026-08-31",
+    summary: "ÖSYM, 6 Eylül 2026 tarihinde yapılacak 2026-KPSS Lisans Genel Yetenek-Genel Kültür oturumu için bina ve salon atamalarını tamamladı; sınava giriş belgeleri AİS üzerinden alınabiliyor.",
+    details: [
+      "2026-KPSS Lisans Genel Yetenek-Genel Kültür oturumu 6 Eylül 2026 tarihinde uygulanacak.",
+      "Adayların sınava girecekleri bina ve salon bilgilerini gösteren sınava giriş belgeleri 27 Ağustos 2026 saat 11.00'den itibaren ÖSYM AİS üzerinden erişime açıldı.",
+      "ÖSYM duyurusuna göre adaylar 6 Eylül 2026 tarihinde saat 10.00'dan sonra sınav binalarına alınmayacak."
+    ],
+    actions: [
+      "Sınava giriş belgenizi ÖSYM AİS'ten alın ve bina/salon bilginizi sınav gününden önce kontrol edin.",
+      "6 Eylül'de sınav binasına giriş için ÖSYM'nin ilan ettiği saat sınırını dikkate alarak erken ulaşın."
+    ],
+    deadlineAt: "2026-09-06T10:00:00+03:00",
+    deadlineLabel: "6 Eylül 2026 tarihinde saat 10.00'dan sonra sınav binasına giriş yapılmayacak",
+    actionUrl: "https://ais.osym.gov.tr/",
+    actionLabel: "Sınava giriş belgesini ÖSYM AİS'ten al",
+    relatedPathKeys: [],
+    relatedSearches: ["KPSS Lisans", "KPSS sınava giriş belgesi", "KPSS 6 Eylül"],
+    sources: [
+      { title: "2026-KPSS Lisans Sınavı Genel Yetenek-Genel Kültür Oturumu: Sınava Giriş Belgeleri Erişime Açıldı", authority: "ÖSYM", url: "https://osym.gov.tr/2026-kpss-lisans-sinavi-genel-yetenek-genel-kultur-oturumu-sinava-giris-belgeleri-erisime-acildi" }
+    ]
+  }),
+  A({
     slug: "2026-kpss-ortaogretim-basvurulari-basladi",
     title: "2026-KPSS Ortaöğretim başvuruları başladı",
     authority: "ÖSYM",
