@@ -24,7 +24,7 @@ for (const item of supplementalAnnouncements) {
   }
 }
 
-if (supplementalAnnouncements.length !== 2) failures.push(`28 Ağustos ek duyuru seti beklenmeyen sayıda kayıt içeriyor: ${supplementalAnnouncements.length}`);
+if (supplementalAnnouncements.length !== 4) failures.push(`Ek duyuru seti beklenmeyen sayıda kayıt içeriyor: ${supplementalAnnouncements.length}`);
 
 if (failures.length) {
   console.error(failures.join("\n"));
