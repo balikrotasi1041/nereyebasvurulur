@@ -90,31 +90,33 @@ export const supplementalAnnouncements: Announcement[] = [
   }),
   A({
     slug: "3713-terorle-mucadelede-yaralananlar-e-devlet-basvurusu",
-    title: "Terörle mücadelede yaralanıp malul sayılmayanlar için e-Devlet başvurusu 1 Eylül'de açılıyor",
-    authority: "Jandarma Genel Komutanlığı",
-    kind: "guide",
+    title: "Terörle mücadelede yaralanıp malul sayılmayanlar için elektronik başvuru açıldı",
+    authority: "Jandarma Genel Komutanlığı / e-Devlet Kapısı",
+    kind: "application",
     publishedAt: "2026-08-25",
-    verifiedAt: "2026-08-28",
-    lastModified: "2026-08-28",
-    summary: "Jandarma Genel Komutanlığının resmî duyurusuna göre 3713 sayılı Kanun kapsamındaki yeni başvuru süreci 1 Eylül 2026 itibarıyla e-Devlet üzerinden erişime açılacak; birlik, kurum ve askerlik şubelerinden başvuru kabul edilmeyecek.",
+    verifiedAt: "2026-09-01",
+    lastModified: "2026-09-01",
+    summary: "3713 sayılı Kanunun geçici 20'nci maddesi kapsamındaki elektronik başvuru süreci 1 Eylül 2026 itibarıyla erişime açıldı; resmî e-Devlet hizmetleri çevrimiçi ve birlik, kurum veya askerlik şubesinden başvuru kabul edilmiyor.",
     details: [
-      "Duyuru; terörle mücadelede yaralanan TSK, Jandarma ve Sahil Güvenlik askerî personeli ile erbaş ve erleri, Emniyet Hizmetleri Sınıfı personelini ve güvenlik korucularını, muvazzaf ve emekliler dâhil olmak üzere kapsayan bir e-Devlet başvuru süreci açıklıyor.",
-      "Başvuru ekranında terör sonucu yaralanma olayı özetlenecek ve başvuru sahibinin elinde varsa mevcut bilgi ve belgeler sisteme yüklenecek.",
-      "Resmî duyuru, başvuru için kamu kurumlarından ayrıca belge talep edilmesine gerek olmadığını ve e-Devlet dışındaki birlik, kurum veya askerlik şubelerinden başvuru kabul edilmeyeceğini açıkça belirtiyor.",
-      "Başvuru ekranının doğrudan e-Devlet bağlantısı duyuruda henüz verilmediği için bu kayıtta tahminî bir hizmet adresi kullanılmıyor; 1 Eylül'de açılacak resmî e-Devlet ekranı esas alınmalı."
+      "Jandarma'nın resmî duyurusu; terörle mücadelede yaralanan TSK, Jandarma ve Sahil Güvenlik askerî personeli ile erbaş ve erleri, Emniyet Hizmetleri Sınıfı personelini ve güvenlik korucularını, muvazzaf ve emekliler dâhil olmak üzere kapsayan elektronik başvuru sürecini açıklıyor.",
+      "1 Eylül 2026 kontrolünde e-Devlet'te Millî Savunma Bakanlığı ve İçişleri Bakanlığı adına '3713 sayılı Kanunun Geçici 20'nci Maddesi Kapsamında Terörle Mücadelede Malul Kalmayacak Şekilde Yaralananlara İlişkin Başvuru' hizmetlerinin erişilebilir olduğu doğrulandı.",
+      "Başvuru ekranında terör sonucu yaralanma olayı özetleniyor ve başvuru sahibinin elinde varsa mevcut bilgi ve belgeler sisteme yükleniyor.",
+      "Resmî duyuru, başvuru için kamu kurumlarından ayrıca belge talep edilmesine gerek olmadığını ve e-Devlet dışındaki birlik, kurum veya askerlik şubelerinden başvuru kabul edilmeyeceğini belirtiyor."
     ],
     actions: [
-      "1 Eylül 2026'dan itibaren e-Devlet'te açılacak resmî başvuru hizmetini kullanın.",
+      "e-Devlet'te 3713 sayılı Kanunun geçici 20'nci maddesi kapsamındaki resmî başvuru hizmetini kurumunuza uygun seçenek üzerinden açın.",
       "Elinizde bulunan olay ve yaralanmaya ilişkin bilgi veya belgeleri dijital olarak hazır bulundurun; sırf başvuru için kamu kurumlarından yeni belge istemeniz gerekmediği duyuruldu.",
       "Birlik, kurum veya askerlik şubesine başvuru yapmayın; resmî duyuru bu kanallardan başvuru kabul edilmeyeceğini belirtiyor."
     ],
-    deadlineLabel: "Başvuru ekranı 1 Eylül 2026 itibarıyla e-Devlet'te açılacak; duyuruda kapanış tarihi belirtilmedi",
-    actionUrl: "https://ankara.jandarma.gov.tr/terorle-mucadelede-yaralanip-malul-sayilmayanlara-yonelik-basvuru-sureci-hakkinda-duyuru25-merkezicerik",
-    actionLabel: "Jandarma'nın resmî başvuru duyurusunu aç",
+    deadlineLabel: "Başvuru 1 Eylül 2026 itibarıyla elektronik ortamda açık; resmî duyuruda kapanış tarihi belirtilmedi",
+    actionUrl: "https://www.turkiye.gov.tr/arama?aranan=3713",
+    actionLabel: "e-Devlet'te 3713 başvuru hizmetlerini aç",
     relatedPathKeys: [],
     relatedSearches: ["3713", "terörle mücadelede yaralanma", "gazi hakları", "malul sayılmayan"],
     sources: [
-      { title: "Terörle Mücadelede Yaralanıp Malul Sayılmayanlara Yönelik Başvuru Süreci Hakkında Duyuru", authority: "Jandarma Genel Komutanlığı / Ankara İl Jandarma Komutanlığı", url: "https://ankara.jandarma.gov.tr/terorle-mucadelede-yaralanip-malul-sayilmayanlara-yonelik-basvuru-sureci-hakkinda-duyuru25-merkezicerik" }
+      { title: "Terörle Mücadelede Yaralanıp Malul Sayılmayanlara Yönelik Başvuru Süreci Hakkında Duyuru", authority: "Jandarma Genel Komutanlığı / İl Jandarma Komutanlığı", url: "https://afyonkarahisar.jandarma.gov.tr/terorle-mucadelede-yaralanip-malul-sayilmayanlara-yonelik-basvuru-sureci-hakkinda-duyuru25-merkezicerik" },
+      { title: "3713 sayılı Kanunun Geçici 20'nci Maddesi Kapsamında Terörle Mücadelede Malul Kalmayacak Şekilde Yaralananlara İlişkin Başvuru", authority: "e-Devlet Kapısı / Millî Savunma Bakanlığı", url: "https://www.turkiye.gov.tr/milli-savunma-3713-sayili-kanunun-gecici-20nci-maddesi-kapsaminda-terorle-mucadelede-malul-kalmayacak-sekilde-yaralananlara-iliskin-basvuru" },
+      { title: "3713 sayılı Kanunun Geçici 20'nci Maddesi Kapsamında Terörle Mücadelede Malul Kalmayacak Şekilde Yaralananlara İlişkin Başvuru", authority: "e-Devlet Kapısı / İçişleri Bakanlığı", url: "https://www.turkiye.gov.tr/icisleri-3713-sayili-kanunun-gecici-20nci-maddesi-kapsaminda-terorle-mucadelede-malul-kalmayacak-sekilde-yaralananlara-iliskin-basvuru" }
     ]
   })
 ].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
