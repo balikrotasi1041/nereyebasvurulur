@@ -1,6 +1,7 @@
 import type { RouteRecord } from "./data";
 import { announcements } from "./announcements";
 import { militaryServiceAnnouncements } from "./military-service-announcements";
+import { applicationState, costAnswer } from "./seo-growth";
 
 function esc(value: string): string {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/\"/g, "&quot;").replace(/'/g, "&#39;");
@@ -25,7 +26,7 @@ function freshnessLabel(route: RouteRecord): string {
 const routeStyles = `
 .nb-fast{margin:0 0 16px;border:1px solid #c8d7f4;background:linear-gradient(180deg,#f7faff,#fff);border-radius:18px;padding:18px;box-shadow:0 12px 30px rgba(36,88,214,.06)}
 .nb-fast-head{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin-bottom:13px}.nb-fast-head h2{margin:0;font-size:1.25rem;letter-spacing:-.025em}.nb-fast-head p{margin:5px 0 0;color:#627084;line-height:1.5;font-size:.9rem}.nb-fast-badge{white-space:nowrap;border-radius:999px;background:#edf8f2;color:#176a42;font-weight:850;font-size:.76rem;padding:6px 9px}
-.nb-fast-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:9px}.nb-fast-card{border:1px solid #dfe6f1;background:#fff;border-radius:13px;padding:13px;min-width:0}.nb-fast-card b{display:block;color:#536174;font-size:.74rem;text-transform:uppercase;letter-spacing:.075em;margin-bottom:5px}.nb-fast-card strong,.nb-fast-card span{display:block;line-height:1.45}.nb-fast-card span{color:#526174;font-size:.9rem}.nb-fast-action{display:inline-flex;margin-top:9px;min-height:40px;align-items:center;padding:8px 11px;border-radius:10px;background:#2458d6;color:#fff;font-weight:800;text-decoration:none}
+.nb-fast-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.nb-fast-card{border:1px solid #dfe6f1;background:#fff;border-radius:13px;padding:13px;min-width:0}.nb-fast-card:first-child{grid-column:1/-1}.nb-fast-card b{display:block;color:#536174;font-size:.74rem;text-transform:uppercase;letter-spacing:.075em;margin-bottom:5px}.nb-fast-card strong,.nb-fast-card span{display:block;line-height:1.45}.nb-fast-card span{color:#526174;font-size:.9rem}.nb-fast-action{display:inline-flex;margin-top:9px;min-height:40px;align-items:center;padding:8px 11px;border-radius:10px;background:#2458d6;color:#fff;font-weight:800;text-decoration:none}
 .nb-check{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.nb-check-box{border:1px solid #e2e8f0;border-radius:13px;padding:14px;background:#fff}.nb-check-box h3{margin:0 0 8px;font-size:.98rem}.nb-check-box ul,.nb-check-box ol{margin:0;padding-left:20px;color:#475467;line-height:1.55}.nb-check-box li+li{margin-top:5px}.nb-proof{margin-top:10px;padding-top:10px;border-top:1px solid #e6ebf3;color:#667085;font-size:.82rem;line-height:1.5}
 @media(max-width:760px){.nb-fast-grid{grid-template-columns:1fr}.nb-check{grid-template-columns:1fr}.nb-fast-head{flex-direction:column}.nb-fast-badge{white-space:normal}}
 `;
@@ -38,6 +39,8 @@ export function renderRoutePreferenceLayer(route: RouteRecord): string {
   const status = verificationLabel(route);
   const sourceCount = route.sources.length;
   const channelText = channel ? channel.label : "Başvuru kanalı için aşağıdaki ayrıntılı rotayı kontrol edin.";
+  const liveState = applicationState(route);
+  const cost = costAnswer(route);
   const channelAction = channel?.url ? `<a class="nb-fast-action" target="_blank" rel="noopener noreferrer" href="${esc(channel.url)}">Resmî kanalı aç ↗</a>` : "";
   const checklistHtml = checklist.length
     ? checklist.map(item => `<li>${esc(item)}</li>`).join("")
@@ -45,7 +48,7 @@ export function renderRoutePreferenceLayer(route: RouteRecord): string {
   const stepsHtml = nextSteps.length
     ? nextSteps.map(item => `<li>${esc(item)}</li>`).join("")
     : `<li>Aşağıdaki ayrıntılı başvuru rotasını takip edin.</li>`;
-  return `<section class="nb-fast" aria-labelledby="nbFastAnswer"><div class="nb-fast-head"><div><h2 id="nbFastAnswer">30 saniyede cevap</h2><p>İlk bakışta ihtiyacınız olan merci, kanal, süre ve güncellik bilgisi.</p></div><span class="nb-fast-badge">✓ ${esc(status)}</span></div><div class="nb-fast-grid"><div class="nb-fast-card"><b>Nereye?</b><strong>${esc(authority)}</strong></div><div class="nb-fast-card"><b>Nasıl?</b><strong>${esc(channelText)}</strong>${channelAction}</div><div class="nb-fast-card"><b>Süre / itiraz</b><span>${esc(route.deadlineAndAppeal || "Özel bir süre belirtilmemiştir; işlem öncesi güncel resmî kaynağı kontrol edin.")}</span></div></div><div class="nb-check"><div class="nb-check-box"><h3>Gitmeden / başvurmadan önce</h3><ul>${checklistHtml}</ul></div><div class="nb-check-box"><h3>Şimdi ne yapmalısınız?</h3><ol>${stepsHtml}</ol></div></div><div class="nb-proof"><strong>Güncellik kaydı:</strong> Son doğrulama ${esc(route.lastVerified)} · ${sourceCount} resmî kaynak · ${esc(freshnessLabel(route))} · yeniden kontrol aralığı ${route.reviewCadence} gün.${route.caution ? ` <strong>Dikkat:</strong> ${esc(route.caution)}` : ""}</div><style>${routeStyles}</style></section>`;
+  return `<section class="nb-fast" aria-labelledby="nbFastAnswer"><div class="nb-fast-head"><div><h2 id="nbFastAnswer">30 saniyede cevap</h2><p>Nereye, nasıl, ne zaman ve ne kadar sorularının doğrulanmış kısa karşılığı.</p></div><span class="nb-fast-badge">✓ ${esc(status)}</span></div><div class="nb-fast-grid"><div class="nb-fast-card"><b>Nereye?</b><strong>${esc(authority)}</strong></div><div class="nb-fast-card"><b>Nasıl?</b><strong>${esc(channelText)}</strong>${channelAction}</div><div class="nb-fast-card"><b>Ne zaman / açık mı?</b><strong>${esc(liveState.label)}</strong><span>${esc(liveState.detail)}</span></div><div class="nb-fast-card"><b>Süre / itiraz</b><span>${esc(route.deadlineAndAppeal || "Özel bir süre belirtilmemiştir; işlem öncesi güncel resmî kaynağı kontrol edin.")}</span></div><div class="nb-fast-card"><b>Ne kadar?</b><span>${esc(cost)}</span></div></div><div class="nb-check"><div class="nb-check-box"><h3>Gitmeden / başvurmadan önce</h3><ul>${checklistHtml}</ul></div><div class="nb-check-box"><h3>Şimdi ne yapmalısınız?</h3><ol>${stepsHtml}</ol></div></div><div class="nb-proof"><strong>Güncellik kaydı:</strong> Son doğrulama ${esc(route.lastVerified)} · ${sourceCount} resmî kaynak · ${esc(freshnessLabel(route))} · yeniden kontrol aralığı ${route.reviewCadence} gün.${route.caution ? ` <strong>Dikkat:</strong> ${esc(route.caution)}` : ""}</div><style>${routeStyles}</style></section>`;
 }
 
 type DeadlineItem = {

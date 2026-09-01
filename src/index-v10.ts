@@ -1,5 +1,5 @@
 import baseHandler from "./index-v9";
-import { publishedRoutes, routeBySlug } from "./data";
+import { publishedRoutes, routeBySlug, routes } from "./data";
 import { searchMilitaryBranches } from "./military-branches";
 import { renderSearch } from "./ui";
 import { insertBeforeFooter, renderAnnouncementDetail } from "./announcements";
@@ -11,9 +11,10 @@ import {
   supplementalAnnouncementBySlug,
   supplementalAnnouncements
 } from "./supplemental-announcements";
+import { renderSeoGrowthLayer, renderSeoOpsPanel, seoCoverageSummary } from "./seo-growth";
 
-const RELEASE = "v10-preference-layer-2026-08-26";
-const DAILY_RELEASE = "daily-official-audit-2026-08-28";
+const RELEASE = "v11-search-security-growth-2026-09-01";
+const DAILY_RELEASE = "daily-official-audit-2026-09-01";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
 const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
 
@@ -21,25 +22,29 @@ const BLOCKED_IPS = new Set([
   "20.220.10.235",
   "172.212.194.58",
   "158.158.100.150",
-  "34.168.106.157"
+  "34.168.106.157",
+  "45.148.10.246",
+  "195.178.110.102",
+  "158.23.147.79",
+  "20.104.18.15"
 ]);
 
-const SCANNER_PATH_PREFIXES = [
-  "/wp-admin",
-  "/wp-content",
-  "/wp-includes",
-  "/wordpress",
-  "/test/wp-",
-  "/vendor/phpunit",
-  "/.env",
-  "/server-status"
-];
+const RESTRICTED_IPS = new Set(["143.198.198.51", "154.58.229.19"]);
+const SCANNER_SEGMENT = /(^|\/)(?:wp-admin|wp-content|wp-includes|wp-login\.php|xmlrpc\.php|wlwmanifest\.xml|wordpress|wp\d+|phpmyadmin|pma|adminer|vendor\/phpunit|\.git|\.env(?:\.[^/]*)?|server-status|server-info)(?:\/|$)/i;
+const SUSPICIOUS_FILE = /(?:^|\/)(?:phpinfo[^/]*|[^/]+\.(?:php\d*|phtml|phar|asp|aspx|jsp|cgi|pl))(?:\/|$)/i;
+
+function safePath(path: string): string {
+  try { return decodeURIComponent(path); } catch { return path; }
+}
 
 function isScannerProbe(path: string): boolean {
-  const normalized = path.toLowerCase();
-  if (normalized === "/xmlrpc.php" || normalized === "/wp-login.php") return true;
-  if (SCANNER_PATH_PREFIXES.some(prefix => normalized.startsWith(prefix))) return true;
-  return normalized.endsWith(".php");
+  const normalized = safePath(path).toLowerCase();
+  return SCANNER_SEGMENT.test(normalized) || SUSPICIOUS_FILE.test(normalized);
+}
+
+function isVerifiedBot(request: Request): boolean {
+  const cf = request.cf as unknown as { botManagement?: { verifiedBot?: boolean } } | undefined;
+  return cf?.botManagement?.verifiedBot === true;
 }
 
 function securityHeaders(headers: Headers): Headers {
@@ -61,11 +66,24 @@ function securityHeaders(headers: Headers): Headers {
 function blockedResponse(request: Request, reason: "ip" | "scanner"): Response {
   const headers = securityHeaders(new Headers({
     "content-type": "text/plain; charset=utf-8",
-    "cache-control": "no-store, max-age=0",
+    "cache-control": reason === "scanner" ? "public, max-age=86400, s-maxage=86400" : "no-store, max-age=0",
     "x-robots-tag": "noindex, nofollow, noarchive",
     "x-edge-security": reason
   }));
   return new Response(request.method === "HEAD" ? null : "Not Found", { status: 404, headers });
+}
+
+function restrictedResponse(request: Request): Response {
+  return new Response(request.method === "HEAD" ? null : "Too Many Requests", {
+    status: 429,
+    headers: securityHeaders(new Headers({
+      "content-type": "text/plain; charset=utf-8",
+      "cache-control": "no-store",
+      "retry-after": "3600",
+      "x-robots-tag": "noindex, nofollow",
+      "x-edge-security": "adaptive-restriction"
+    }))
+  });
 }
 
 function withVerificationMeta(body: string): string {
@@ -124,7 +142,8 @@ function withReleaseHeader(response: Response): Response {
 async function transformHtmlResponse(
   response: Response,
   request: Request,
-  transform: (body: string) => string
+  transform: (body: string) => string,
+  cacheControl?: string
 ): Promise<Response> {
   if (request.method === "HEAD" || response.status !== 200 || !(response.headers.get("content-type") || "").includes("text/html")) {
     return withReleaseHeader(response);
@@ -134,6 +153,10 @@ async function transformHtmlResponse(
   headers.delete("content-length");
   headers.set("x-security-layer", RELEASE);
   headers.set("x-daily-official-audit", DAILY_RELEASE);
+  if (cacheControl) {
+    headers.set("cache-control", cacheControl);
+    headers.set("cdn-cache-control", cacheControl);
+  }
   return new Response(body, { status: response.status, statusText: response.statusText, headers });
 }
 
@@ -169,6 +192,9 @@ async function healthResponse(request: Request, env: Env, ctx: ExecutionContext)
       scannerProbeBlocking: true,
       abusiveIpBlocking: true,
       blockedIpCount: BLOCKED_IPS.size,
+      adaptiveRestrictionCount: RESTRICTED_IPS.size,
+      verifiedBotBypass: true,
+      seoGrowth: seoCoverageSummary(routes),
       dailyOfficialAudit: DAILY_RELEASE,
       supplementalAnnouncements: supplementalAnnouncements.length
     });
@@ -190,6 +216,7 @@ export default {
 
     if (BLOCKED_IPS.has(clientIp)) return blockedResponse(request, "ip");
     if (isScannerProbe(path)) return blockedResponse(request, "scanner");
+    if (RESTRICTED_IPS.has(clientIp) && !isVerifiedBot(request)) return restrictedResponse(request);
 
     if (request.method !== "GET" && request.method !== "HEAD") return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
     if (url.hostname === "www.nereyebasvurulur.com") return withReleaseHeader(await baseHandler.fetch(request, env, ctx));
@@ -218,14 +245,19 @@ export default {
     }
 
     if (path === "/") {
-      return transformHtmlResponse(response, request, body => insertBeforeFooter(insertBeforeFooter(body, renderSupplementalHomeSection()), renderHomeDeadlineRadar(new Date())));
+      return transformHtmlResponse(response, request, body => insertBeforeFooter(insertBeforeFooter(body, renderSupplementalHomeSection()), renderHomeDeadlineRadar(new Date())), "public, max-age=300, s-maxage=1800, stale-while-revalidate=86400");
+    }
+
+    if (path === "/admin/dashboard" || path === "/admin/dashboard/") {
+      return transformHtmlResponse(response, request, body => insertBeforeFooter(body, renderSeoOpsPanel(routes)));
     }
 
     const routeMatch = path.match(/^\/konu\/([^/]+)\/?$/);
     if (routeMatch) {
       const route = routeBySlug.get(routeMatch[1]);
       if (route && route.verificationStatus !== "needs-review") {
-        return transformHtmlResponse(response, request, body => injectRouteLayer(body, renderRoutePreferenceLayer(route)));
+        const cacheControl = route.timeSensitive ? "public, max-age=300, s-maxage=1800, stale-while-revalidate=86400" : "public, max-age=900, s-maxage=21600, stale-while-revalidate=172800";
+        return transformHtmlResponse(response, request, body => injectRouteLayer(body, `${renderRoutePreferenceLayer(route)}${renderSeoGrowthLayer(route)}`), cacheControl);
       }
     }
 
