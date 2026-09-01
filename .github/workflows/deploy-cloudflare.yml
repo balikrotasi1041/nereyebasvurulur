@@ -58,13 +58,16 @@ jobs:
               && curlr --fail --show-error --silent "${base}/health?deploy-check=${GITHUB_SHA}" -o /tmp/health.json; then
               if grep -Fq 'name="google-site-verification" content="5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU"' /tmp/home.html \
                 && grep -Fq 'name="yandex-verification" content="3fa0665bc8ba3bb6"' /tmp/home.html \
-                && grep -Fq '"release":"v10-preference-layer-2026-08-26"' /tmp/health.json \
+                && grep -Fq '"release":"v11-search-security-growth-2026-09-01"' /tmp/health.json \
                 && grep -Fq '"preferenceLayer":true' /tmp/health.json \
                 && grep -Fq '"quickAnswerLayer":true' /tmp/health.json \
                 && grep -Fq '"deadlineRadar":true' /tmp/health.json \
                 && grep -Fq '"smartSearch":true' /tmp/health.json \
                 && grep -Fq '"noNewPreferenceUrls":true' /tmp/health.json \
                 && grep -Fq '"scannerProbeBlocking":true' /tmp/health.json \
+                && grep -Fq '"blockedIpCount":8' /tmp/health.json \
+                && grep -Fq '"adaptiveRestrictionCount":2' /tmp/health.json \
+                && grep -Fq '"verifiedBotBypass":true' /tmp/health.json \
                 && grep -Fq '"militaryAnnouncementFeed":true' /tmp/health.json; then
                 verified=1
                 break
@@ -73,7 +76,7 @@ jobs:
             sleep 5
           done
           if [ "$verified" -ne 1 ]; then
-            echo "::error::The expected v10 preference release did not become visible on the live domain."
+            echo "::error::The expected v11 search/security release did not become visible on the live domain."
             exit 1
           fi
 
@@ -87,6 +90,10 @@ jobs:
           grep -Fq 'Gitmeden / başvurmadan önce' /tmp/route.html
           grep -Fq 'Şimdi ne yapmalısınız?' /tmp/route.html
           grep -Fq 'Güncellik kaydı:' /tmp/route.html
+          grep -Fq 'Bugün yapılabilir mi?' /tmp/route.html
+          grep -Fq 'İnsanlar bunu şöyle de arıyor' /tmp/route.html
+          grep -Fq 'FAQPage' /tmp/route.html
+          grep -Fq 'BreadcrumbList' /tmp/route.html
           grep -Fq 'Bu işlemle ilgili askerlik takvimi' /tmp/route.html
 
           curlr --fail --show-error --silent "${base}/ara?q=Ceyhan%20askerlik%20%C5%9Fubesi%20telefon%20numaras%C4%B1" -o /tmp/search.html
@@ -114,12 +121,14 @@ jobs:
           grep -Eiq '^strict-transport-security: max-age=31536000; includeSubDomains' /tmp/headers.txt
           grep -Eiq '^content-security-policy:' /tmp/headers.txt
           grep -Eiq '^x-content-type-options: nosniff' /tmp/headers.txt
-          grep -Eiq '^x-security-layer: v10-preference-layer-2026-08-26' /tmp/headers.txt
+          grep -Eiq '^x-security-layer: v11-search-security-growth-2026-09-01' /tmp/headers.txt
 
           test "$(curlr --silent --output /dev/null --write-out '%{http_code}' "${base}/admin/dashboard/")" = '401'
           test "$(curlr --silent --output /tmp/probe.txt --write-out '%{http_code}' "${base}/wp-login.php")" = '404'
           test "$(curlr --silent --output /tmp/randomphp.txt --write-out '%{http_code}' "${base}/UuAFIYGYKdefault.php")" = '404'
           test "$(curlr --silent --output /tmp/serverstatus.txt --write-out '%{http_code}' "${base}/server-status")" = '404'
+          test "$(curlr --silent --output /tmp/nestedwp.txt --write-out '%{http_code}' "${base}/shop/wp-includes/wlwmanifest.xml")" = '404'
+          test "$(curlr --silent --output /tmp/gitprobe.txt --write-out '%{http_code}' "${base}/backup/.git/HEAD")" = '404'
 
           curlr --fail --show-error --silent --dump-header /tmp/healthheaders --output /dev/null "${base}/health"
           tr -d '\r' < /tmp/healthheaders | grep -Eiq '^cache-control: no-store, max-age=0$'
@@ -131,7 +140,7 @@ jobs:
           tr -d '\r' < /tmp/cache2 | grep -Eiq '^x-edge-cache: HIT$'
 
           test "$(curlr --fail --show-error --silent "${base}/b1493a8a691bb36804ec62b677f59d5b.txt")" = 'b1493a8a691bb36804ec62b677f59d5b'
-          echo "V10 preference layer, smart search, deadline radar, separate general/ASAL feeds, security, cache, sitemap and IndexNow key verified."
+          echo "V11 search aliases, live status, schema, internal links, adaptive security, cache, feeds, sitemap and IndexNow key verified."
 
       - name: Notify IndexNow
         shell: bash
