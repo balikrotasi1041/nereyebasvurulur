@@ -4,6 +4,14 @@ import { supplementalAnnouncements } from "../src/supplemental-announcements";
 const failures: string[] = [];
 const existingSlugs = new Set(announcements.map(item => item.slug));
 const seen = new Set<string>();
+const requiredSlugs = new Set([
+  "2026-dgs-tercihleri-basladi",
+  "2026-kpss-lisans-sinava-giris-belgeleri",
+  "2026-kpss-ortaogretim-basvurulari-basladi",
+  "3713-terorle-mucadelede-yaralananlar-e-devlet-basvurusu",
+  "2026-e-ydts-2-turkce-basvurulari",
+  "2027-cks-basvurulari-basladi"
+]);
 
 for (const item of supplementalAnnouncements) {
   if (existingSlugs.has(item.slug)) failures.push(`Ana duyuru listesiyle çakışan slug: ${item.slug}`);
@@ -24,7 +32,10 @@ for (const item of supplementalAnnouncements) {
   }
 }
 
-if (supplementalAnnouncements.length !== 4) failures.push(`Ek duyuru seti beklenmeyen sayıda kayıt içeriyor: ${supplementalAnnouncements.length}`);
+for (const slug of requiredSlugs) {
+  if (!seen.has(slug)) failures.push(`Beklenen ek duyuru eksik: ${slug}`);
+}
+if (supplementalAnnouncements.length !== requiredSlugs.size) failures.push(`Ek duyuru seti beklenmeyen sayıda kayıt içeriyor: ${supplementalAnnouncements.length}`);
 
 if (failures.length) {
   console.error(failures.join("\n"));

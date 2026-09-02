@@ -4,6 +4,64 @@ const A = (value: Announcement): Announcement => value;
 
 export const supplementalAnnouncements: Announcement[] = [
   A({
+    slug: "2027-cks-basvurulari-basladi",
+    title: "2027 üretim yılı ÇKS başvuruları başladı",
+    authority: "Tarım ve Orman Bakanlığı",
+    kind: "application",
+    publishedAt: "2026-09-01",
+    verifiedAt: "2026-09-02",
+    lastModified: "2026-09-02",
+    summary: "2027 üretim yılı Çiftçi Kayıt Sistemi başvuruları 1 Eylül 2026'da başladı; genel başvuru dönemi 31 Aralık 2026'da sona erecek.",
+    details: [
+      "Tarım ve Orman Bakanlığının il müdürlüklerince yayımlanan resmî duyurular, 2027 üretim yılı ÇKS başvurularının 1 Eylül-31 Aralık 2026 tarihleri arasında alınacağını doğruluyor.",
+      "Tapu, kira/taahhütname ve arazi mülkiyet bilgilerinde değişiklik olmayan mevcut kayıtlı üreticiler kayıt yenilemesini e-Devlet üzerinden yapabiliyor; Bakanlığın il müdürlüğü duyuruları ayrıca yerel başvuru kanalını gösteriyor.",
+      "İlk kayıt, arazi edinim/mülkiyet değişikliği veya yerelde protokole bağlanan işlemlerde başvuru mercii il/ilçe müdürlüğü ya da ilgili yerel resmî kanal olabilir; bu nedenle bulunduğunuz ilin Tarım ve Orman Müdürlüğü duyurusunu kontrol edin."
+    ],
+    actions: [
+      "Mevcut ÇKS kaydınız ve arazi bilgileriniz değişmediyse e-Devlet üzerinden yenileme ekranını kontrol edin.",
+      "İlk kayıt veya arazi/mülkiyet değişikliği varsa il/ilçe Tarım ve Orman Müdürlüğünün güncel yönlendirmesini izleyin.",
+      "Başvurunuzu 31 Aralık 2026 tarihinden önce tamamlayın."
+    ],
+    deadlineAt: "2026-12-31T23:59:00+03:00",
+    deadlineLabel: "Genel başvuru dönemi 31 Aralık 2026'da sona eriyor",
+    actionUrl: "https://www.turkiye.gov.tr/tarim-ve-orman-bakanligi",
+    actionLabel: "e-Devlet Tarım ve Orman hizmetlerini aç",
+    relatedPathKeys: [],
+    relatedSearches: ["ÇKS", "Çiftçi Kayıt Sistemi", "2027 ÇKS", "çiftçi kayıt yenileme"],
+    sources: [
+      { title: "2027 Üretim Yılı Çiftçi Kayıt Sistemi Başvuruları 1 Eylül 2026 Tarihi itibari ile başlamıştır", authority: "Tarım ve Orman Bakanlığı Bolu İl Müdürlüğü", url: "https://bolu.tarimorman.gov.tr/Duyuru/701/2027-Uretim-Yili-Ciftci-Kayit-Sistemi-Basvurulari-1-Eylul-2026-Tarihi-Itibari-Ile-Baslamistir" },
+      { title: "2027 Yılı ÇKS Kayıtları Başladı", authority: "Tarım ve Orman Bakanlığı Rize İl Müdürlüğü", url: "https://rize.tarimorman.gov.tr/Duyuru/355/2027-Yili-Cks-Kayitlari-Basladi" }
+    ]
+  }),
+  A({
+    slug: "2026-e-ydts-2-turkce-basvurulari",
+    title: "2026 e-YDTS/2 Türkçe başvuruları başladı",
+    authority: "ÖSYM",
+    kind: "application",
+    publishedAt: "2026-09-01",
+    verifiedAt: "2026-09-02",
+    lastModified: "2026-09-02",
+    summary: "19 Eylül 2026'da yapılacak 2026 e-YDTS/2 Türkçe için başvurular 1-10 Eylül 2026 arasında ÖSYM ödeme sistemi üzerinden alınıyor; kontenjan dolarsa başvuru daha erken kapanabilir.",
+    details: [
+      "Sınav 19 Eylül 2026 tarihinde Ankara, İstanbul, İzmir ve Adana'daki e-Sınav Uygulama Binalarında yapılacak.",
+      "Başvurular 1 Eylül 2026 saat 14.00'ten itibaren ÖSYM'nin ödeme sistemi üzerinden alınmaya başladı ve ilan edilen dönem 10 Eylül 2026'da sona eriyor.",
+      "Kontenjan Ankara'da 658, İstanbul'da 202, İzmir'de 49 ve Adana'da 102 kişiyle sınırlı; adaylar sınav ücretini ödeme sırasına göre kontenjana dâhil ediliyor ve kontenjan dolarsa ödeme sistemi başvuruyu kapatıyor."
+    ],
+    actions: [
+      "ÖSYM'nin 2026 e-YDTS kılavuzunu okuyun.",
+      "Kontenjan sınırlı olduğu için başvuruyu son günü beklemeden ÖSYM ödeme sistemi üzerinden tamamlayın."
+    ],
+    deadlineAt: "2026-09-10T23:59:00+03:00",
+    deadlineLabel: "İlan edilen başvuru dönemi 10 Eylül 2026'da sona eriyor; kontenjan dolarsa daha erken kapanabilir",
+    actionUrl: "https://sanalpos.osym.gov.tr/",
+    actionLabel: "ÖSYM ödeme sistemini aç",
+    relatedPathKeys: [],
+    relatedSearches: ["e-YDTS", "e-YDTS Türkçe", "Türkçe yeterlilik sınavı"],
+    sources: [
+      { title: "2026 Elektronik Yabancı Dil Olarak Türkçe Sınavı (e-YDTS/2 Türkçe): Başvuruların Alınması", authority: "ÖSYM", url: "https://osym.gov.tr/2026-elektronik-yabanci-dil-olarak-turkce-sinavi-e-ydts2-turkce-basvurularin-alinmasi" }
+    ]
+  }),
+  A({
     slug: "2026-dgs-tercihleri-basladi",
     title: "2026-DGS tercihleri başladı",
     authority: "ÖSYM",
@@ -124,7 +182,7 @@ export const supplementalAnnouncements: Announcement[] = [
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
 
 function esc(value: string): string {
-  return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char] || char));
+  return String(value).replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '\"': "&quot;", "'": "&#039;" }[char] || char));
 }
 
 function formatDate(value: string): string {
