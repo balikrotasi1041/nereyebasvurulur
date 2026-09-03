@@ -4,6 +4,37 @@ const A = (value: Announcement): Announcement => value;
 
 export const supplementalAnnouncements: Announcement[] = [
   A({
+    slug: "ipard-iii-12-cagri-basvuru-paketi-son-teslim-7-eylul",
+    title: "IPARD III 12. Çağrı: başvuru paketi teslimi 7 Eylül'de sona eriyor",
+    authority: "Tarım ve Kırsal Kalkınmayı Destekleme Kurumu (TKDK)",
+    kind: "application",
+    publishedAt: "2026-08-31",
+    verifiedAt: "2026-09-03",
+    lastModified: "2026-09-03",
+    summary: "IPARD III 12. Başvuru Çağrısında M1 (101) için çevrimiçi başvuru aşaması 31 Ağustos'ta kapandı; çevrimiçi aşamayı tamamlayanların başvuru paketini 7 Eylül 2026 saat 18.00'e kadar ilgili TKDK birimine teslim etmesi gerekiyor.",
+    details: [
+      "Çağrı, 81 ilde M1 (101) Tarımsal İşletmelerin Fiziki Varlıklarına Yönelik Yatırımlar için başvuru kabul ediyor; destek oranı yüzde 60-70 ve çağrı bütçesi 30 milyon Avro olarak ilan edildi.",
+      "TKDK, çevrimiçi başvuru sisteminin kapanışını 31 Ağustos 2026 saat 18.00'den aynı gün saat 21.59'a uzattı. Bu çevrimiçi aşama artık sona erdi; yeni bir çevrimiçi başvurunun hâlen yapılabildiği izlenimi verilmemelidir.",
+      "Resmî çağrı ilanına göre çevrimiçi aşamayı tamamlayan başvuru sahiplerinin başvuru paketini yatırımın uygulanacağı ildeki TKDK İl Koordinatörlüğü veya İl İrtibat Ofisine en geç 7 Eylül 2026 saat 18.00'e kadar teslim etmesi gerekiyor; bu saatten sonraki teslimler kabul edilmeyecek."
+    ],
+    actions: [
+      "Çevrimiçi başvurunuzu 31 Ağustos'taki kapanıştan önce tamamladıysanız TKDK'nın 12. Başvuru Çağrı İlanını ve Başvuru Çağrı Rehberini yeniden kontrol edin.",
+      "Başvuru paketinizi yatırımın uygulanacağı ildeki TKDK İl Koordinatörlüğü veya İl İrtibat Ofisine 7 Eylül 2026 saat 18.00'den önce teslim edin.",
+      "Çevrimiçi aşamayı tamamlamadıysanız bu duyuruyu yeni başvuru başlangıcı olarak değerlendirmeyin; çevrimiçi sistemin bu çağrı için kapanış süresi sona erdi."
+    ],
+    deadlineAt: "2026-09-07T18:00:00+03:00",
+    deadlineLabel: "Başvuru paketi teslimi 7 Eylül 2026 saat 18.00'de sona eriyor",
+    actionUrl: "https://www.tkdk.gov.tr/Duyuru/ipard-iii-program-12th-application-call-announcement-has-been-published-13111",
+    actionLabel: "TKDK 12. Başvuru Çağrı İlanını aç",
+    relatedPathKeys: ["Tarım, Hayvancılık, Orman ve Kırsal > Tarımsal Destekler > Kırsal kalkınma destekleri"],
+    relatedSearches: ["IPARD", "IPARD III 12. çağrı", "TKDK", "kırsal kalkınma desteği"],
+    sources: [
+      { title: "IPARD III Programı On İkinci Başvuru Çağrı İlanı", authority: "Tarım ve Kırsal Kalkınmayı Destekleme Kurumu (TKDK)", url: "https://www.tkdk.gov.tr/Duyuru/ipard-iii-program-12th-application-call-announcement-has-been-published-13111" },
+      { title: "M1 (101) çevrimiçi başvuru sistemi kapanış süresi uzatımı", authority: "Tarım ve Kırsal Kalkınmayı Destekleme Kurumu (TKDK)", url: "https://www.tkdk.gov.tr/Duyuru/ipard-iii-programi-12-basvuru-cagri-ilani-kapsaminda-m1-101-tedbiri-icin-online-basvuru-sistemine-giris-suresi-31-agustos-2026-saat-21-59-a-kadar-uzat-13155" },
+      { title: "IPARD III 12. Başvuru Çağrı İlanı PDF", authority: "Tarım ve Kırsal Kalkınmayı Destekleme Kurumu (TKDK)", url: "https://www.tkdk.gov.tr/Content/File/Duyuru/files/IPARD%20III%2012_%20Basvuru%20%C3%87agri%20Ilani.pdf" }
+    ]
+  }),
+  A({
     slug: "2027-cks-basvurulari-basladi",
     title: "2027 üretim yılı ÇKS başvuruları başladı",
     authority: "Tarım ve Orman Bakanlığı",
