@@ -11,7 +11,8 @@ const requiredSlugs = new Set([
   "3713-terorle-mucadelede-yaralananlar-e-devlet-basvurusu",
   "2026-e-ydts-2-turkce-basvurulari",
   "2027-cks-basvurulari-basladi",
-  "ipard-iii-12-cagri-basvuru-paketi-son-teslim-7-eylul"
+  "ipard-iii-12-cagri-basvuru-paketi-son-teslim-7-eylul",
+  "2026-hayvancilik-destekleri-1-donem-basvurulari"
 ]);
 
 for (const item of supplementalAnnouncements) {

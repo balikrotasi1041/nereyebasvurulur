@@ -12,7 +12,7 @@ const expectedPhysicalMilitaryBranches = 397;
 const publishedSlugs = new Set(publishedRoutes.map(route => route.slug));
 const pathKeys = new Set(routes.map(route => route.pathKey));
 const slugs = new Set(routes.map(route => route.slug));
-const allowedAuditDates = new Set(["2026-08-21", "2026-08-23"]);
+const allowedAuditDates = new Set(["2026-08-21", "2026-08-23", "2026-09-05"]);
 const staleSourceFragments = [
   "/mevzuatmetin/1.5.213.pdf",
   "/mevzuatmetin/1.5.2644.pdf",
