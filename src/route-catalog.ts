@@ -30,7 +30,8 @@ function applyDailyOfficialUpdates(routes: RouteRecord[]): RouteRecord[] {
       ],
       lastVerified: "2026-09-05",
       freshnessRisk: "high",
-      timeSensitive: true
+      timeSensitive: true,
+      eGovernmentAvailable: false
     };
   });
 }
