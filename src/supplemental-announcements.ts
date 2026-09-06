@@ -1,6 +1,39 @@
 import type { Announcement } from "./announcements";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
+const gsbYurtResultAnnouncement: Announcement = {
+  slug: "2026-gsb-yurt-basvuru-sonuclari-sorgulama",
+  title: "2026-2027 GSB yurt başvuru sonucu sorgulama ekranı erişime açık",
+  authority: "Gençlik ve Spor Bakanlığı / Kredi ve Yurtlar Genel Müdürlüğü",
+  kind: "result",
+  publishedAt: "2026-09-06",
+  verifiedAt: "2026-09-06",
+  lastModified: "2026-09-06",
+  summary: "Gençlik ve Spor Bakanlığının resmî 2026-2027 yurt başvuru sonucu sayfası, öğrencileri e-Devlet'teki Yurt Başvuru Sonucu Sorgulama hizmetine yönlendiriyor; kişisel sonuç yalnız kimlik doğrulaması sonrasında görüntülenebiliyor.",
+  details: [
+    "Gençlik ve Spor Bakanlığının resmî sonuç sayfasında '2026-2027 Eğitim Öğretim Dönemi Yurt Başvuru Sonucu' başlığı yer alıyor ve sorgulama bağlantısı doğrudan e-Devlet'teki Gençlik ve Spor Bakanlığı Yurt Başvuru Sonucu Sorgulama hizmetine yönlendiriyor.",
+    "e-Devlet sonuç hizmeti kişisel nitelikte olduğundan yurt yerleştirme sonucu, hak kazanılan yurt ve kişiye özel işlem bilgileri genel duyuru sayfasından değil kimlik doğrulaması yapılarak öğrenilmeli.",
+    "6 Eylül 2026 denetiminde GSB/KYGM'nin güncel haber ve duyuru listelerinde 2026-2027 dönemi için herkese uygulanabilecek yeni bir genel kayıt son tarihi ayrıca doğrulanamadı. Bu nedenle önceki yılların kayıt tarihleri yeni dönem için kullanılmamalı; sonuç ekranındaki kişisel işlem bilgileri ile sonraki resmî GSB/KYGM duyuruları esas alınmalı."
+  ],
+  actions: [
+    "e-Devlet'teki GSB Yurt Başvuru Sonucu Sorgulama hizmetine giriş yaparak kişisel sonucunuzu kontrol edin.",
+    "Yurt hakkı kazandıysanız kişisel sonuç ekranında gösterilen kayıt, ücret veya taahhütname adımlarını ve varsa süreyi esas alın; önceki yıllara ait son tarihleri 2026 için kullanmayın.",
+    "Yedek veya ek başvuru sürecindeyseniz GSB ve KYGM'nin yeni resmî duyurularını takip edin."
+  ],
+  deadlineLabel: "2026-2027 dönemi için genel kayıt son tarihi 6 Eylül 2026 denetiminde ayrıca doğrulanmadı; kişisel sonuç ekranındaki süre ve güncel GSB/KYGM duyurusu esas alınmalı",
+  actionUrl: "https://www.turkiye.gov.tr/gsb-yurt-basvuru-sonucu-sorgulama",
+  actionLabel: "e-Devlet GSB yurt başvuru sonucunu sorgula",
+  relatedPathKeys: [
+    "Eğitim ve Öğrenci İşlemleri > Üniversite > Kayıt",
+    "Eğitim ve Öğrenci İşlemleri > Sınav ve Yerleştirme > Yerleştirme işlemleri"
+  ],
+  relatedSearches: ["GSB yurt sonucu", "KYK yurt sonucu", "yurt başvuru sonucu", "2026 yurt sonucu"],
+  sources: [
+    { title: "2026-2027 Eğitim Öğretim Dönemi Yurt Başvuru Sonucu", authority: "Gençlik ve Spor Bakanlığı", url: "https://www.gsb.gov.tr/Featured/YurtSonuc" },
+    { title: "Yurt Başvuru Sonucu Sorgulama", authority: "e-Devlet Kapısı / Gençlik ve Spor Bakanlığı", url: "https://www.turkiye.gov.tr/gsb-yurt-basvuru-sonucu-sorgulama" }
+  ]
+};
+
 const newAnnouncement: Announcement = {
   slug: "2026-hayvancilik-destekleri-1-donem-basvurulari",
   title: "2026 büyükbaş ve küçükbaş hayvancılık destekleri 1. dönem başvuruları başladı",
@@ -33,7 +66,7 @@ const newAnnouncement: Announcement = {
   ]
 };
 
-export const supplementalAnnouncements: Announcement[] = [newAnnouncement, ...previousAnnouncements]
+export const supplementalAnnouncements: Announcement[] = [gsbYurtResultAnnouncement, newAnnouncement, ...previousAnnouncements]
   .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
