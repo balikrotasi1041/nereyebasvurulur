@@ -1,6 +1,36 @@
 import type { Announcement } from "./announcements";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
+const gsbCoachExamAnnouncement: Announcement = {
+  slug: "2026-gsb-sozlesmeli-antrenor-sozlu-uygulamali-sinav",
+  title: "2026 GSB sözleşmeli antrenör alımı sözlü ve uygulamalı sınav tarihleri açıklandı",
+  authority: "Gençlik ve Spor Bakanlığı / Personel Genel Müdürlüğü",
+  kind: "exam-call",
+  publishedAt: "2026-09-07",
+  verifiedAt: "2026-09-08",
+  lastModified: "2026-09-08",
+  summary: "GSB, 2026 sözleşmeli antrenör alımında sözlü ve uygulamalı sınava katılmaya hak kazanan adayların sınavlarının 15-25 Eylül 2026 arasında Ankara'da yapılacağını; kişisel tarih ve yer bilgisinin Kariyer Kapısı Sınavlarım/Mülakatlarım bölümünden öğrenileceğini duyurdu.",
+  details: [
+    "Gençlik ve Spor Bakanlığı Personel Genel Müdürlüğünün 7 Eylül 2026 tarihli resmî duyurusuna göre başvuruları onaylanan ve sözlü/uygulamalı sınava katılmaya hak kazanan adayların sınavları 15-25 Eylül 2026 tarihleri arasında Ankara'da yapılacak.",
+    "Her adayın kişisel sınav tarihi, saati ve yeri Cumhurbaşkanlığı Kariyer Kapısı üzerinden Sınavlarım/Mülakatlarım başlığı altında ilan edildi. Genel tarih aralığı kişisel randevu yerine geçmiyor.",
+    "Belirlenen tarih ve saatte sınava katılmayan aday sınav hakkını kaybetmiş sayılıyor ve ikinci sınav hakkı verilmiyor. Mücbir sebep varsa, ilgili spor dalının sınav tarihleri içinde kalmak kaydıyla değişiklik talebi mümkün; gerekçeyi kanıtlayan belge ve ıslak imzalı dilekçe en geç kişisel sınav tarihine kadar personel.sinavlar@gsb.gov.tr adresine gönderilmeli.",
+    "Adayların sınava nüfus cüzdanı veya pasaport ile gelmesi gerekiyor; duyuru bu belgeler dışında başka bir kimlik belgesinin kabul edilmeyeceğini belirtiyor."
+  ],
+  actions: [
+    "Kariyer Kapısı'nda Sınavlarım/Mülakatlarım bölümünü açarak size atanmış tarih, saat ve yeri kontrol edin.",
+    "Sınava nüfus cüzdanı veya pasaportla gidin ve branşınıza uygun spor kıyafeti/varsa kişisel ekipmanınızı hazırlayın.",
+    "Mücbir sebeple katılamayacaksanız kanıtlayıcı belge ve ıslak imzalı dilekçenizi en geç kişisel sınav tarihinize kadar Bakanlığın duyuruda verdiği e-posta adresine gönderin."
+  ],
+  deadlineLabel: "Sınavlar 15-25 Eylül 2026 arasında; bağlayıcı kişisel tarih, saat ve yer Kariyer Kapısı Sınavlarım/Mülakatlarım ekranında",
+  actionUrl: "https://kariyerkapisi.gov.tr/isealim",
+  actionLabel: "Kariyer Kapısı sınav bilgilerini kontrol et",
+  relatedPathKeys: [],
+  relatedSearches: ["GSB antrenör alımı", "sözleşmeli antrenör sınavı", "GSB sözlü uygulamalı sınav", "Kariyer Kapısı antrenör sınavı"],
+  sources: [
+    { title: "2026 Yılı Sözleşmeli Antrenör Alımı Sözlü ve Uygulamalı Sınav Duyurusu", authority: "Gençlik ve Spor Bakanlığı Personel Genel Müdürlüğü", url: "https://pgm.gsb.gov.tr/Duyuru/302875/2026-yili-sozlesmeli-antrenor-alimi-sozlu-ve-uygulamali-sinav-duyurusu.aspx" }
+  ]
+};
+
 const gsbYurtResultAnnouncement: Announcement = {
   slug: "2026-gsb-yurt-basvuru-sonuclari-sorgulama",
   title: "2026-2027 GSB yurt başvuru sonucu sorgulama ekranı erişime açık",
@@ -66,7 +96,7 @@ const newAnnouncement: Announcement = {
   ]
 };
 
-export const supplementalAnnouncements: Announcement[] = [gsbYurtResultAnnouncement, newAnnouncement, ...previousAnnouncements]
+export const supplementalAnnouncements: Announcement[] = [gsbCoachExamAnnouncement, gsbYurtResultAnnouncement, newAnnouncement, ...previousAnnouncements]
   .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));

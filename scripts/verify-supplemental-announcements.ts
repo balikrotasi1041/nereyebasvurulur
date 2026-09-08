@@ -13,7 +13,8 @@ const requiredSlugs = new Set([
   "2027-cks-basvurulari-basladi",
   "ipard-iii-12-cagri-basvuru-paketi-son-teslim-7-eylul",
   "2026-hayvancilik-destekleri-1-donem-basvurulari",
-  "2026-gsb-yurt-basvuru-sonuclari-sorgulama"
+  "2026-gsb-yurt-basvuru-sonuclari-sorgulama",
+  "2026-gsb-sozlesmeli-antrenor-sozlu-uygulamali-sinav"
 ]);
 
 for (const item of supplementalAnnouncements) {
