@@ -66,30 +66,34 @@ const gsbYurtResultAnnouncement: Announcement = {
 
 const newAnnouncement: Announcement = {
   slug: "2026-hayvancilik-destekleri-1-donem-basvurulari",
-  title: "2026 büyükbaş ve küçükbaş hayvancılık destekleri 1. dönem başvuruları başladı",
+  title: "2026 hayvancılık destekleri: 1. dönem başvuruları sürüyor, destek tutarları güncellendi",
   authority: "Tarım ve Orman Bakanlığı / Hayvancılık Genel Müdürlüğü",
   kind: "application",
   publishedAt: "2026-09-01",
-  verifiedAt: "2026-09-05",
-  lastModified: "2026-09-05",
-  summary: "2026 yılı 1. dönem buzağı/malak ve kuzu/oğlak hayvancılık destekleme başvuruları 1 Eylül 2026'da başladı; resmî il müdürlüğü duyurularında son başvuru tarihi 1 Aralık 2026 olarak açıklandı ve başvuru kanalı destek türü ile yetiştirici örgütü üyeliğine göre değişiyor.",
+  verifiedAt: "2026-09-09",
+  lastModified: "2026-09-09",
+  summary: "2026 yılı 1. dönem buzağı/malak ve kuzu/oğlak hayvancılık destekleme başvuruları 1 Aralık 2026'ya kadar sürüyor. 8 Eylül 2026 tarihli 11782 sayılı Cumhurbaşkanı Kararıyla 2026 hayvancılık destek tutarları ve bazı ilave katsayılar güncellendi; başvuru kanalı ve 1. dönem son tarihi değişmedi.",
   details: [
-    "Hayvancılık Genel Müdürlüğü, 1 Eylül 2026 tarihinde hem 2026 Yılı Büyükbaş Hayvancılık (Buzağı/Malak) hem de 2026 Yılı Küçükbaş Hayvancılık (Kuzu/Oğlak) Desteklemeleri Talimatlarını yayımladı. Resmî il müdürlüğü uygulama duyuruları 1. dönem başvurularını 1 Eylül-1 Aralık 2026 aralığında gösteriyor.",
-    "Büyükbaş buzağı/malak desteğinde yetiştirici örgütü üyesi olan yetiştiriciler başvuruyu ilgili yetiştirici örgütü üzerinden; üye olmayan yetiştiriciler ise il/ilçe Tarım ve Orman Müdürlüğüne şahsen yapıyor. İlinizdeki uygulama ayrıntısı için bağlı bulunduğunuz müdürlüğün güncel duyurusunu kontrol edin.",
-    "Küçükbaş kuzu/oğlak desteğinde resmî il müdürlüğü duyuruları başvurunun Damızlık Koyun-Keçi Yetiştiricileri Birliği üzerinden yürütüldüğünü belirtiyor. Yerel uygulamada belge ve kabul noktası ayrıntısını ilgili birlik ve İl/İlçe Tarım ve Orman Müdürlüğünden doğrulayın."
+    "Hayvancılık Genel Müdürlüğü, 1 Eylül 2026 tarihinde 2026 Yılı Büyükbaş Hayvancılık (Buzağı/Malak) ve Küçükbaş Hayvancılık (Kuzu/Oğlak) Desteklemeleri Talimatlarını yayımladı. Resmî il müdürlüğü uygulama duyuruları 1. dönem başvurularını 1 Eylül-1 Aralık 2026 aralığında gösteriyor.",
+    "8 Eylül 2026 tarihli ve 33364 sayılı Resmî Gazete'de yayımlanan 11782 sayılı Cumhurbaşkanı Kararı 1 Ocak 2026'dan geçerli olmak üzere destek tutarlarını değiştirdi. Buzağı temel desteği 2.000 TL/baş, malak 4.000 TL/baş, kuzu/oğlak 430 TL/baş oldu. Atık desteği sığır ve manda için 20.000 TL/baş, koyun ve keçi için 4.000 TL/baş; arıcılık desteği birlik üyesine 250 TL/kovan, üye olmayana 200 TL/kovan olarak düzenlendi.",
+    "Karar ayrıca suni tohumlama, embriyo transferi/cinsiyeti belirli sperma, soy kütüğü, ari işletme, göçer sevk kontrol noktası ve bazı diğer destek kalemlerine ilişkin ilave katsayıları güncelledi. Destek kapsamı teknik şartlara bağlı olduğundan yalnız özet tutara bakarak hak kazanıldığı varsayılmamalı; Bakanlığın güncel talimatı ve başvuru kaydı birlikte kontrol edilmeli.",
+    "Büyükbaş buzağı/malak desteğinde yetiştirici örgütü üyesi olan yetiştiriciler başvuruyu ilgili yetiştirici örgütü üzerinden; üye olmayan yetiştiriciler ise il/ilçe Tarım ve Orman Müdürlüğüne şahsen yapıyor. Küçükbaş kuzu/oğlak desteğinde resmî il müdürlüğü duyuruları başvurunun Damızlık Koyun-Keçi Yetiştiricileri Birliği üzerinden yürütüldüğünü belirtiyor."
   ],
   actions: [
     "Başvuracağınız desteğin buzağı/malak mı yoksa kuzu/oğlak mı olduğunu belirleyin ve Hayvancılık Genel Müdürlüğünün 2026 talimatını kontrol edin.",
+    "Hak kazanma ve tutar hesabında 11782 sayılı Kararın güncel 2026 tutarlarını ve ilave katsayılarını esas alın; yalnız temel tutarı nihai ödeme tutarı olarak kabul etmeyin.",
     "Büyükbaş desteğinde yetiştirici örgütü üyesiyseniz ilgili örgüt üzerinden, üye değilseniz İl/İlçe Tarım ve Orman Müdürlüğü üzerinden başvurun; küçükbaş desteğinde ilgili Damızlık Koyun-Keçi Yetiştiricileri Birliğinin başvuru kanalını kullanın.",
     "Başvuruyu 1 Aralık 2026 tarihini geçirmeden tamamlayın; fizikî başvuruda ilgili kurum veya birliğin mesai/kabul saatini esas alın."
   ],
   deadlineAt: "2026-12-02T00:00:00+03:00",
-  deadlineLabel: "1. dönem başvuruları 1 Aralık 2026 tarihinde sona eriyor; fizikî kabul için ilgili birimin mesai saatini esas alın",
-  actionUrl: "https://www.tarimorman.gov.tr/haygem/Sayfalar/Detay.aspx?Liste=Duyuru",
-  actionLabel: "HAYGEM 2026 hayvancılık destekleme talimatlarını aç",
+  deadlineLabel: "1. dönem başvuruları 1 Aralık 2026 tarihinde sona eriyor; 11782 sayılı Karar bu son tarihi değiştirmedi",
+  actionUrl: "https://www.tarimorman.gov.tr/HHGM/Haber/263/2024-2026-Yillarinda-Yapilacak-Hayvancilik-Desteklemelerine-Iliskin-Kararda-Degisiklik-Yapilmasina-Dair-Karar",
+  actionLabel: "Tarım ve Orman Bakanlığının 11782 sayılı Karar duyurusunu aç",
   relatedPathKeys: ["Tarım, Hayvancılık, Orman ve Kırsal > Hayvancılık > Hayvancılık destekleri"],
-  relatedSearches: ["hayvancılık destekleri", "buzağı malak desteği", "kuzu oğlak desteği", "2026 hayvancılık desteği"],
+  relatedSearches: ["hayvancılık destekleri", "buzağı malak desteği", "kuzu oğlak desteği", "2026 hayvancılık desteği", "11782 hayvancılık destekleri"],
   sources: [
+    { title: "2024-2026 Yıllarında Yapılacak Hayvancılık Desteklemelerine İlişkin Kararda Değişiklik Yapılmasına Dair Karar", authority: "Tarım ve Orman Bakanlığı Hayvancılık Genel Müdürlüğü", url: "https://www.tarimorman.gov.tr/HHGM/Haber/263/2024-2026-Yillarinda-Yapilacak-Hayvancilik-Desteklemelerine-Iliskin-Kararda-Degisiklik-Yapilmasina-Dair-Karar" },
+    { title: "11782 sayılı Cumhurbaşkanı Kararı - Resmî Gazete PDF", authority: "T.C. Resmî Gazete", url: "https://www.resmigazete.gov.tr/eskiler/2026/09/20260908-8.pdf" },
     { title: "2026 Yılı Büyükbaş ve Küçükbaş Hayvancılık Desteklemeleri Talimatları", authority: "Tarım ve Orman Bakanlığı Hayvancılık Genel Müdürlüğü", url: "https://www.tarimorman.gov.tr/haygem/Sayfalar/Detay.aspx?Liste=Duyuru" },
     { title: "2026 Yılı 1. Dönem Büyükbaş Hayvancılık Destekleme Başvuru İşlemleri", authority: "Tarım ve Orman Bakanlığı Kütahya İl Müdürlüğü", url: "https://kutahya.tarimorman.gov.tr/Duyuru/733/2026-Yili-1-Donem-Buyukbas-Hayvancilik-Destekleme-Basvuru-Islemleri" },
     { title: "2026 Yılı 1. Dönem Büyükbaş ve Küçükbaş Hayvancılık Desteklemeleri Başvuruları Başladı", authority: "Tarım ve Orman Bakanlığı İstanbul İl Müdürlüğü", url: "https://istanbul.tarimorman.gov.tr/Duyuru/483/2026-Yili-1-Donem-Buyukbas-Ve-Kucukbas-Hayvancilik-Desteklemeleri-Basvurulari-Basladi" }
