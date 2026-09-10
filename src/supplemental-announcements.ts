@@ -33,32 +33,35 @@ const gsbCoachExamAnnouncement: Announcement = {
 
 const gsbYurtResultAnnouncement: Announcement = {
   slug: "2026-gsb-yurt-basvuru-sonuclari-sorgulama",
-  title: "2026-2027 GSB yurt başvuru sonucu sorgulama ekranı erişime açık",
+  title: "2026-2027 GSB yurt sonuçları açıklandı: kayıt için son gün 10 Eylül saat 23.00",
   authority: "Gençlik ve Spor Bakanlığı / Kredi ve Yurtlar Genel Müdürlüğü",
   kind: "result",
   publishedAt: "2026-09-06",
-  verifiedAt: "2026-09-06",
-  lastModified: "2026-09-06",
-  summary: "Gençlik ve Spor Bakanlığının resmî 2026-2027 yurt başvuru sonucu sayfası, öğrencileri e-Devlet'teki Yurt Başvuru Sonucu Sorgulama hizmetine yönlendiriyor; kişisel sonuç yalnız kimlik doğrulaması sonrasında görüntülenebiliyor.",
+  verifiedAt: "2026-09-10",
+  lastModified: "2026-09-10",
+  summary: "2026-2027 GSB yurt başvuru sonuçları açıklandı. Yurt hakkı kazanan öğrencilerin kayıt işlemlerini 10 Eylül 2026 Perşembe günü saat 23.00'e kadar tamamlaması gerekiyor; kayıt ilk kayıt ücretinin ödenmesi ve e-Devlet taahhütnamesinin onaylanmasıyla tamamlanıyor.",
   details: [
-    "Gençlik ve Spor Bakanlığının resmî sonuç sayfasında '2026-2027 Eğitim Öğretim Dönemi Yurt Başvuru Sonucu' başlığı yer alıyor ve sorgulama bağlantısı doğrudan e-Devlet'teki Gençlik ve Spor Bakanlığı Yurt Başvuru Sonucu Sorgulama hizmetine yönlendiriyor.",
-    "e-Devlet sonuç hizmeti kişisel nitelikte olduğundan yurt yerleştirme sonucu, hak kazanılan yurt ve kişiye özel işlem bilgileri genel duyuru sayfasından değil kimlik doğrulaması yapılarak öğrenilmeli.",
-    "6 Eylül 2026 denetiminde GSB/KYGM'nin güncel haber ve duyuru listelerinde 2026-2027 dönemi için herkese uygulanabilecek yeni bir genel kayıt son tarihi ayrıca doğrulanamadı. Bu nedenle önceki yılların kayıt tarihleri yeni dönem için kullanılmamalı; sonuç ekranındaki kişisel işlem bilgileri ile sonraki resmî GSB/KYGM duyuruları esas alınmalı."
+    "Kredi ve Yurtlar Genel Müdürlüğünün 8 Eylül 2026 tarihli resmî duyurusuna göre 2026-2027 eğitim öğretim yılı yurt başvuru sonuçları açıklandı. Kişisel sonuç e-Devlet'teki Gençlik ve Spor Bakanlığı Yurt Başvuru Sonucu Sorgulama hizmetinden öğreniliyor.",
+    "Yurtlara yerleşmeye hak kazanan öğrencilerin kayıt işlemlerini 10 Eylül 2026 Perşembe günü saat 23.00'e kadar tamamlaması gerekiyor. KYGM, kayıt işleminin ilk kayıt ücretinin ödenmesi ve e-Devlet'te yer alan taahhütnamenin onaylanmasıyla tamamlandığını belirtiyor.",
+    "İlk kayıt ücreti güvence bedeli ile gün bazında yatak ücretini içeriyor. Kayıt sürecinde sorun yaşayan öğrenciler GSB'nin 444 0 472 numaralı çağrı merkezi veya KYK_Destek kanalı üzerinden destek isteyebiliyor.",
+    "Kişisel yurt yerleştirme sonucu ve kişiye özel işlem bilgileri genel duyurudan değil kimlik doğrulaması yapılan e-Devlet ekranından kontrol edilmeli. Genel 10 Eylül saat 23.00 son tarihi, kişisel ekranda gösterilen işlem adımlarını takip etme gereğini ortadan kaldırmıyor."
   ],
   actions: [
     "e-Devlet'teki GSB Yurt Başvuru Sonucu Sorgulama hizmetine giriş yaparak kişisel sonucunuzu kontrol edin.",
-    "Yurt hakkı kazandıysanız kişisel sonuç ekranında gösterilen kayıt, ücret veya taahhütname adımlarını ve varsa süreyi esas alın; önceki yıllara ait son tarihleri 2026 için kullanmayın.",
-    "Yedek veya ek başvuru sürecindeyseniz GSB ve KYGM'nin yeni resmî duyurularını takip edin."
+    "Yurt hakkı kazandıysanız ilk kayıt ücretini ödeyin ve e-Devlet'teki taahhütnameyi onaylayarak kayıt işlemini 10 Eylül 2026 saat 23.00'ten önce tamamlayın.",
+    "Kayıt sırasında sorun yaşarsanız GSB'nin 444 0 472 çağrı merkezini veya KYK_Destek kanalını kullanın; kişisel işlem ekranını esas alın."
   ],
-  deadlineLabel: "2026-2027 dönemi için genel kayıt son tarihi 6 Eylül 2026 denetiminde ayrıca doğrulanmadı; kişisel sonuç ekranındaki süre ve güncel GSB/KYGM duyurusu esas alınmalı",
+  deadlineAt: "2026-09-10T23:00:00+03:00",
+  deadlineLabel: "Yurt kayıt işlemleri 10 Eylül 2026 Perşembe günü saat 23.00'te sona eriyor",
   actionUrl: "https://www.turkiye.gov.tr/gsb-yurt-basvuru-sonucu-sorgulama",
   actionLabel: "e-Devlet GSB yurt başvuru sonucunu sorgula",
   relatedPathKeys: [
     "Eğitim ve Öğrenci İşlemleri > Üniversite > Kayıt",
     "Eğitim ve Öğrenci İşlemleri > Sınav ve Yerleştirme > Yerleştirme işlemleri"
   ],
-  relatedSearches: ["GSB yurt sonucu", "KYK yurt sonucu", "yurt başvuru sonucu", "2026 yurt sonucu"],
+  relatedSearches: ["GSB yurt sonucu", "KYK yurt sonucu", "yurt başvuru sonucu", "2026 yurt sonucu", "GSB yurt kayıt son tarih", "KYK yurt kayıt 10 Eylül"],
   sources: [
+    { title: "Yurt Başvuru Sonuçları Açıklandı", authority: "Gençlik ve Spor Bakanlığı Kredi ve Yurtlar Genel Müdürlüğü", url: "https://kygm.gsb.gov.tr/HaberDetaylari/1/10008/302886/yurt-basvuru-sonuclari-aciklandi.aspx" },
     { title: "2026-2027 Eğitim Öğretim Dönemi Yurt Başvuru Sonucu", authority: "Gençlik ve Spor Bakanlığı", url: "https://www.gsb.gov.tr/Featured/YurtSonuc" },
     { title: "Yurt Başvuru Sonucu Sorgulama", authority: "e-Devlet Kapısı / Gençlik ve Spor Bakanlığı", url: "https://www.turkiye.gov.tr/gsb-yurt-basvuru-sonucu-sorgulama" }
   ]
