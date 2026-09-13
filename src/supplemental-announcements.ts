@@ -1,41 +1,6 @@
 import type { Announcement } from "./announcements";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
-const cks2027Announcement: Announcement = {
-  slug: "2027-cks-basvurulari-basladi",
-  title: "2027 ÇKS başvuruları başladı: son gün 31 Aralık 2026",
-  authority: "Tarım ve Orman Bakanlığı",
-  kind: "application",
-  publishedAt: "2026-09-01",
-  verifiedAt: "2026-09-13",
-  lastModified: "2026-09-13",
-  summary: "2027 üretim yılı Çiftçi Kayıt Sistemi (ÇKS) başvuruları 1 Eylül 2026'da başladı ve 31 Aralık 2026'ya kadar devam ediyor. Mevcut kaydı olan üreticiler uygun yenileme işlemlerini e-Devlet üzerinden yapabilir; fizikî kabul kanalı ildeki güncel Bakanlık-TZOB uygulamasına göre İl/İlçe Müdürlüğü veya yetkilendirilmiş Ziraat Odası olabileceğinden yerel resmî duyuru kontrol edilmelidir.",
-  details: [
-    "Tarım ve Orman Bakanlığının il müdürlükleri 2027 üretim yılı ÇKS başvuru dönemini 1 Eylül-31 Aralık 2026 olarak duyurdu. e-Devlet'te Tarım ve Orman Bakanlığına ait Çiftçi Kayıt Sistemi Kayıt Yenileme Başvurusu hizmeti erişilebilir durumda.",
-    "Fizikî başvuru kanalı bütün illerde aynı şekilde uygulanmayabiliyor. Bazı il müdürlüğü duyuruları ilk kayıt veya arazi/beyan değişikliğinde İl/İlçe Tarım ve Orman Müdürlüğünü gösterirken, Bakanlık ile Türkiye Ziraat Odaları Birliği arasında 28 Ağustos 2026'da imzalanan yetki devri protokolünün uygulandığı illerde ÇKS başvuru ve veri girişleri Ziraat Odaları/temsilciliklerine devredilebiliyor.",
-    "Bu nedenle ilk kez kayıt yaptıracak, arazi bilgisini değiştirecek veya fizikî evrak verecek üretici, başvuru yapmadan önce kendi ilinin Tarım ve Orman Müdürlüğü veya bağlı olduğu Ziraat Odasının güncel resmî duyurusunu kontrol etmeli. Önceki yıl ÇKS kaydı bulunan üreticiler için e-Devlet kayıt yenileme seçeneği resmî kanallarda ayrıca gösteriliyor."
-  ],
-  actions: [
-    "Mevcut ÇKS kaydınız varsa e-Devlet'teki Çiftçi Kayıt Sistemi Kayıt Yenileme Başvurusu hizmetini kontrol edin.",
-    "İlk kayıt, arazi/beyan değişikliği veya fizikî evrak teslimi gerekiyorsa ilinizde başvurunun İl/İlçe Tarım ve Orman Müdürlüğü mü yoksa yetkilendirilmiş Ziraat Odası mı üzerinden alındığını güncel resmî duyurudan doğrulayın.",
-    "Başvurunuzu 31 Aralık 2026'yı geçirmeden tamamlayın; fizikî başvuruda son gün kurumun veya odanın mesai ve evrak kabul saatini esas alın."
-  ],
-  deadlineAt: "2027-01-01T00:00:00+03:00",
-  deadlineLabel: "2027 üretim yılı ÇKS başvuruları 31 Aralık 2026'da sona eriyor; fizikî başvuruda yerel mesai/kabul saati esas alınır",
-  actionUrl: "https://www.turkiye.gov.tr/tarim-ve-orman-ciftci-kayit-sistemi-kayit-yenileme-basvurusu-gercek-kisi",
-  actionLabel: "e-Devlet ÇKS kayıt yenileme hizmetini aç",
-  relatedPathKeys: [
-    "Tarım, Hayvancılık, Orman ve Kırsal > Çiftçi Kayıt Sistemi > ÇKS kaydı",
-    "Tarım, Hayvancılık, Orman ve Kırsal > Çiftçi Kayıt Sistemi > ÇKS güncelleme"
-  ],
-  relatedSearches: ["2027 ÇKS", "ÇKS başvurusu", "ÇKS son başvuru tarihi", "ÇKS e-Devlet", "Çiftçi Kayıt Sistemi", "ÇKS kayıt yenileme"],
-  sources: [
-    { title: "2027 Üretim Yılı Çiftçi Kayıt Sistemi (ÇKS) Başvuruları Başlıyor", authority: "Tarım ve Orman Bakanlığı Bingöl İl Müdürlüğü", url: "https://bingol.tarimorman.gov.tr/Duyuru/574/2027-Uretim-Yili-Ciftci-Kayit-Sistemi-_cks_-Basvurulari-Basliyor" },
-    { title: "2027 Yılı ÇKS Kayıtları Başladı", authority: "Tarım ve Orman Bakanlığı Rize İl Müdürlüğü", url: "https://rize.tarimorman.gov.tr/Duyuru/355/2027-Yili-Cks-Kayitlari-Basladi" },
-    { title: "Çiftçi Kayıt Sistemi Kayıt Yenileme Başvurusu", authority: "e-Devlet Kapısı / Tarım ve Orman Bakanlığı", url: "https://www.turkiye.gov.tr/tarim-ve-orman-ciftci-kayit-sistemi-kayit-yenileme-basvurusu-gercek-kisi" }
-  ]
-};
-
 const gsbCoachExamAnnouncement: Announcement = {
   slug: "2026-gsb-sozlesmeli-antrenor-sozlu-uygulamali-sinav",
   title: "2026 GSB sözleşmeli antrenör alımı sözlü ve uygulamalı sınav tarihleri açıklandı",
@@ -138,7 +103,7 @@ const newAnnouncement: Announcement = {
   ]
 };
 
-export const supplementalAnnouncements: Announcement[] = [gsbCoachExamAnnouncement, gsbYurtResultAnnouncement, cks2027Announcement, newAnnouncement, ...previousAnnouncements]
+export const supplementalAnnouncements: Announcement[] = [gsbCoachExamAnnouncement, gsbYurtResultAnnouncement, newAnnouncement, ...previousAnnouncements]
   .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
