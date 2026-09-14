@@ -8,6 +8,8 @@ const requiredSlugs = new Set([
   "2026-dgs-tercihleri-basladi",
   "2026-kpss-lisans-sinava-giris-belgeleri",
   "2026-kpss-ortaogretim-basvurulari-basladi",
+  "2026-kpss-ortaogretim-gec-basvuru",
+  "2026-sayistay-denetci-yardimcisi-eleme-basvurulari",
   "3713-terorle-mucadelede-yaralananlar-e-devlet-basvurusu",
   "2026-e-ydts-2-turkce-basvurulari",
   "2027-cks-basvurulari-basladi",
