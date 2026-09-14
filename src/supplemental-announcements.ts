@@ -103,8 +103,105 @@ const newAnnouncement: Announcement = {
   ]
 };
 
-export const supplementalAnnouncements: Announcement[] = [gsbCoachExamAnnouncement, gsbYurtResultAnnouncement, newAnnouncement, ...previousAnnouncements]
-  .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
+const kpssSecondaryLateApplication: Announcement = {
+  slug: "2026-kpss-ortaogretim-gec-basvuru",
+  title: "2026-KPSS Ortaöğretim geç başvurusu 15-16 Eylül'de",
+  authority: "ÖSYM",
+  kind: "application",
+  publishedAt: "2026-08-27",
+  verifiedAt: "2026-09-14",
+  lastModified: "2026-09-14",
+  summary: "2026-KPSS Ortaöğretim normal başvuru dönemi sona erdi; ÖSYM kılavuzu ve güncel AİS işlem ekranına göre geç başvuru 15 Eylül saat 10.00'da başlayacak ve 16 Eylül 2026 saat 23.59'da sona erecek.",
+  details: [
+    "ÖSYM'nin 2026-KPSS Ortaöğretim kılavuzunda normal başvuru dönemi 27 Ağustos-8 Eylül 2026, geç başvuru günleri ise 15-16 Eylül 2026 olarak ilan edildi. Sınav 25 Ekim 2026 tarihinde yapılacak.",
+    "Kılavuza göre normal sınav ücreti 800 TL; geç başvuru günlerinde ücret yüzde 50 artırımlı ödeniyor. ÖSYM AİS güncel işlem ekranı geç başvuru için 1.200 TL ücret ve 15 Eylül 10.00-16 Eylül 23.59 işlem aralığını gösteriyor.",
+    "Geç başvuru, normal başvuru dönemini kaçıran adaylar için ayrı ve kısa bir işlem penceresidir. Başvuru şartları ve eğitim düzeyi koşulları için ÖSYM kılavuzu esas alınmalıdır."
+  ],
+  actions: [
+    "15 Eylül 2026 saat 10.00'dan itibaren ÖSYM AİS'e girerek 2026-KPSS Ortaöğretim geç başvuru işlemini kontrol edin.",
+    "Başvuru ve yüzde 50 artırımlı 1.200 TL sınav ücreti işlemini 16 Eylül 2026 saat 23.59'dan önce tamamlayın.",
+    "Başvuru öncesinde ÖSYM kılavuzundaki mezuniyet/eğitim durumu ve adaylık koşullarını yeniden kontrol edin."
+  ],
+  deadlineAt: "2026-09-16T23:59:00+03:00",
+  deadlineLabel: "Geç başvuru 15 Eylül saat 10.00'da başlıyor ve 16 Eylül 2026 saat 23.59'da sona eriyor",
+  actionUrl: "https://ais.osym.gov.tr/",
+  actionLabel: "ÖSYM AİS geç başvuru ekranını aç",
+  relatedPathKeys: [],
+  relatedSearches: ["KPSS Ortaöğretim geç başvuru", "KPSS lise geç başvuru", "2026 KPSS ortaöğretim", "KPSS geç başvuru ücreti"],
+  sources: [
+    { title: "2026-KPSS Ortaöğretim: Başvuruların Alınması", authority: "ÖSYM", url: "https://www.osym.gov.tr/2026-kpss-ortaogretim-basvurularin-alinmasi" },
+    { title: "ÖSYM Aday İşlemleri Sistemi", authority: "ÖSYM", url: "https://ais.osym.gov.tr/" }
+  ]
+};
+
+const sayistayApplication: Announcement = {
+  slug: "2026-sayistay-denetci-yardimcisi-eleme-basvurulari",
+  title: "2026 Sayıştay Denetçi Yardımcısı Eleme Sınavı başvuruları 17 Eylül'de sona eriyor",
+  authority: "ÖSYM / Sayıştay Başkanlığı",
+  kind: "application",
+  publishedAt: "2026-09-09",
+  verifiedAt: "2026-09-14",
+  lastModified: "2026-09-14",
+  summary: "2026 Sayıştay Denetçi Yardımcısı Adaylığı Eleme Sınavı başvuruları ÖSYM AİS üzerinden devam ediyor; güncel işlem ekranına göre normal başvuru 17 Eylül 2026 saat 23.59'da sona erecek ve sınav 31 Ekim'de yapılacak.",
+  details: [
+    "ÖSYM'nin güncel sınav takvimi ve Aday İşlemleri Sistemi, 2026 Sayıştay Denetçi Yardımcısı Adaylığı Eleme Sınavı normal başvurularını 9-17 Eylül 2026 arasında gösteriyor. AİS'teki işlem başlangıcı 9 Eylül saat 10.30, son saat 17 Eylül 23.59.",
+    "ÖSYM AİS işlem ekranında sınav ücreti 1.900 TL olarak gösteriliyor. Eleme sınavı 31 Ekim 2026 tarihinde yapılacak; normal dönemi kaçıranlar için ÖSYM takviminde 24 Eylül 2026 saat 23.59'a kadar tek günlük geç başvuru penceresi de yer alıyor.",
+    "Adaylık şartları, mezuniyet ve diğer özel koşullar için sınavın güncel kılavuzu esas alınmalı; yalnız takvim bilgisinden başvuru hakkı bulunduğu sonucu çıkarılmamalıdır."
+  ],
+  actions: [
+    "ÖSYM AİS'te 2026-Sayıştay Eleme başvuru ekranını açın ve kılavuzdaki adaylık şartlarını kontrol edin.",
+    "Normal başvuruyu ve 1.900 TL sınav ücreti işlemini 17 Eylül 2026 saat 23.59'dan önce tamamlayın.",
+    "Normal dönemi kaçırırsanız 24 Eylül'deki geç başvuru penceresinin koşul ve ücretini ÖSYM'nin güncel ekranından ayrıca doğrulayın."
+  ],
+  deadlineAt: "2026-09-17T23:59:00+03:00",
+  deadlineLabel: "Normal başvuru 17 Eylül 2026 saat 23.59'da sona eriyor; ÖSYM takviminde 24 Eylül için ayrıca geç başvuru günü bulunuyor",
+  actionUrl: "https://ais.osym.gov.tr/",
+  actionLabel: "ÖSYM AİS başvuru ekranını aç",
+  relatedPathKeys: [],
+  relatedSearches: ["Sayıştay denetçi yardımcısı", "Sayıştay Eleme", "2026 Sayıştay başvuru", "Sayıştay denetçi yardımcılığı sınavı"],
+  sources: [
+    { title: "ÖSYM Sınav Takvimi - 2026 Sayıştay Eleme", authority: "ÖSYM", url: "https://www.osym.gov.tr/Sayfa/SinavTakvimi/tr-TR" },
+    { title: "ÖSYM Aday İşlemleri Sistemi", authority: "ÖSYM", url: "https://ais.osym.gov.tr/" }
+  ]
+};
+
+const refreshedPreviousAnnouncements: Announcement[] = previousAnnouncements.map(item => {
+  if (item.slug !== "2026-e-ydts-2-turkce-basvurulari") return item;
+  return {
+    ...item,
+    title: "2026 e-YDTS/2 Türkçe başvurularında son gün 14 Eylül",
+    verifiedAt: "2026-09-14",
+    lastModified: "2026-09-14",
+    summary: "ÖSYM Aday İşlemleri Sisteminin güncel işlem ekranında 2026 e-YDTS/2 Türkçe başvurusu 14 Eylül 2026 saat 23.59'a kadar devam ediyor; sınav 19 Eylül'de yapılacak ve sınav ücreti 1.000 TL olarak gösteriliyor.",
+    details: [
+      "ÖSYM'nin Aday İşlemleri Sisteminde 2026 e-YDTS/2 Türkçe için güncel başvuru aralığı 1 Eylül 2026 saat 14.00-14 Eylül 2026 saat 23.59 olarak gösteriliyor.",
+      "AİS ekranında sınav tarihi 19 Eylül 2026 ve sınav ücreti 1.000 TL olarak yer alıyor. Mevcut site kaydındaki 10 Eylül son tarihi bu güncel operasyonel ekranla uyumlu olacak şekilde düzeltildi.",
+      "Bu denetimde son tarihin neden değiştiğini açıklayan ayrı bir ÖSYM duyurusu doğrulanamadığı için değişiklik 'süre uzatımı' olarak etiketlenmedi; güncel AİS işlem aralığı esas alındı."
+    ],
+    actions: [
+      "ÖSYM AİS'te e-YDTS 2026/2 Türkçe başvuru kaydını açın.",
+      "Başvuru ve 1.000 TL sınav ücreti işlemini 14 Eylül 2026 saat 23.59'dan önce tamamlayın.",
+      "İşlemden önce AİS ekranındaki güncel durum ve ilgili dosyaları yeniden kontrol edin."
+    ],
+    deadlineAt: "2026-09-14T23:59:00+03:00",
+    deadlineLabel: "ÖSYM AİS güncel işlem ekranına göre başvuru 14 Eylül 2026 saat 23.59'da sona eriyor",
+    actionUrl: "https://ais.osym.gov.tr/",
+    actionLabel: "ÖSYM AİS e-YDTS başvuru ekranını aç",
+    sources: [
+      { title: "ÖSYM Aday İşlemleri Sistemi - e-YDTS 2026/2 Türkçe", authority: "ÖSYM", url: "https://ais.osym.gov.tr/" },
+      ...item.sources
+    ]
+  };
+});
+
+export const supplementalAnnouncements: Announcement[] = [
+  kpssSecondaryLateApplication,
+  sayistayApplication,
+  gsbCoachExamAnnouncement,
+  gsbYurtResultAnnouncement,
+  newAnnouncement,
+  ...refreshedPreviousAnnouncements
+].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
 
