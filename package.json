@@ -21,11 +21,12 @@
     "verify:military-announcements": "node --import tsx scripts/verify-military-service-announcements.ts",
     "verify:preference": "node --import tsx scripts/verify-preference-layer.ts",
     "verify:seo-growth": "node --import tsx scripts/verify-seo-security-growth.ts",
+    "verify:content-semantics": "node --import tsx scripts/verify-content-semantics.ts",
     "audit:collisions": "node --import tsx scripts/check-route-collisions.ts",
     "audit:risk": "node --import tsx scripts/generate-risk-audit.ts",
     "audit:sources": "node --import tsx scripts/check-source-links.ts",
     "refresh:military-branches": "node scripts/fetch-military-branches.mjs",
-    "validate": "pnpm run types:check && pnpm run check && pnpm run verify && pnpm run verify:petition && pnpm run verify:quality && pnpm run verify:announcements && pnpm run verify:supplemental-announcements && pnpm run verify:military-announcements && pnpm run verify:preference && pnpm run verify:seo-growth && pnpm run audit:collisions && pnpm run cf:check",
+    "validate": "pnpm run types:check && pnpm run check && pnpm run verify && pnpm run verify:petition && pnpm run verify:quality && pnpm run verify:announcements && pnpm run verify:supplemental-announcements && pnpm run verify:military-announcements && pnpm run verify:preference && pnpm run verify:seo-growth && pnpm run verify:content-semantics && pnpm run audit:collisions && pnpm run cf:check",
     "cf:check": "wrangler deploy --dry-run"
   },
   "devDependencies": {

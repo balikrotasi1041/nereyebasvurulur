@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "createdAt": "2026-09-18",
+  "source": "GSC Coverage Drilldown 2026-09-18; 109 URL incelemesi",
+  "batchLimit": 3,
+  "observationDays": [
+    14,
+    28
+  ],
+  "note": "Ortak şablon düzeltmesi özgün içerik pilotunun tamamlandığı anlamına gelmez. Güncel GSC metrikleri yok; boş alanlar sıfır değildir.",
+  "items": [
+    {
+      "path": "/konu/msu-askeri-ogrenci-basvurusu-nereye-yapilir/",
+      "group": "msu",
+      "priority": 1,
+      "status": "pending",
+      "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-14",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/konu/milli-savunma-universitesi-harp-okullari-nereye-basvurulur/",
+      "group": "msu",
+      "priority": 2,
+      "status": "pending",
+      "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/konu/milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur/",
+      "group": "msu",
+      "priority": 3,
+      "status": "pending",
+      "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-03",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/konu/milli-savunma-universitesi-ikinci-secim-asamalari-nereye-basvurulur/",
+      "group": "msu",
+      "priority": 4,
+      "status": "pending",
+      "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-03",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/agri/merkez/",
+      "group": "district",
+      "priority": 5,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/siirt/merkez/",
+      "group": "district",
+      "priority": 6,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/kilis/merkez/",
+      "group": "district",
+      "priority": 7,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-14",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/bartin/merkez/",
+      "group": "district",
+      "priority": 8,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-14",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/yozgat/merkez/",
+      "group": "district",
+      "priority": 9,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-14",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/tunceli/merkez/",
+      "group": "district",
+      "priority": 10,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-14",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/bartin/ulus/",
+      "group": "district",
+      "priority": 11,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/hatay/iskenderun/",
+      "group": "district",
+      "priority": 12,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/erzurum/palandoken/",
+      "group": "district",
+      "priority": 13,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/istanbul/esenyurt/",
+      "group": "district",
+      "priority": 14,
+      "status": "pending",
+      "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-13",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/nevsehir/",
+      "group": "province",
+      "priority": 15,
+      "status": "pending",
+      "focus": "İlçelerin gerçek hizmet dağılımı ve sorumlu şubelere uygun yönlendirme.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/izmir/",
+      "group": "province",
+      "priority": 16,
+      "status": "pending",
+      "focus": "İlçelerin gerçek hizmet dağılımı ve sorumlu şubelere uygun yönlendirme.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/askerlik-subeleri/istanbul/",
+      "group": "province",
+      "priority": 17,
+      "status": "pending",
+      "focus": "İlçelerin gerçek hizmet dağılımı ve sorumlu şubelere uygun yönlendirme.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-13",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/konu/tuketici-hakem-heyeti-kararina-itiraz/",
+      "group": "other",
+      "priority": 18,
+      "status": "pending",
+      "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-13",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/konu/kayip-calinti-telefon-imei-kapatma/",
+      "group": "other",
+      "priority": 19,
+      "status": "pending",
+      "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-14",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    },
+    {
+      "path": "/konu/cimer-cimer-basvurusu-nereye-basvurulur/",
+      "group": "other",
+      "priority": 20,
+      "status": "pending",
+      "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
+      "baseline": {
+        "reportDate": "2026-09-18",
+        "lastCrawl": "2026-09-15",
+        "coverage": "crawled-currently-not-indexed"
+      },
+      "evidence": [],
+      "changeSummary": null,
+      "publishedAt": null,
+      "publishedCommit": null,
+      "observationDue": [],
+      "observations": []
+    }
+  ]
+}

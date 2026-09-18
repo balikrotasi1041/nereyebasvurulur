@@ -353,10 +353,7 @@ export function renderMilitaryBranch(record: MilitaryBranchRecord, province: Mil
   const phone = phoneDetails(record.phone);
   const canonicalPath = militaryBranchPath(record);
   const canonical = `https://nereyebasvurulur.com${canonicalPath}`;
-  const servesSameNamedBranch = record.branchName.toLocaleLowerCase("tr-TR").includes(record.district.toLocaleLowerCase("tr-TR"));
-  const serviceExplanation = servesSameNamedBranch
-    ? `MSB'nin resmî iletişim aramasında ${record.province} ili ${record.district} ilçesi için ${record.branchName} gösterilmektedir.`
-    : `${record.district} ilçesinde ayrı bir fiziksel şube görünmüyor. MSB'nin resmî iletişim araması bu ilçe için ${record.branchName} kaydını göstermektedir.`;
+  const serviceExplanation = `MSB'nin resmî iletişim aramasında ${record.province} ili ${record.district} ilçesi için ${record.branchName} gösterilmektedir.`;
   const sourceDistrictNote = record.officialDistrict.toLocaleLowerCase("tr-TR") !== record.district.toLocaleLowerCase("tr-TR")
     ? `MSB kayıt ekranındaki ilçe alanı “${record.officialDistrict}” olarak dönmektedir; güncel ilçe adı sayfa başlığında “${record.district}” olarak kullanılmıştır.`
     : "";

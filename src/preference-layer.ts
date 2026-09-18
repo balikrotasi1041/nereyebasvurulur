@@ -33,7 +33,7 @@ const routeStyles = `
 
 export function renderRoutePreferenceLayer(route: RouteRecord): string {
   const authority = route.competentAuthorities[0] || "Yetkili kurum bilgisi resmî kaynaklarda gösterilir.";
-  const channel = route.applicationChannels.find(item => item.url) || route.applicationChannels[0];
+  const channel = route.applicationChannels[0];
   const checklist = unique([...route.requiredDocuments, ...route.evidenceChecklist]).slice(0, 6);
   const nextSteps = route.steps.slice(0, 3);
   const status = verificationLabel(route);
