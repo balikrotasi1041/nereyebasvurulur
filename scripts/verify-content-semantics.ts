@@ -5,6 +5,7 @@ import { renderRoutePreferenceLayer } from "../src/preference-layer";
 import { applicationState, costAnswer, relatedRouteLinks, renderSeoGrowthLayer } from "../src/seo-growth";
 import { formatThreshold } from "../src/thresholds";
 import { renderMilitaryBranch } from "../src/ui";
+import baseHandler from "../src/index";
 
 function assert(condition: unknown, message = "İçerik anlamı doğrulaması başarısız."): asserts condition {
   if (!condition) throw new Error(message);
@@ -120,3 +121,27 @@ for (const item of queue.items) {
   }
 }
 console.log(`İçerik anlamı doğrulandı: ücret/süre/aşama, SSS, ilgili yollar, ${checkedBranches} şube örneği ve 20 pilot URL.`);
+
+// A warm cache from the previous deployment must not serve the incorrect body.
+const cacheWrites = new Map<string, Response>();
+const pendingWrites: Promise<unknown>[] = [];
+Object.defineProperty(globalThis, "caches", { configurable: true, value: { default: {
+  async match(key: Request) {
+    const url = new URL(key.url);
+    if (!url.searchParams.has("__content_revision")) return new Response("STALE_INCORRECT_CONTENT");
+    return cacheWrites.get(key.url)?.clone();
+  },
+  async put(key: Request, response: Response) { cacheWrites.set(key.url, response.clone()); }
+} } });
+const ctx = { waitUntil(promise: Promise<unknown>) { pendingWrites.push(promise); }, passThroughOnException() {}, props: {} } as ExecutionContext;
+const request = new Request("https://nereyebasvurulur.com/askerlik-subeleri/siirt/merkez/");
+const fresh = await baseHandler.fetch(request, {} as Env, ctx);
+equal(fresh.status, 200);
+equal(fresh.headers.get("x-edge-cache"), "MISS");
+const freshBody = await fresh.text();
+assert(!freshBody.includes("STALE_INCORRECT_CONTENT") && !freshBody.includes("ayrı bir fiziksel şube görünmüyor"));
+await Promise.all(pendingWrites);
+const cached = await baseHandler.fetch(request, {} as Env, ctx);
+equal(cached.headers.get("x-edge-cache"), "HIT", "Yeni içerik önbelleği kullanılamıyor.");
+equal(await cached.text(), freshBody);
+console.log("Önceki sürümün önbelleği atlandı; düzeltilmiş içerikte MISS → HIT doğrulandı.");
