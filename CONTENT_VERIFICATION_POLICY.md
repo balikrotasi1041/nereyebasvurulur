@@ -111,3 +111,21 @@ Askerlik şubesi sayfalarında il ve ilçe envanteri İçişleri Bakanlığını
 - Yol tarifi bağlantısı, MSB'nin yayımladığı şube adı ve yazışma adresini harita uygulamasına hedef olarak aktarır; doğrulanmamış enlem/boylam tahmini saklanmaz.
 - Her kayıtta resmî sorguda kullanılan il/ilçe değeri ve son doğrulama tarihi tutulur.
 - Adres ve telefon değişebileceği için kayıtlar yüksek güncellik ihtiyacıyla periyodik olarak yeniden üretilir ve veri bütünlüğü testinden geçirilir.
+- İlçe adı ile şube adının aynı veya farklı olması, ilçede fiziksel şube bulunduğunun ya da bulunmadığının kanıtı değildir. Yalnız resmî sorgunun hangi şubeyi gösterdiği söylenir; fiziksel yer hakkında ek iddia ayrı kaynak ister.
+
+## 10. İşlem anlamı ve kısa cevap tutarlılığı
+
+- Her sayfanın kullanıcı niyeti ve işlem aşaması belirlenir. İlk başvuru mercii, ilk kanal, hızlı cevap, belge listesi, işlem adımları ve dilekçe aynı aşamayı anlatmalıdır. Bağlantısı olmayan ilk kanal, sırf sonraki kanalda URL var diye atlanmaz.
+- Başvuru, karara itiraz ve kararın icrası aynı işlem değildir. Karar aşamasındaki kullanıcı ilk satıcı şikâyeti veya yeni hakem heyeti başvurusuna döndürülmez.
+- MSÜ genel rehberi, Harp Okulları, tercih işlemleri ve ikinci seçim aşamaları ayrı kullanıcı sorularını cevaplar. ÖSYM sınav başvurusuyla MSB tercih/çağrı kanalı karıştırılmaz; ortak paragrafın yalnız başlığı değiştirilerek yeni sayfa hazırlanmaz.
+- `thresholdKey` yalnız parasal görev/uygunluk sınırıdır; başvuru ücreti, harç veya ödenecek bedel değildir. Gerçek ücret bilgisi varsa `applicationCost.summary`, resmî `sourceUrls` ve `verifiedAt` birlikte tutulur. Kaynağı olmayan ücret ya da ücretsiz olma iddiası üretilmez.
+- `applicationTiming`: `continuous` (ilan döneminden bağımsız), `event-relative` (olay/tebliğ gibi kişisel başlangıca bağlı), `periodic` (resmî ilan dönemi). `freshnessRisk`, `urgency` veya `timeSensitive` tek başına dönem bilgisi vermez. Tür doğrulanmadıysa süre alanı gösterilir; açık/kapalı diye tahmin yapılmaz.
+- “Başvuru açık” iddiası için ilgili aşamanın başlamış olduğu ve bitiş/erken kapanma koşulları kaynakta doğrulanır. Duyurunun yayımlanma tarihi başlangıç tarihi sayılmaz; gelecek dönem duyurusu bugüne açık gösterilmez. Sonuç ve sevk duyuruları başvuru dönemi açmaz.
+- Görünür SSS ve yapılandırılmış veri aynı soru-cevabı taşır. Soru başlığına ikinci bir soru eklenmez. SSS işaretlemesi zengin sonuç garantisi değildir.
+- İç bağlantılar aynı işlem ailesi, anlamlı konu veya sonraki adımla ilişkilendirilir. “Başvuru”, “itiraz”, “e-Devlet” gibi ortak kelimeler tek başına ilişki kurmaz. Alakasız linkle kart sayısı tamamlanmaz.
+
+## 11. Analize dayalı içerik üretimi
+
+Günlük resmî denetime [kalite iş akışı](docs/seo-quality-workflow.md) ve [20 URL pilot kuyruğu](docs/seo-quality-pilot.json) eşlik eder. Önce mevcut kanonik sayfanın eksik kullanıcı cevabı tamamlanır. Yeni URL ancak farklı işlem niyeti, yeterli resmî kaynak ve bağımsız kullanıcı faydası varsa açılır. Trend veya arama eşanlamlısı tek başına yeni sayfa gerekçesi değildir.
+
+SEO için sabit kelime sayısı, yapay güncelleme tarihi, yer adı değiştirilmiş kopya içerik, toplu noindex/redirect veya yüzeysel yeni sayfa kotası kullanılmaz. `lastVerified` tüm ilgili içeriğin gerçekten doğrulandığı tarihi gösterir; ortak şablon düzeltmesi bütün kaynakların yeniden doğrulandığı anlamına gelmez. Sitemap değişiklikleri bu iyileştirme kapsamının dışındadır.

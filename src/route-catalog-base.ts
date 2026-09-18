@@ -1,5 +1,7 @@
 import type {
   ApplicationChannel,
+  ApplicationCost,
+  ApplicationTiming,
   FreshnessRisk,
   MenuNode,
   PetitionReference,
@@ -47,6 +49,8 @@ export type RouteDraft = {
   urgency?: Urgency;
   reviewCadence?: number;
   thresholdKey?: ThresholdKey;
+  applicationTiming?: ApplicationTiming;
+  applicationCost?: ApplicationCost;
   eGovernmentAvailable?: boolean;
   petitionRequired?: boolean;
   petitionReference?: PetitionReference;
@@ -975,11 +979,17 @@ function militaryServiceDraft(ctx: LeafContext): RouteDraft {
 
 function msuPersonnelDraft(ctx: LeafContext): RouteDraft {
   const student = ["MSÜ askerî öğrenci başvurusu", "Harp Okulları", "Astsubay Meslek Yüksekokulları", "Bando Astsubay MYO", "MSÜ tercih işlemleri", "İkinci seçim aşamaları", "Sonuç takibi"].includes(ctx.label);
+  const personnelStage = ["MSÜ tercih işlemleri", "İkinci seçim aşamaları", "Sonuç takibi"].includes(ctx.label);
   if (student) return {
     summary: ctx.label + " süreci ÖSYM MSÜ aday belirleme sınavı, gerekli YKS oturumları, MSB Personel Temin tercihleri ve seçim aşamalarından oluşur; her halka ilgili yıl kılavuzuna bağlıdır.",
     verificationStatus: "verified",
-    competentAuthorities: ["ÖSYM (MSÜ sınav başvurusu)", "Millî Savunma Bakanlığı Personel Temin Dairesi / Millî Savunma Üniversitesi"],
-    applicationChannels: [portal("ÖSYM AİS", "https://ais.osym.gov.tr/"), portal("MSB Personel Temin Sistemi", "https://personeltemin.msb.gov.tr/")],
+    competentAuthorities: personnelStage
+      ? ["Millî Savunma Bakanlığı Personel Temin Dairesi / Millî Savunma Üniversitesi", "ÖSYM (ayrı sınav başvuru ve sonuç işlemleri)"]
+      : ["ÖSYM (MSÜ sınav başvurusu)", "Millî Savunma Bakanlığı Personel Temin Dairesi / Millî Savunma Üniversitesi"],
+    applicationChannels: personnelStage
+      ? [portal("MSB Personel Temin Sistemi", "https://personeltemin.msb.gov.tr/"), portal("ÖSYM AİS (sınav işlemleri)", "https://ais.osym.gov.tr/")]
+      : [portal("ÖSYM AİS", "https://ais.osym.gov.tr/"), portal("MSB Personel Temin Sistemi", "https://personeltemin.msb.gov.tr/")],
+    applicationTiming: "periodic",
     requiredDocuments: ["T.C. kimlik ve aday bilgileri", "İlgili yıl MSÜ ve YKS başvuruları", "Okul tercihleri", "Seçim aşaması çağrı belgesi", "Kılavuzdaki diploma, fotoğraf, beyan ve diğer evrak", ...(ctx.label === "Bando Astsubay MYO" ? ["Müzik yeteneği/bilgisi sınavı için duyurulan belgeler"] : [])],
     deadlineAndAppeal: "Sınav, tercih, çağrı, evrak ve sonuç süreleri yalnız ilgili yıl ÖSYM/MSB kılavuz ve duyurusundan alınır. ÖSYM sınav işlemlerinde kılavuzdaki kısa inceleme ve İYUK m.20/B süreleri saklıdır.",
     escalation: ["ÖSYM işlemleri için kılavuzdaki itiraz/inceleme kanalı", "MSB Personel Temin Çağrı Takip/iletişim kanalı", "Duyuruda gösterilen idari/yargısal yol"],
@@ -1122,6 +1132,8 @@ function toRoute(ctx: LeafContext, draft: RouteDraft, used: Set<string>): RouteR
     urgency: draft.urgency || "normal",
     reviewCadence: draft.reviewCadence || (draft.freshnessRisk === "high" ? 30 : draft.freshnessRisk === "medium" ? 180 : 365),
     thresholdKey: draft.thresholdKey,
+    applicationTiming: draft.applicationTiming,
+    applicationCost: draft.applicationCost,
     eGovernmentAvailable: draft.eGovernmentAvailable ?? draft.applicationChannels.some(channel => channel.type === "e-government"),
     petitionRequired: draft.petitionRequired || false,
     petitionReference: draft.petitionReference,

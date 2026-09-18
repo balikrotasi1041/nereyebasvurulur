@@ -154,6 +154,7 @@ export function telecomDraft(ctx: { label: string }): RouteDraft {
     summary: "Cihazın haberleşmeye kapatılması için e-Devlet Kayıp/Çalıntı İhbar Bildirimi veya BTK 120 kullanılabilir; çalınma şüphesinde kolluk başvurusu ve hesap güvenliği işlemleri ayrıca yapılmalıdır.",
     aliases: ["Kayıp/çalıntı telefonun IMEI'si nasıl kapatılır?", "çalıntı telefon kapatma", "IMEI kayıp ihbar"],
     intentKey: "telecom.lost-stolen-imei-block",
+    applicationTiming: "event-relative",
     canonicalIntent: "telecom.lost-stolen-imei-block",
     competentAuthorities: ["Bilgi Teknolojileri ve İletişim Kurumu", "Çalınma veya suç şüphesinde kolluk/Cumhuriyet başsavcılığı"],
     applicationChannels: [

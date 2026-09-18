@@ -4,7 +4,6 @@ import type { RouteRecord } from "./data";
 import { publishedRoutes } from "./data";
 import { militaryServiceAnnouncements } from "./military-service-announcements";
 import { supplementalAnnouncements } from "./supplemental-announcements";
-import { formatThreshold } from "./thresholds";
 
 const SITE_ORIGIN = "https://nereyebasvurulur.com";
 
@@ -33,29 +32,56 @@ export type LiveApplicationState = {
 };
 
 export function applicationState(route: RouteRecord, now = new Date()): LiveApplicationState {
-  const linked = relatedAnnouncements(route).sort((a, b) => b.lastModified.localeCompare(a.lastModified));
+  if (route.applicationTiming === "event-relative") return {
+    label: route.urgency === "urgent" ? "Gecikmeden işlem yapın" : "Süre, olay veya tebliğ tarihine bağlı",
+    detail: route.deadlineAndAppeal,
+    className: "evergreen"
+  };
+  if (route.applicationTiming === "continuous") return {
+    label: "Sürekli işlem rotası", detail: route.deadlineAndAppeal, className: "evergreen"
+  };
+  const linked = relatedAnnouncements(route)
+    .filter(item => new Date(item.publishedAt).getTime() <= now.getTime())
+    .sort((a, b) => b.lastModified.localeCompare(a.lastModified));
   const open = linked.find(item => item.kind === "application" && (!item.deadlineAt || new Date(item.deadlineAt).getTime() >= now.getTime()));
   if (open) return { label: "Başvuru açık", detail: open.deadlineLabel || "Resmî duyuruda kapanış tarihi belirtilmedi.", className: "open", url: `/duyuru/${open.slug}/` };
   const expired = linked.find(item => item.kind === "application" && item.deadlineAt && new Date(item.deadlineAt).getTime() < now.getTime());
   if (expired) return { label: "Bu dönem sona erdi", detail: expired.deadlineLabel || "Son doğrulanan başvuru dönemi kapandı.", className: "closed", url: `/duyuru/${expired.slug}/` };
-  if (route.timeSensitive || route.urgency === "time-limited") return { label: "Dönemsel işlem", detail: route.currentCycleNote || "Güncel ilan ve son tarihi işlem öncesi kontrol edin.", className: "periodic" };
-  return { label: "Sürekli işlem rotası", detail: "Belirli bir ilan dönemine bağlı olmayan genel başvuru yolu.", className: "evergreen" };
+  if (route.applicationTiming === "periodic") return { label: "Dönemsel işlem", detail: route.currentCycleNote || "Güncel ilan ve son tarihi işlem öncesi kontrol edin.", className: "periodic" };
+  return { label: "İşleme özgü süreyi kontrol edin", detail: route.deadlineAndAppeal, className: "evergreen" };
 }
 
 export function costAnswer(route: RouteRecord): string {
-  if (route.thresholdKey) return formatThreshold(route.thresholdKey);
+  if (route.applicationCost) return route.applicationCost.summary;
   return "Ücret, harç veya ödeme varsa tutarı resmî işlem ekranında ya da güncel kurum tarifesinde doğrulayın.";
 }
 
+const genericLinkTerms = new Set([
+  "nereye", "nerede", "nasil", "hangi", "icin", "basvuru", "basvurusu", "basvurulur", "basvurulari",
+  "yapilir", "edilir", "yapilacak", "islem", "islemi", "islemler", "islemleri", "devlet", "kurum", "resmi",
+  "itiraz", "sikayet", "bilgi", "talep", "sonuc", "sonuclari", "gerekli", "belgeler"
+]);
+
+function linkTerms(route: RouteRecord): Set<string> {
+  const aliases = route.aliases.filter(alias => alias !== route.category && alias !== route.section);
+  return new Set(normalize(`${route.title} ${aliases.join(" ")}`).split(" ")
+    .filter(term => term.length > 2 && !genericLinkTerms.has(term)));
+}
+
 export function relatedRouteLinks(route: RouteRecord, limit = 6): RouteRecord[] {
-  const routeTerms = new Set(normalize(`${route.title} ${route.aliases.join(" ")}`).split(" ").filter(term => term.length > 3));
+  const routeTerms = linkTerms(route);
   return publishedRoutes.filter(candidate => candidate.slug !== route.slug).map(candidate => {
+    const sameCategory = candidate.category === route.category;
+    const sameHub = Boolean(route.parentHub) && candidate.parentHub === route.parentHub;
+    const sharedAuthority = candidate.competentAuthorities.some(authority => route.competentAuthorities.includes(authority));
+    const overlap = [...linkTerms(candidate)].filter(term => routeTerms.has(term)).length;
+    if (!sameCategory && !sameHub && !(sharedAuthority && overlap >= 2)) return { candidate, score: 0 };
     let score = 0;
-    if (candidate.category === route.category) score += 8;
-    if (candidate.section === route.section) score += 7;
-    if (candidate.parentHub === route.parentHub) score += 4;
-    if (candidate.competentAuthorities.some(authority => route.competentAuthorities.includes(authority))) score += 5;
-    score += normalize(`${candidate.title} ${candidate.aliases.join(" ")}`).split(" ").filter(term => routeTerms.has(term)).length;
+    if (sameCategory) score += 8;
+    if (sameCategory && candidate.section === route.section) score += 7;
+    if (sameHub) score += 4;
+    if (sharedAuthority) score += 5;
+    score += overlap;
     return { candidate, score };
   }).filter(item => item.score >= 5).sort((a, b) => b.score - a.score || a.candidate.title.localeCompare(b.candidate.title, "tr-TR")).slice(0, limit).map(item => item.candidate);
 }
@@ -64,8 +90,8 @@ function routeFaq(route: RouteRecord): Array<{ question: string; answer: string 
   const authority = route.competentAuthorities.join("; ");
   const channel = route.applicationChannels[0]?.label || "Ayrıntılı başvuru kanalını sayfadaki resmî kaynaklardan kontrol edin.";
   return [
-    { question: `${route.title.replace(/\?$/, "")} nereye yapılır?`, answer: `Yetkili merci: ${authority}.` },
-    { question: `${route.title.replace(/\?$/, "")} nasıl yapılır?`, answer: `İlk başvuru kanalı: ${channel}. Sayfadaki adımlar ve resmî bağlantılar izlenmelidir.` },
+    { question: "Bu işlem için hangi kuruma başvurulur?", answer: `Yetkili merci: ${authority}.` },
+    { question: "İlk başvuru nasıl yapılır?", answer: `İlk başvuru kanalı: ${channel}. Sayfadaki adımlar ve resmî bağlantılar izlenmelidir.` },
     { question: "Başvuru veya itiraz süresi nedir?", answer: route.deadlineAndAppeal },
     { question: "Başvuru ücreti ne kadar?", answer: costAnswer(route) }
   ];

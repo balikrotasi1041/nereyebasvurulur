@@ -46,6 +46,9 @@ type ConsumerConfig = {
   authorities?: string[];
   channels?: ApplicationChannel[];
   escalation?: string[];
+  steps?: string[];
+  locationLogic?: string;
+  thresholdApplicable?: boolean;
   petition?: PetitionReference;
   urgency?: "normal" | "time-limited" | "urgent";
 };
@@ -312,12 +315,29 @@ const configs: Record<string, ConsumerConfig> = {
     deadline: "Hakem heyeti başvuruyu kural olarak en geç altı ay içinde karara bağlar; bu süre en fazla üç ay uzatılabilir. Alacağın/ayıbın kendi zamanaşımı süresi ayrıca korunmalıdır.",
     legalBasis: ["6502 sayılı Kanun m. 66-72", "Tüketici Hakem Heyetleri Yönetmeliği"],
     sources: [THH_REGULATION],
+    authorities: ["Yetkili Tüketici Hakem Heyeti"],
+    channels: [tubisChannel, thhOffice],
+    steps: [
+      "Uyuşmazlık değerini, talebinizi ve destekleyici belgeleri hazırlayın; güncel görev sınırını kontrol edin.",
+      "TÜBİS formunu doldurun veya yetkili Tüketici Hakem Heyetine yazılı başvurun.",
+      "Başvuru numarasını saklayın ve dosyanın durumunu takip edin.",
+      "Karar tebliğ edildiğinde sonucu ve varsa itiraz süresini kontrol edin."
+    ],
+    escalation: ["Başvuru ve dosya durumunu yetkili hakem heyetinden veya TÜBİS'ten takip etme", "Karara itiraz gerekiyorsa tebliğ tarihine göre tüketici mahkemesi yolu"],
     petition: { subject: "Tüketici uyuşmazlığı başvurusu", authority: "Yetkili Tüketici Hakem Heyeti Başkanlığı", suggestedType: "Tüketici Hakem Heyeti başvuru dilekçesi", note: "TÜBİS formu elektronik başvuruda ayrıca dilekçe yükleme ihtiyacını ortadan kaldırabilir." }
   },
   "Tüketici Hakem Heyeti kararına itiraz": {
     title: "Tüketici Hakem Heyeti kararına nasıl itiraz edilir?",
     backlogAlias: "Tüketici Hakem Heyeti kararına nasıl itiraz edilir?",
     intentKey: "consumer.thh-decision-appeal",
+    thresholdApplicable: false,
+    locationLogic: "Hakem heyetinin veya tüketicinin yerleşim yerindeki tüketici mahkemesi; bulunmayan yerde tüketici mahkemesi sıfatıyla asliye hukuk mahkemesi.",
+    steps: [
+      "Hakem heyeti kararını ve tebligatı hazırlayın; iki haftalık itiraz süresini tebliğ tarihinden kontrol edin.",
+      "İtiraz nedenlerini ve delilleri dilekçenize ekleyin.",
+      "Yetkili tüketici mahkemesine başvurun; UYAP kullanacaksanız elektronik imza ve başvuru koşullarını doğrulayın.",
+      "Mahkeme dosya numarasını saklayın ve dosyayı takip edin."
+    ],
     summary: "Hakem heyeti kararına karşı tebliğden itibaren iki hafta içinde hakem heyetinin veya tüketicinin yerleşim yerindeki tüketici mahkemesine; yoksa asliye hukuk mahkemesine itiraz edilir.",
     requiredDocuments: ["Hakem heyeti kararı", "Tebligat ve tebliğ tarihi", "İtiraz dilekçesi", "Dayanılan sözleşme, ödeme ve deliller"],
     evidenceChecklist: ["İki haftalık sürenin başlangıcını tebligattan belirleyin", "Karar ve tebligat zarfını birlikte saklayın", "İtiraz nedenlerini madde madde yazın", "Harç/masraf ve elektronik imza koşullarını mahkemeden/UYAP'tan doğrulayın"],
@@ -334,6 +354,14 @@ const configs: Record<string, ConsumerConfig> = {
     title: "Tüketici Hakem Heyeti kararı uygulanmıyorsa nereye başvurulur?",
     backlogAlias: "Tüketici Hakem Heyeti kararı uygulanmıyor",
     intentKey: "consumer.thh-decision-enforcement",
+    thresholdApplicable: false,
+    locationLogic: "Kararın uygulanması için yetkili icra dairesine başvurulur; takip koşulları ve yetki işlem öncesi doğrulanmalıdır.",
+    steps: [
+      "Hakem heyeti kararını, tebliğ bilgisini ve karşı tarafın bilgilerini hazırlayın.",
+      "Kararın yerine getirilip getirilmediğini ve icrayı durduran bir mahkeme kararı bulunup bulunmadığını kontrol edin.",
+      "Kararın uygulanması için yetkili icra dairesine ilamlı icra başvurusu yapın; takip koşullarını doğrulayın.",
+      "İcra dosya numarasını saklayın ve dosya hareketlerini takip edin."
+    ],
     summary: "Bağlayıcı hakem heyeti kararı gönüllü uygulanmazsa kararın ilamların icrası hükümlerine göre yerine getirilmesi için icra dairesine başvurulabilir.",
     requiredDocuments: ["Hakem heyeti kararının onaylı/uygulanabilir örneği", "Kararın tebliğ bilgisi", "Borçlu/satıcı kimlik ve adres bilgileri", "Varsa ödeme/teslim talebi ve cevap"],
     evidenceChecklist: ["Kararın taraf ve tutar bilgilerini kontrol edin", "Karşı tarafa yapılan son uygulama talebini saklayın", "İtiraz/dava ve tedbir bulunup bulunmadığını UYAP'tan kontrol edin", "İcra dosyası ve masraf bilgilerini kaydedin"],
@@ -373,10 +401,10 @@ export function consumerDraft(ctx: { label: string }): RouteDraft {
     applicationChannels: channels,
     requiredDocuments: config.requiredDocuments,
     evidenceChecklist: config.evidenceChecklist,
-    deadlineAndAppeal: `${config.deadline} Uyuşmazlık tutarı için merkezi yıllık görev sınırını kontrol edin; hakem heyeti kararına itiraz süresi tebliğden itibaren iki haftadır.`,
+    deadlineAndAppeal: config.thresholdApplicable === false ? config.deadline : `${config.deadline} Uyuşmazlık tutarı için merkezi yıllık görev sınırını kontrol edin; hakem heyeti kararına itiraz süresi tebliğden itibaren iki haftadır.`,
     escalation,
-    locationLogic: "Tüketici Hakem Heyetine tüketicinin yerleşim yerinde veya tüketici işleminin yapıldığı yerde başvurulabilir. Mahkeme ve icra aşamasında özel yetki kuralları ayrıca kontrol edilir.",
-    steps: [
+    locationLogic: config.locationLogic || "Tüketici Hakem Heyetine tüketicinin yerleşim yerinde veya tüketici işleminin yapıldığı yerde başvurulabilir. Mahkeme ve icra aşamasında özel yetki kuralları ayrıca kontrol edilir.",
+    steps: config.steps || [
       "Sözleşme türünü, satıcının ticari sıfatını ve kullanmak istediğiniz hakkı belirleyin.",
       `Şu kanıtları kaybolmadan saklayın: ${config.evidenceChecklist.join("; ")}.`,
       "Talebinizi satıcı/sağlayıcıya ispatlanabilir yazılı kanaldan gönderin ve başvuru numarasını alın.",
@@ -389,7 +417,8 @@ export function consumerDraft(ctx: { label: string }): RouteDraft {
     freshnessRisk: "high",
     urgency: config.urgency || "time-limited",
     reviewCadence: 90,
-    thresholdKey: "consumer-dispute-thh",
+    thresholdKey: config.thresholdApplicable === false ? undefined : "consumer-dispute-thh",
+    applicationTiming: "event-relative",
     eGovernmentAvailable: true,
     petitionRequired: true,
     petitionReference: petition,

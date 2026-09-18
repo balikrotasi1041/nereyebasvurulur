@@ -18,6 +18,14 @@ export type VerificationStatus = "verified" | "local-check" | "needs-review";
 export type FreshnessRisk = "low" | "medium" | "high";
 export type Urgency = "normal" | "time-limited" | "urgent";
 
+// A freshness risk or appeal deadline does not establish an application window.
+export type ApplicationTiming = "continuous" | "event-relative" | "periodic";
+export type ApplicationCost = {
+  summary: string;
+  sourceUrls: string[];
+  verifiedAt: string;
+};
+
 export type PetitionReference = {
   subject: string;
   authority: string;
@@ -55,6 +63,8 @@ export type RouteRecord = {
   urgency: Urgency;
   reviewCadence: number;
   thresholdKey?: ThresholdKey;
+  applicationTiming?: ApplicationTiming;
+  applicationCost?: ApplicationCost;
   eGovernmentAvailable: boolean;
   petitionRequired: boolean;
   petitionReference?: PetitionReference;
