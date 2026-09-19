@@ -13,15 +13,32 @@
       "path": "/konu/msu-askeri-ogrenci-basvurusu-nereye-yapilir/",
       "group": "msu",
       "priority": 1,
-      "status": "pending",
+      "status": "ready",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-14",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
-      "changeSummary": null,
+      "evidence": [
+        {
+          "url": "https://dokuman.osym.gov.tr/pdfdokuman/2026/MSU/kilavuz_msd06012026.pdf",
+          "checkedAt": "2026-09-19",
+          "scope": "2026 ÖSYM/MSB kılavuzu: sınav, okul türleri, tercih ve seçim aşamaları; sonraki yıllara taşınmadı."
+        },
+        {
+          "url": "https://www.osym.gov.tr/2026msu-kilavuz-ve-basvuru-bilgileri",
+          "checkedAt": "2026-09-19",
+          "scope": "Resmî kılavuzun yayın kaydı."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/msb-personel-ve-ogrenci-temin-sistemi-5958",
+          "checkedAt": "2026-09-19",
+          "scope": "MSB Personel ve Öğrenci Temin Sistemi e-Devlet köprüsü."
+        }
+      ],
+      "changeSummary": "İlk sınav başvurusu ÖSYM AİS olarak ayrıldı; sonraki MSB okul tercihi/çağrı aşamaları, MSÜ-YKS ayrı başvuru yükümlülüğü, okul türüne göre TYT/AYT ve 2026 geçmiş sınav ücreti kaynaklandırıldı.",
+      "verificationLimit": "MSB Personel Temin canlı duyuruları erişim hatası nedeniyle sonuçlandırılamadı. Açık/kapalı dönem veya yeni çağrı iddiası yayımlanmadı; kişisel ekran kontrolü açıkça korunuyor.",
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
@@ -31,15 +48,32 @@
       "path": "/konu/milli-savunma-universitesi-harp-okullari-nereye-basvurulur/",
       "group": "msu",
       "priority": 2,
-      "status": "pending",
+      "status": "ready",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-15",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
-      "changeSummary": null,
+      "evidence": [
+        {
+          "url": "https://dokuman.osym.gov.tr/pdfdokuman/2026/MSU/kilavuz_msd06012026.pdf",
+          "checkedAt": "2026-09-19",
+          "scope": "2026 ÖSYM/MSB kılavuzu: sınav, okul türleri, tercih ve seçim aşamaları; sonraki yıllara taşınmadı."
+        },
+        {
+          "url": "https://www.osym.gov.tr/2026msu-kilavuz-ve-basvuru-bilgileri",
+          "checkedAt": "2026-09-19",
+          "scope": "Resmî kılavuzun yayın kaydı."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/msb-personel-ve-ogrenci-temin-sistemi-5958",
+          "checkedAt": "2026-09-19",
+          "scope": "MSB Personel ve Öğrenci Temin Sistemi e-Devlet köprüsü."
+        }
+      ],
+      "changeSummary": "Harp Okullarının subay/lisans odağı Astsubay MYO’dan ayrıldı; okul türü, çağrı puan türü, TYT+AYT, MSB tercih kanalı ve kişisel seçim/kayıt belgeleri özgünleştirildi.",
+      "verificationLimit": "MSB Personel Temin canlı duyuruları erişim hatası nedeniyle sonuçlandırılamadı. Açık/kapalı dönem veya yeni çağrı iddiası yayımlanmadı; kişisel ekran kontrolü açıkça korunuyor.",
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
@@ -49,15 +83,32 @@
       "path": "/konu/milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur/",
       "group": "msu",
       "priority": 3,
-      "status": "pending",
+      "status": "ready",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-03",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
-      "changeSummary": null,
+      "evidence": [
+        {
+          "url": "https://dokuman.osym.gov.tr/pdfdokuman/2026/MSU/kilavuz_msd06012026.pdf",
+          "checkedAt": "2026-09-19",
+          "scope": "2026 ÖSYM/MSB kılavuzu: sınav, okul türleri, tercih ve seçim aşamaları; sonraki yıllara taşınmadı."
+        },
+        {
+          "url": "https://www.osym.gov.tr/2026msu-kilavuz-ve-basvuru-bilgileri",
+          "checkedAt": "2026-09-19",
+          "scope": "Resmî kılavuzun yayın kaydı."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/msb-personel-ve-ogrenci-temin-sistemi-5958",
+          "checkedAt": "2026-09-19",
+          "scope": "MSB Personel ve Öğrenci Temin Sistemi e-Devlet köprüsü."
+        }
+      ],
+      "changeSummary": "Tercih aşamasının ilk kanalı MSB Personel Temin/e-Devlet oldu; ÖSYM sınav başvurusu bu aşamanın kanallarından çıkarıldı. Tercih sırası, kaydın kontrolü ve sonraki kişisel çağrı ayrıştırıldı.",
+      "verificationLimit": "MSB Personel Temin canlı duyuruları erişim hatası nedeniyle sonuçlandırılamadı. Açık/kapalı dönem veya yeni çağrı iddiası yayımlanmadı; kişisel ekran kontrolü açıkça korunuyor.",
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],

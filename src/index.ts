@@ -26,7 +26,7 @@ const encoder = new TextEncoder();
 const INDEXNOW_KEY = "b1493a8a691bb36804ec62b677f59d5b";
 const SITE_ORIGIN = "https://nereyebasvurulur.com";
 const RELEASE = "v6-security-hardening-2026-08-24";
-const CONTENT_CACHE_REVISION = "content-semantics-2026-09-18";
+const CONTENT_CACHE_REVISION = "official-msu-pilot-2026-09-19";
 const GOOGLE_SITE_VERIFICATION = "5Vmhgh-JkZi7cm_gjUHEwjNymv-Sds3VmXmLpmDp3KU";
 const YANDEX_SITE_VERIFICATION = "3fa0665bc8ba3bb6";
 const PUBLIC_HTML_CACHE_CONTROL = "public, max-age=300, s-maxage=3600, stale-while-revalidate=86400";

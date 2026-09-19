@@ -17,6 +17,9 @@ export type Announcement = {
   summary: string;
   details: string[];
   actions: string[];
+  startsAt?: string;
+  // Calendar-only deadline: no invented closing hour.
+  deadlineDate?: string;
   deadlineAt?: string;
   deadlineLabel?: string;
   actionUrl?: string;
@@ -263,7 +266,11 @@ function formatDate(value: string): string {
 }
 
 export function announcementState(item: Announcement, now = new Date()): { label: string; className: string } {
+  const localDate = new Date(now.getTime() + 3 * 60 * 60 * 1000).toISOString().slice(0, 10);
+  if (item.deadlineDate && localDate > item.deadlineDate) return { label: "Arşiv · süre sona erdi", className: "archive" };
   if (item.deadlineAt && now.getTime() > new Date(item.deadlineAt).getTime()) return { label: "Arşiv · süre sona erdi", className: "archive" };
+  if (item.kind === "application" && item.startsAt && now.getTime() < new Date(item.startsAt).getTime()) return { label: "Başvuru henüz başlamadı", className: "guide" };
+  if (item.kind === "application" && item.deadlineDate && localDate === item.deadlineDate) return { label: "Son gün · kapanış saatini kontrol edin", className: "guide" };
   if (item.kind === "application") return { label: "Başvuru açık", className: "open" };
   if (item.kind === "result") return { label: "Sonuç açıklandı", className: "result" };
   if (item.kind === "guide") return { label: "Kılavuz", className: "guide" };
