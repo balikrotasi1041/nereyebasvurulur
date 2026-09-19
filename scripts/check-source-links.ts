@@ -3,12 +3,18 @@ import { execFile } from "node:child_process";
 import { promisify } from "node:util";
 import { routes } from "../src/data";
 import { annualThresholds } from "../src/thresholds";
+import { announcements } from "../src/announcements";
+import { supplementalAnnouncements } from "../src/supplemental-announcements";
+import { militaryServiceAnnouncements } from "../src/military-service-announcements";
 
 const execFileAsync = promisify(execFile);
 const urls = Array.from(new Set([
   ...routes.flatMap(route => route.sources.map(source => source.url)),
   ...routes.flatMap(route => route.applicationChannels.flatMap(channel => channel.url ? [channel.url] : [])),
-  ...Object.values(annualThresholds).map(threshold => threshold.sourceUrl)
+  ...Object.values(annualThresholds).map(threshold => threshold.sourceUrl),
+  ...[...announcements, ...supplementalAnnouncements, ...militaryServiceAnnouncements].flatMap(item => [
+    ...item.sources.map(source => source.url), ...(item.actionUrl ? [item.actionUrl] : [])
+  ])
 ]));
 const failures: string[] = [];
 const inconclusive: string[] = [];
@@ -40,4 +46,4 @@ if (failures.length) {
   console.error(failures.join("\n"));
   throw new Error(`${failures.length}/${urls.length} benzersiz resmî kaynak doğrulanamadı.`);
 }
-console.log(`${urls.length} benzersiz resmî kaynak, başvuru köprüsü ve eşik kaynağında kesin kırık bağlantı yok; ${inconclusive.length} adres kurum sunucusunun bot/redirect koruması nedeniyle otomatik olarak sonuçlandırılamadı.`);
+console.log(`${urls.length} benzersiz resmî kaynak, başvuru köprüsü ve eşik kaynağında kesin kırık bağlantı yok; ${inconclusive.length} adres HTTP/erişim hatası veya zaman aşımı nedeniyle otomatik olarak sonuçlandırılamadı. Bu adresler içerik doğrulaması sayılmaz.`);

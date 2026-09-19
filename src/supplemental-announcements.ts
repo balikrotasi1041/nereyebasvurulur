@@ -1,4 +1,6 @@
 import type { Announcement } from "./announcements";
+import { announcementState } from "./announcements";
+import { officialAnnouncementsSeptember19, refreshSeptember19 } from "./official-updates-20260919";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
 const gsbCoachExamAnnouncement: Announcement = {
@@ -200,8 +202,9 @@ export const supplementalAnnouncements: Announcement[] = [
   gsbCoachExamAnnouncement,
   gsbYurtResultAnnouncement,
   newAnnouncement,
-  ...refreshedPreviousAnnouncements
-].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
+  ...refreshedPreviousAnnouncements,
+  ...officialAnnouncementsSeptember19
+].map(refreshSeptember19).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
 
@@ -215,11 +218,7 @@ function formatDate(value: string): string {
 }
 
 function badge(item: Announcement): { label: string; className: string } {
-  if (item.deadlineAt && Date.now() > new Date(item.deadlineAt).getTime()) return { label: "Arşiv · süre sona erdi", className: "archive" };
-  if (item.kind === "application") return { label: "Başvuru açık", className: "open" };
-  if (item.kind === "result") return { label: "Sonuç açıklandı", className: "result" };
-  if (item.kind === "exam-call") return { label: "Aktif sınav çağrısı", className: "call" };
-  return { label: "Resmî başvuru duyurusu", className: "guide" };
+  return announcementState(item);
 }
 
 function card(item: Announcement, heading = "h2"): string {
