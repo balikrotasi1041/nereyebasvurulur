@@ -44,8 +44,11 @@ kişisel veriye giriş yapılmadı. Takvim ve kaynak doğrulama tarihleri korunu
 19 Eylül raporundaki et/süt tebliği inceleme ihtiyacı sürüyor. KYGM ödeme günü
 anlatımı ayrıca inceleme gerekli. Bunlar pilot kuyruğunun blocked sayısıyla aynı ölçü değildir.
 
-Güncel GSC/Trends/Cloudflare ölçüm erişimi yok. Eski dosya canlı sayılmadı, yeni
-blok/analitik/indeksleme stratejisi veya görev oluşturulmadı.
+İlk yayın sırasında güncel GSC/Trends/Cloudflare ölçüm erişimi yoktu. Daha sonra
+20 Eylül dışa aktarımları sağlandı; [ölçüm kaydı](seo-measurement-2026-09-20.md)
+gerçek veri tarihlerini ve yayın öncesi sınırını içeriyor. Canlı GSC/Trends veya
+Cloudflare olay yönetimi erişimi sağlanmış sayılmadı. Yeni blok, analitik,
+indeksleme stratejisi veya görev oluşturulmadı.
 Yayın sonrası 14/28 günlük gözlem, gerçek ilk production tarihinden hesaplanacak.
 
 ## Yayın ve kontrol kanıtı
@@ -72,9 +75,22 @@ Yayın sonrası 14/28 günlük gözlem, gerçek ilk production tarihinden hesapl
 Ek duyuruların entrypoint'i detay oluşturucuya boş rehber listesi gönderiyordu.
 Artık yalnız `publishedRoutes` içinde yer alan ve duyurunun açıkça ilişkilendirdiği
 rotalar gönderiliyor; needs-review kayıtlarına görünür link oluşturulmuyor.
-Bu değişiklik YKS ve ÇKS duyurularında iki doğrudan rehber dönüşünü sağlıyor.
+İlk değişiklikte iki doğrudan dönüş YKS ve yurt sonucuna aitti. Sonraki canlı
+kontrol ÇKS kaydının boş ilişki listesi nedeniyle teste hiç girmediğini ortaya
+çıkardı; önceki YKS/ÇKS ifadesi bu nedenle düzeltildi. ÇKS kayıt rehberine açık
+ilişki eklendi, yurt sonucundan üniversite kayıt rehberine ilgisiz ilişki kaldırıldı.
+İki beklenen YKS/ÇKS çifti artık ayrıca tanımlanarak her iki yönde test ediliyor.
 21 ek duyurunun gerçek Worker giriş noktası kalite testine eklendi; yalnız alt
 şablon fonksiyonunun doğru olması yeterli kabul edilmiyor.
 
 Bu takip commit'i pilotların ilk içerik yayın tarihini veya yayın SHA'sını değiştirmez.
 Son bağlantı düzeltmesinin CI/production ve yeniden canlı denetim sonucu ilgili PR'da izlenir.
+
+ÇKS kaynakları 20 Eylül'de yeniden açıldı: [Rize](https://rize.tarimorman.gov.tr/Duyuru/355/2027-Yili-Cks-Kayitlari-Basladi)
+1 Eylül-31 Aralık 2026 tarih aralığını, [Bolu](https://bolu.tarimorman.gov.tr/Duyuru/701/2027-Uretim-Yili-Ciftci-Kayit-Sistemi-Basvurulari-1-Eylul-2026-Tarihi-Itibari-Ile-Baslamistir)
+yerel ve elektronik başvuru ayrımını destekliyor. Kaynakta bulunmayan 23.59
+kapanış saati kaldırılarak yalnız takvim günü saklandı; yeni süre uzatımı
+veya yeni dönem ilan edilmedi. Duyuru/rota doğrulama tarihleri topluca yenilenmedi.
+Bu mevcut kayıt düzeltmesi, 9 yeni duyuru ve 4 diğer duyuru güncellemesine ektir;
+planlı pilot sayısını artırmaz. ÇKS'nin GSC'deki son taraması hâlâ 3 Eylül olduğu
+için sırf indeksleme amacıyla rehber içeriği yeniden yazılmadı.
