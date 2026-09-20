@@ -191,6 +191,24 @@ console.log("Önceki sürümün önbelleği atlandı; düzeltilmiş içerikte MI
 
 // Exercise the deployed entrypoint, not only the detail renderer: it must pass
 // published related routes through and keep needs-review routes out of links.
+// Explicit expected pairs prevent an empty relation list from passing silently.
+for (const [announcementSlug, routeSlug] of [
+  ["2026-yks-ek-yerlestirme-tercihleri", "sinav-ve-yerlestirme-yks-nereye-basvurulur"],
+  ["2027-cks-basvurulari-basladi", "ciftci-kayit-sistemi-cks-kaydi-nereye-basvurulur"]
+]) {
+  const item = supplementalAnnouncements.find(item => item.slug === announcementSlug);
+  const route = publishedRoutes.find(route => route.slug === routeSlug);
+  assert(item && route && item.relatedPathKeys.includes(route.pathKey), `Beklenen duyuru/rehber ilişkisi eksik: ${announcementSlug}`);
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com/konu/${routeSlug}/`), {} as Env, ctx);
+  equal(response.status, 200);
+  assert((await response.text()).includes(`href="/duyuru/${announcementSlug}/"`), `Rehberden duyuruya bağlantı yok: ${routeSlug}`);
+}
+equal(yurt.relatedPathKeys.length, 0, "Yurt sonucu üniversite kayıt/yerleştirme işlemiyle eşleştirildi.");
+const yurtResponse = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com/duyuru/${yurt.slug}/`), {} as Env, ctx);
+assert(!(await yurtResponse.text()).includes('href="/konu/universite-kayit-nereye-basvurulur/"'), "Yurt sonucundan ilgisiz üniversite kaydına dönüş var.");
+const cks = supplementalAnnouncements.find(item => item.slug === "2027-cks-basvurulari-basladi");
+assert(cks && !cks.deadlineAt && cks.deadlineDate === "2026-12-31", "ÇKS kaynağında bulunmayan kapanış saati üretildi.");
+equal(announcementState(cks, new Date("2026-12-31T12:00:00+03:00")).label, "Son gün · kapanış saatini kontrol edin");
 let directAnnouncementLinks = 0;
 for (const item of supplementalAnnouncements) {
   const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com/duyuru/${item.slug}/`), {} as Env, ctx);

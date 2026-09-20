@@ -7,7 +7,18 @@
     14,
     28
   ],
-  "note": "Ortak şablon düzeltmesi özgün içerik pilotunun tamamlandığı anlamına gelmez. Güncel GSC metrikleri yok; boş alanlar sıfır değildir.",
+  "note": "Ortak şablon düzeltmesi özgün içerik pilotunun tamamlandığı anlamına gelmez. 20 Eylül dışa aktarımı yayın öncesi veridir; canlı GSC veya yayın sonrası sonuç değildir. Boş alanlar sıfır değildir.",
+  "measurementSnapshot": {
+    "report": "docs/seo-measurement-2026-09-20.md",
+    "exportDate": "2026-09-20",
+    "coverageThrough": "2026-09-14",
+    "performanceFrom": "2026-08-19",
+    "performanceThrough": "2026-09-17",
+    "kind": "pre-publication-export",
+    "pilotUrlsWithPerformanceRows": 6,
+    "pilotUrlsWithoutPerformanceRows": 14,
+    "comparablePostPublicationPeriodsAvailable": false
+  },
   "items": [
     {
       "path": "/konu/msu-askeri-ogrenci-basvurusu-nereye-yapilir/",
