@@ -13,7 +13,7 @@
       "path": "/konu/msu-askeri-ogrenci-basvurusu-nereye-yapilir/",
       "group": "msu",
       "priority": 1,
-      "status": "ready",
+      "status": "published",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -39,16 +39,22 @@
       ],
       "changeSummary": "İlk sınav başvurusu ÖSYM AİS olarak ayrıldı; sonraki MSB okul tercihi/çağrı aşamaları, MSÜ-YKS ayrı başvuru yükümlülüğü, okul türüne göre TYT/AYT ve 2026 geçmiş sınav ücreti kaynaklandırıldı.",
       "verificationLimit": "MSB Personel Temin canlı duyuruları erişim hatası nedeniyle sonuçlandırılamadı. Açık/kapalı dönem veya yeni çağrı iddiası yayımlanmadı; kişisel ekran kontrolü açıkça korunuyor.",
-      "publishedAt": null,
-      "publishedCommit": null,
-      "observationDue": [],
+      "publishedAt": "2026-09-20",
+      "publishedCommit": "ec6f10892c1dc397f478893db1e7c95b32c1ec4b",
+      "publicationEvidence": {
+        "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/37",
+        "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705",
+        "checkedAt": "2026-09-20T05:28:00.698Z",
+        "checks": ["HTTP 200", "self-canonical", "updated pilot content", "visible verification limit", "FAQPage", "next MSU stage link"]
+      },
+      "observationDue": ["2026-10-04", "2026-10-18"],
       "observations": []
     },
     {
       "path": "/konu/milli-savunma-universitesi-harp-okullari-nereye-basvurulur/",
       "group": "msu",
       "priority": 2,
-      "status": "ready",
+      "status": "published",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -74,16 +80,22 @@
       ],
       "changeSummary": "Harp Okullarının subay/lisans odağı Astsubay MYO’dan ayrıldı; okul türü, çağrı puan türü, TYT+AYT, MSB tercih kanalı ve kişisel seçim/kayıt belgeleri özgünleştirildi.",
       "verificationLimit": "MSB Personel Temin canlı duyuruları erişim hatası nedeniyle sonuçlandırılamadı. Açık/kapalı dönem veya yeni çağrı iddiası yayımlanmadı; kişisel ekran kontrolü açıkça korunuyor.",
-      "publishedAt": null,
-      "publishedCommit": null,
-      "observationDue": [],
+      "publishedAt": "2026-09-20",
+      "publishedCommit": "ec6f10892c1dc397f478893db1e7c95b32c1ec4b",
+      "publicationEvidence": {
+        "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/37",
+        "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705",
+        "checkedAt": "2026-09-20T05:28:00.698Z",
+        "checks": ["HTTP 200", "self-canonical", "updated pilot content", "visible verification limit", "FAQPage", "next MSU stage link"]
+      },
+      "observationDue": ["2026-10-04", "2026-10-18"],
       "observations": []
     },
     {
       "path": "/konu/milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur/",
       "group": "msu",
       "priority": 3,
-      "status": "ready",
+      "status": "published",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -109,9 +121,15 @@
       ],
       "changeSummary": "Tercih aşamasının ilk kanalı MSB Personel Temin/e-Devlet oldu; ÖSYM sınav başvurusu bu aşamanın kanallarından çıkarıldı. Tercih sırası, kaydın kontrolü ve sonraki kişisel çağrı ayrıştırıldı.",
       "verificationLimit": "MSB Personel Temin canlı duyuruları erişim hatası nedeniyle sonuçlandırılamadı. Açık/kapalı dönem veya yeni çağrı iddiası yayımlanmadı; kişisel ekran kontrolü açıkça korunuyor.",
-      "publishedAt": null,
-      "publishedCommit": null,
-      "observationDue": [],
+      "publishedAt": "2026-09-20",
+      "publishedCommit": "ec6f10892c1dc397f478893db1e7c95b32c1ec4b",
+      "publicationEvidence": {
+        "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/37",
+        "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705",
+        "checkedAt": "2026-09-20T05:28:00.698Z",
+        "checks": ["HTTP 200", "self-canonical", "updated pilot content", "visible verification limit", "FAQPage", "next MSU stage link"]
+      },
+      "observationDue": ["2026-10-04", "2026-10-18"],
       "observations": []
     },
     {

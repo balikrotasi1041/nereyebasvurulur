@@ -31,11 +31,11 @@ Başlama zamanı bulunan duyuru ilan tarihinde otomatik açık sayılmıyor. Saa
 Genel MSÜ, Harp Okulları ve MSÜ tercih sayfaları ayrı kullanıcı aşamalarına göre geliştirildi.
 Kaynak: [2026 ÖSYM/MSB ortak kılavuzu](https://dokuman.osym.gov.tr/pdfdokuman/2026/MSU/kilavuz_msd06012026.pdf), [resmî yayın kaydı](https://www.osym.gov.tr/2026msu-kilavuz-ve-basvuru-bilgileri), ÖSYM AİS ve [MSB e-Devlet köprüsü](https://www.turkiye.gov.tr/msb-personel-ve-ogrenci-temin-sistemi-5958).
 
-3 kayıt inceleme/test aşamasında hazır; 17 kayıt pending; pilotta blocked 0.
+19 Eylül hazırlık durumu: 3 kayıt inceleme/test aşamasında hazır; 17 kayıt pending; pilotta blocked 0.
 MSB'nin güncel ek çağrı/tercih duyuruları erişilemediğinden yeni dönem açık/kapalı iddiası yok.
 Bu sınır üç sayfada da açık; 2026 geçmiş tarih ve ücretler sonraki yıla taşınmadı.
 Üç sayfanın aşama, belge, ilk kanal, SSS ve sonraki MSÜ aşamasına bağlantısı test edildi.
-Kaynak ve farklar `seo-quality-pilot.json` kuyruğuna işlendi. Production doğrulanmadan published sayılmayacak.
+Kaynak ve farklar `seo-quality-pilot.json` kuyruğuna işlendi. Gerçek yayın ve kanıtı 20 Eylül raporunda; yayın öncesinde published sayılmadı.
 
 ## Tamamlanamayan resmî kontroller / inceleme gerekli
 

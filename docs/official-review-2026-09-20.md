@@ -48,4 +48,33 @@ Güncel GSC/Trends/Cloudflare ölçüm erişimi yok. Eski dosya canlı sayılmad
 blok/analitik/indeksleme stratejisi veya görev oluşturulmadı.
 Yayın sonrası 14/28 günlük gözlem, gerçek ilk production tarihinden hesaplanacak.
 
-Yayın/CI/canlı kanıtı ve üç pilotun durumu production doğrulamasından sonra kaydedilecek.
+## Yayın ve kontrol kanıtı
+
+- PR #37 squash merge: `ec6f10892c1dc397f478893db1e7c95b32c1ec4b`.
+- Son PR CI: [35491126658](https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491126658), başarılı.
+- [Production 35491384705](https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705):
+  kalite kapıları, kaynak denetimi, deploy, Verify production ve mevcut IndexNow adımı başarılı.
+- Cloudflare sürümü: `371158c6-71b6-4136-9708-d3ce56e02439`.
+- Kaynak denetimi: 206 URL; yerelde 67, production CI'da 60 HTTP/erişim sonucu belirsiz.
+  Bunlar doğrulanmış içerik sayılmadı. Kesin hata kapısı başarılı; yeni duyuruların
+  esas alınan metinleri ayrıca web/PDF üzerinden incelendi.
+- IndexNow mevcut akışı 1323 sitemap URL'si için HTTP 200 aldı. Elle ek indeksleme isteği yapılmadı.
+- İlk canlı taramada 31 URL HTTP 200/canonical/indeks kontrollerinden geçti; ek duyuru
+  detayından YKS rehberine dönüş bağlantısı eksik bulundu. Diğer kontrollerin geçmesi
+  bu eksikliği kapatmış sayılmadı.
+- Üç pilot URL ayrıca 20 Eylül 05.28 UTC'de tekrar kontrol edildi: HTTP 200, self-canonical,
+  yeni içerik, kaynak erişim sınırı, FAQPage ve sonraki MSÜ aşaması bağlantısı başarılı.
+  Kuyruk bu kanıttan sonra published oldu: **3 published, 17 pending, 0 blocked**.
+  İlk ölçüm tarihleri 4 ve 18 Ekim; güncel GSC sonucu henüz yok.
+
+## Canlı kontrolde bulunan ortak şablon düzeltmesi
+
+Ek duyuruların entrypoint'i detay oluşturucuya boş rehber listesi gönderiyordu.
+Artık yalnız `publishedRoutes` içinde yer alan ve duyurunun açıkça ilişkilendirdiği
+rotalar gönderiliyor; needs-review kayıtlarına görünür link oluşturulmuyor.
+Bu değişiklik YKS ve ÇKS duyurularında iki doğrudan rehber dönüşünü sağlıyor.
+21 ek duyurunun gerçek Worker giriş noktası kalite testine eklendi; yalnız alt
+şablon fonksiyonunun doğru olması yeterli kabul edilmiyor.
+
+Bu takip commit'i pilotların ilk içerik yayın tarihini veya yayın SHA'sını değiştirmez.
+Son bağlantı düzeltmesinin CI/production ve yeniden canlı denetim sonucu ilgili PR'da izlenir.
