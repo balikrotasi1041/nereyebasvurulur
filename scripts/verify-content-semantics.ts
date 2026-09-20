@@ -1,11 +1,12 @@
 import queue from "../docs/seo-quality-pilot.json";
-import { publishedRoutes, type RouteRecord } from "../src/data";
+import { publishedRoutes, routes, type RouteRecord } from "../src/data";
 import { militaryBranchPath, militaryProvinces } from "../src/military-branches";
 import { renderRoutePreferenceLayer } from "../src/preference-layer";
 import { applicationState, costAnswer, relatedRouteLinks, renderSeoGrowthLayer } from "../src/seo-growth";
 import { formatThreshold } from "../src/thresholds";
 import { renderMilitaryBranch } from "../src/ui";
 import baseHandler from "../src/index";
+import liveHandler from "../src/index-v10";
 import { announcementState } from "../src/announcements";
 import { supplementalAnnouncements } from "../src/supplemental-announcements";
 
@@ -187,3 +188,21 @@ const cached = await baseHandler.fetch(request, {} as Env, ctx);
 equal(cached.headers.get("x-edge-cache"), "HIT", "Yeni içerik önbelleği kullanılamıyor.");
 equal(await cached.text(), freshBody);
 console.log("Önceki sürümün önbelleği atlandı; düzeltilmiş içerikte MISS → HIT doğrulandı.");
+
+// Exercise the deployed entrypoint, not only the detail renderer: it must pass
+// published related routes through and keep needs-review routes out of links.
+let directAnnouncementLinks = 0;
+for (const item of supplementalAnnouncements) {
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com/duyuru/${item.slug}/`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  for (const route of publishedRoutes.filter(route => item.relatedPathKeys.includes(route.pathKey))) {
+    assert(body.includes(`href="/konu/${route.slug}/"`), `Duyurudan rehbere dönüş yok: ${item.slug} → ${route.slug}`);
+    directAnnouncementLinks++;
+  }
+  for (const route of routes.filter(route => route.verificationStatus === "needs-review" && item.relatedPathKeys.includes(route.pathKey))) {
+    assert(!body.includes(`href="/konu/${route.slug}/"`), `Yayıma kapalı rota duyuruya sızdı: ${route.slug}`);
+  }
+}
+assert(directAnnouncementLinks > 0, "Ek duyurular yalnız arama köprüleriyle bırakıldı.");
+console.log(`Canlı giriş noktası: ${supplementalAnnouncements.length} duyuruda ${directAnnouncementLinks} güvenli rehber bağlantısı doğrulandı.`);

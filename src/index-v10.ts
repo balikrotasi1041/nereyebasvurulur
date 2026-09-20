@@ -233,7 +233,10 @@ export default {
     const announcementMatch = path.match(/^\/duyuru\/([a-z0-9-]+)\/?$/);
     if (announcementMatch) {
       const item = supplementalAnnouncementBySlug.get(announcementMatch[1]);
-      if (item) return supplementalAnnouncementResponse(renderAnnouncementDetail(item, []), request.method);
+      if (item) {
+        const related = publishedRoutes.filter(route => item.relatedPathKeys.includes(route.pathKey));
+        return supplementalAnnouncementResponse(renderAnnouncementDetail(item, related), request.method);
+      }
     }
 
     const response = await baseHandler.fetch(request, env, ctx);
