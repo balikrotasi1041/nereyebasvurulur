@@ -1,5 +1,5 @@
 import type { Announcement } from "./announcements";
-import { announcements } from "./announcements";
+import { announcements, announcementState } from "./announcements";
 import type { RouteRecord } from "./data";
 import { publishedRoutes } from "./data";
 import { militaryServiceAnnouncements } from "./military-service-announcements";
@@ -43,9 +43,13 @@ export function applicationState(route: RouteRecord, now = new Date()): LiveAppl
   const linked = relatedAnnouncements(route)
     .filter(item => new Date(item.publishedAt).getTime() <= now.getTime())
     .sort((a, b) => b.lastModified.localeCompare(a.lastModified));
-  const open = linked.find(item => item.kind === "application" && (!item.deadlineAt || new Date(item.deadlineAt).getTime() >= now.getTime()));
+  const open = linked.find(item => item.kind === "application" && announcementState(item, now).className === "open");
   if (open) return { label: "Başvuru açık", detail: open.deadlineLabel || "Resmî duyuruda kapanış tarihi belirtilmedi.", className: "open", url: `/duyuru/${open.slug}/` };
-  const expired = linked.find(item => item.kind === "application" && item.deadlineAt && new Date(item.deadlineAt).getTime() < now.getTime());
+  const upcoming = linked.find(item => item.kind === "application" && item.startsAt && new Date(item.startsAt).getTime() > now.getTime());
+  if (upcoming) return { label: "Başvuru henüz başlamadı", detail: upcoming.deadlineLabel || "Başlangıç tarihini resmî duyurudan kontrol edin.", className: "periodic", url: `/duyuru/${upcoming.slug}/` };
+  const dateOnly = linked.find(item => item.kind === "application" && item.deadlineDate && announcementState(item, now).className === "guide");
+  if (dateOnly) return { label: "Son gün · kapanış saatini kontrol edin", detail: dateOnly.deadlineLabel || "Son saat resmî kaynakta belirtilmiyor.", className: "periodic", url: `/duyuru/${dateOnly.slug}/` };
+  const expired = linked.find(item => item.kind === "application" && announcementState(item, now).className === "archive");
   if (expired) return { label: "Bu dönem sona erdi", detail: expired.deadlineLabel || "Son doğrulanan başvuru dönemi kapandı.", className: "closed", url: `/duyuru/${expired.slug}/` };
   if (route.applicationTiming === "periodic") return { label: "Dönemsel işlem", detail: route.currentCycleNote || "Güncel ilan ve son tarihi işlem öncesi kontrol edin.", className: "periodic" };
   return { label: "İşleme özgü süreyi kontrol edin", detail: route.deadlineAndAppeal, className: "evergreen" };

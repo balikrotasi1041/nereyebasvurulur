@@ -16,7 +16,16 @@ const requiredSlugs = new Set([
   "ipard-iii-12-cagri-basvuru-paketi-son-teslim-7-eylul",
   "2026-hayvancilik-destekleri-1-donem-basvurulari",
   "2026-gsb-yurt-basvuru-sonuclari-sorgulama",
-  "2026-gsb-sozlesmeli-antrenor-sozlu-uygulamali-sinav"
+  "2026-gsb-sozlesmeli-antrenor-sozlu-uygulamali-sinav",
+  "2026-yks-ek-yerlestirme-tercihleri",
+  "2026-dus-sts-dis-2-donem-basvurulari",
+  "2026-tus-sts-tip-2-donem-sonuclari",
+  "2026-hmgs-iyos-sinava-giris-belgeleri",
+  "2026-gsb-sozlesmeli-bilisim-personeli-basvurulari",
+  "2828-2026-eylul-istihdam-tercihleri",
+  "jandarma-emekli-personel-2026-2027-kis-kamp-basvurulari",
+  "sgk-7594-aylik-farki-uygulama-duyurusu",
+  "2026-2027-acik-ogretim-ilk-donem-kayitlari"
 ]);
 
 for (const item of supplementalAnnouncements) {
@@ -30,6 +39,8 @@ for (const item of supplementalAnnouncements) {
   if (item.summary.length < 100) failures.push(`Ek duyuru özeti fazla kısa: ${item.slug}`);
   if (item.details.length < 2 || item.actions.length < 1) failures.push(`Ek duyuru içeriği yetersiz: ${item.slug}`);
   if (!item.sources.length) failures.push(`Ek duyuruda resmî kaynak yok: ${item.slug}`);
+  if (item.startsAt && (!Number.isFinite(Date.parse(item.startsAt)) || (item.deadlineAt && Date.parse(item.startsAt) > Date.parse(item.deadlineAt)))) failures.push(`Başlangıç/son tarih sırası geçersiz: ${item.slug}`);
+  if (item.deadlineDate && (!/^\d{4}-\d{2}-\d{2}$/.test(item.deadlineDate) || item.deadlineAt)) failures.push(`Takvim günü ile kesin saat karıştı: ${item.slug}`);
   if (!item.relatedSearches?.length && item.relatedPathKeys.length === 0) failures.push(`Ek duyuruda güvenli iç bağlantı köprüsü yok: ${item.slug}`);
 
   for (const source of item.sources) {

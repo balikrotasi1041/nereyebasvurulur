@@ -6,6 +6,8 @@ import { applicationState, costAnswer, relatedRouteLinks, renderSeoGrowthLayer }
 import { formatThreshold } from "../src/thresholds";
 import { renderMilitaryBranch } from "../src/ui";
 import baseHandler from "../src/index";
+import { announcementState } from "../src/announcements";
+import { supplementalAnnouncements } from "../src/supplemental-announcements";
 
 function assert(condition: unknown, message = "İçerik anlamı doğrulaması başarısız."): asserts condition {
   if (!condition) throw new Error(message);
@@ -121,6 +123,46 @@ for (const item of queue.items) {
   }
 }
 console.log(`İçerik anlamı doğrulandı: ücret/süre/aşama, SSS, ilgili yollar, ${checkedBranches} şube örneği ve 20 pilot URL.`);
+
+const gsbFuture = supplementalAnnouncements.find(item => item.slug === "2026-gsb-sozlesmeli-bilisim-personeli-basvurulari");
+const camp = supplementalAnnouncements.find(item => item.slug === "jandarma-emekli-personel-2026-2027-kis-kamp-basvurulari");
+const yksExtra = supplementalAnnouncements.find(item => item.slug === "2026-yks-ek-yerlestirme-tercihleri");
+assert(gsbFuture && camp && yksExtra);
+equal(announcementState(gsbFuture, new Date("2026-09-19T08:00:00+03:00")).label, "Başvuru henüz başlamadı");
+equal(announcementState(gsbFuture, new Date("2026-09-21T00:00:00+03:00")).className, "open");
+equal(announcementState(gsbFuture, new Date("2026-09-25T17:00:01+03:00")).className, "archive");
+assert(!camp.deadlineAt && camp.deadlineDate === "2026-10-16", "Kapanış saati uyduruldu.");
+equal(announcementState(camp, new Date("2026-10-16T12:00:00+03:00")).label, "Son gün · kapanış saatini kontrol edin");
+equal(announcementState(camp, new Date("2026-10-17T00:00:00+03:00")).className, "archive");
+equal(announcementState(yksExtra, new Date("2026-09-22T12:00:00+03:00")).className, "archive", "Ödeme günü tercih penceresini uzattı.");
+const yks = publishedRoutes.find(item => item.pathKey === yksExtra.relatedPathKeys[0]);
+assert(yks);
+const synthetic = { ...gsbFuture, relatedPathKeys: [yks.pathKey] };
+supplementalAnnouncements.push(synthetic);
+try {
+  // A future application cannot turn a route open when the older application has ended.
+  const oldStart = synthetic.startsAt;
+  synthetic.startsAt = "2026-09-24T00:00:00+03:00";
+  equal(applicationState(yks, new Date("2026-09-23T12:00:00+03:00")).label, "Başvuru henüz başlamadı");
+  synthetic.startsAt = oldStart;
+} finally { supplementalAnnouncements.pop(); }
+equal(applicationState(yks, new Date("2026-09-19T12:00:00+03:00")).className, "open");
+for (const slug of ["msu-askeri-ogrenci-basvurusu-nereye-yapilir", "milli-savunma-universitesi-harp-okullari-nereye-basvurulur", "milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur"]) {
+  const route = publishedRoutes.find(item => item.slug === slug);
+  assert(route && route.lastVerified === "2026-09-19");
+  assert(!route.steps.some(step => step.startsWith("İşlemin kapsamını ve yerel yetkiyi")), "Pilot özgün adımlarla geliştirilmedi.");
+  assert(route.currentCycleNote?.includes("erişim hatası"), "Canlı MSB doğrulama sınırı gizlendi.");
+  assert(relatedRouteLinks(route).some(item => item.slug.includes("ikinci-secim")), "İlgili MSÜ aşamasına bağlantı yok.");
+}
+const msuPreference = publishedRoutes.find(item => item.slug === "milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur");
+assert(msuPreference && msuPreference.applicationChannels.every(channel => !channel.url?.includes("ais.osym")), "Tercih aşamasına ÖSYM sınav kanalı karıştı.");
+console.log("19 Eylül pilotu ve başvuru başlangıcı / kesin olmayan son saat / ayrı ödeme günü doğrulandı.");
+const yurt = supplementalAnnouncements.find(item => item.slug === "2026-gsb-yurt-basvuru-sonuclari-sorgulama");
+assert(yurt, "Yurt sonuç duyurusu bulunamadı.");
+assert(yurt.details.some(detail => detail.includes("SSS ise ayın son gününü")), "Yurt ücretindeki kaynak farkı görünür değil.");
+assert(!yurt.deadlineAt, "Çelişkili aylık ödeme kaynağından kesin son saat üretildi.");
+const tus = supplementalAnnouncements.find(item => item.slug === "2026-tus-sts-tip-2-donem-sonuclari");
+assert(tus?.details.some(detail => detail.includes("10 gün") && detail.includes("itiraz veya dava süresi")), "Cevap görüntüleme ile itiraz süresi ayrılmadı.");
 
 // A warm cache from the previous deployment must not serve the incorrect body.
 const cacheWrites = new Map<string, Response>();

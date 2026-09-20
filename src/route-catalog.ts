@@ -1,5 +1,7 @@
 import type { MenuNode, RouteRecord } from "./data";
 import { buildRouteCatalog as buildBaseRouteCatalog, linkVerifiedRoutes as linkBaseVerifiedRoutes } from "./route-catalog-base";
+import { applyMsuPilotContent } from "./msu-pilot-content";
+import { yksExtraGuide, yksExtraSource } from "./official-updates-20260919";
 export type { RouteDraft } from "./route-catalog-base";
 
 const LIVESTOCK_SUPPORT_PATH = "Tarım, Hayvancılık, Orman ve Kırsal > Hayvancılık > Hayvancılık destekleri";
@@ -10,6 +12,17 @@ const CKS_PATHS = new Set([
 
 function applyDailyOfficialUpdates(routes: RouteRecord[]): RouteRecord[] {
   return routes.map(route => {
+    if (route.pathKey === "Eğitim ve Öğrenci İşlemleri > Sınav ve Yerleştirme > YKS") return {
+      ...route,
+      summary: "YKS sınav, tercih ve sonuç işlemleri ÖSYM kanallarıyla yürütülür. 2026 ek yerleştirmede tercih 17 Eylül 16.00-21 Eylül 23.59 arasında AİS'ten yapılır; ücretin son günü 22 Eylül 23.59'dur. Ödeme için tanınan ek gün tercih süresini uzatmaz.",
+      currentCycleNote: "19 Eylül 2026 ek yerleştirme kontrolü: ÖSYM'nin 17 Eylül duyurusu ve ek yerleştirme kılavuzu incelendi. Tercih 21 Eylül 23.59, 170 TL ek yerleştirme ücretinin ödenmesi 22 Eylül 23.59'da sona erer; özel muafiyetler kılavuz ve aday kaydından doğrulanır. Ağustostaki ilk yerleştirme ve kayıt tarihleri bu aşamaya uygulanmaz. Bu güncelleme eski sınav/itiraz mevzuatının tümünün yeniden doğrulandığı anlamına gelmez.",
+      applicationTiming: "periodic",
+      applicationCost: { summary: "2026 ek yerleştirme ücreti 170 TL; ödeme son saati 22 Eylül 23.59. Bu tutar sınav başvuru ücreti değildir. Kılavuzdaki muafiyet koşullarını kendi AİS kaydınızdan kontrol edin.", sourceUrls: [yksExtraGuide.url], verifiedAt: "2026-09-19" },
+      requiredDocuments: ["AİS aday ve kimlik bilgileri", "2026 YKS yerleştirme puanı ve merkezî yerleştirme durumu", "Tercih edilen programların kodları ve özel koşulları", "Varsa ek yerleştirme ücretine ilişkin ödeme kaydı"],
+      steps: ["AİS'te ek tercih hakkınızı kontrol edip 2026 ek yerleştirme kılavuzundaki program koşullarını okuyun.", "Tercih listenizi 21 Eylül saat 23.59'dan önce kaydedip yeniden kontrol edin.", "Ücret yükümlülüğünüz varsa 22 Eylül saat 23.59'a kadar ödeyin; tercih ve ödeme kaydınızı saklayın.", "Sonuç ve kayıt için sonraki ÖSYM/üniversite duyurusunu takip edin; ek tercih yapmak kayıt hakkı vermez."],
+      deadlineAndAppeal: "Ek tercih 21 Eylül 2026 23.59'da, ek yerleştirme ücreti ödeme süresi 22 Eylül 23.59'da biter. Sonuç incelemesi veya hukuki başvuru gerekiyorsa işlemin türüne ait güncel kılavuz ve mevzuatı gecikmeden kontrol edin; ödeme süresi itiraz süresi değildir.",
+      sources: [yksExtraSource, yksExtraGuide, ...route.sources]
+    };
     if (CKS_PATHS.has(route.pathKey)) {
       return {
         ...route,
@@ -72,7 +85,7 @@ function applyDailyOfficialUpdates(routes: RouteRecord[]): RouteRecord[] {
 
 export function buildRouteCatalog(nodes: MenuNode[]): { routes: RouteRecord[] } {
   const built = buildBaseRouteCatalog(nodes);
-  return { routes: applyDailyOfficialUpdates(built.routes) };
+  return { routes: applyDailyOfficialUpdates(built.routes).map(applyMsuPilotContent) };
 }
 
 export function linkVerifiedRoutes(nodes: MenuNode[], routes: RouteRecord[], path: string[] = []): MenuNode[] {
