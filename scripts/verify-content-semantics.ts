@@ -157,6 +157,11 @@ for (const slug of ["msu-askeri-ogrenci-basvurusu-nereye-yapilir", "milli-savunm
 const msuPreference = publishedRoutes.find(item => item.slug === "milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur");
 assert(msuPreference && msuPreference.applicationChannels.every(channel => !channel.url?.includes("ais.osym")), "Tercih aşamasına ÖSYM sınav kanalı karıştı.");
 console.log("19 Eylül pilotu ve başvuru başlangıcı / kesin olmayan son saat / ayrı ödeme günü doğrulandı.");
+const yurt = supplementalAnnouncements.find(item => item.slug === "2026-gsb-yurt-basvuru-sonuclari-sorgulama");
+assert(yurt?.details.some(detail => detail.includes("SSS ise ayın son gününü")), "Yurt ücretindeki kaynak farkı görünür değil.");
+assert(!yurt.deadlineAt, "Çelişkili aylık ödeme kaynağından kesin son saat üretildi.");
+const tus = supplementalAnnouncements.find(item => item.slug === "2026-tus-sts-tip-2-donem-sonuclari");
+assert(tus?.details.some(detail => detail.includes("10 gün") && detail.includes("itiraz veya dava süresi")), "Cevap görüntüleme ile itiraz süresi ayrılmadı.");
 
 // A warm cache from the previous deployment must not serve the incorrect body.
 const cacheWrites = new Map<string, Response>();
