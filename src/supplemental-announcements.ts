@@ -2,6 +2,8 @@ import type { Announcement } from "./announcements";
 import { announcementState } from "./announcements";
 import { officialAnnouncementsSeptember19, refreshSeptember19 } from "./official-updates-20260919";
 import { refreshSeptember20 } from "./official-updates-20260920";
+import { refreshSeptember22 } from "./official-updates-20260922";
+import { officialAnnouncementsSeptember23 } from "./official-updates-20260923";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
 const gsbCoachExamAnnouncement: Announcement = {
@@ -204,8 +206,9 @@ export const supplementalAnnouncements: Announcement[] = [
   gsbYurtResultAnnouncement,
   newAnnouncement,
   ...refreshedPreviousAnnouncements,
-  ...officialAnnouncementsSeptember19
-].map(refreshSeptember19).map(refreshSeptember20).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
+  ...officialAnnouncementsSeptember19,
+  ...officialAnnouncementsSeptember23
+].map(refreshSeptember19).map(refreshSeptember20).map(refreshSeptember22).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
 

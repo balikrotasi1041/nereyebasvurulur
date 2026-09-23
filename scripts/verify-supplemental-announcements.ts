@@ -25,7 +25,12 @@ const requiredSlugs = new Set([
   "2828-2026-eylul-istihdam-tercihleri",
   "jandarma-emekli-personel-2026-2027-kis-kamp-basvurulari",
   "sgk-7594-aylik-farki-uygulama-duyurusu",
-  "2026-2027-acik-ogretim-ilk-donem-kayitlari"
+  "2026-2027-acik-ogretim-ilk-donem-kayitlari",
+  "2026-kpss-dhbt-basvurulari",
+  "2026-ozyes-tercihleri",
+  "2026-2027-gsb-yurt-ek-kontenjan-basvuru-duyurusu",
+  "2026-meb-ogretmen-veli-telefonla-randevu",
+  "2026-kpss-alan-bilgisi-kitapcik-goruntuleme"
 ]);
 
 for (const item of supplementalAnnouncements) {

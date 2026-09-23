@@ -147,25 +147,38 @@
       "path": "/konu/milli-savunma-universitesi-ikinci-secim-asamalari-nereye-basvurulur/",
       "group": "msu",
       "priority": 4,
-      "status": "pending",
+      "status": "ready",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-03",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
-      "changeSummary": null,
+      "evidence": [
+        {
+          "url": "https://dokuman.osym.gov.tr/pdfdokuman/2026/MSU/kilavuz_msd06012026.pdf",
+          "checkedAt": "2026-09-22",
+          "scope": "Bölüm 12-13: çağrı, evrak ve ikinci seçim aşamaları; genel kılavuz kişisel çağrı sayılmadı."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/msb-personel-ve-ogrenci-temin-sistemi-5958",
+          "checkedAt": "2026-09-22",
+          "scope": "Resmî MSB giriş köprüsü; kişisel hesaba girilmedi."
+        }
+      ],
+      "changeSummary": "İkinci seçim için kişisel MSB çağrısı, evrak hazırlığı ve aşama takibi yazıldı; ÖSYM ilk sınav kanalı ve bu aşamaya uygulanamayan sınav itiraz anlatımı çıkarıldı.",
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "verificationLimit": "MSB canlı çağrı/ek duyuruları erişim hatası; açık/kapalı dönem veya yeni çağrı ilan edilmiyor.",
+      "reviewedAt": "2026-09-22"
     },
     {
       "path": "/askerlik-subeleri/agri/merkez/",
       "group": "district",
       "priority": 5,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -177,13 +190,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/siirt/merkez/",
       "group": "district",
       "priority": 6,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -195,13 +215,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/kilis/merkez/",
       "group": "district",
       "priority": 7,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -213,13 +240,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/bartin/merkez/",
       "group": "district",
       "priority": 8,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -231,13 +265,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/yozgat/merkez/",
       "group": "district",
       "priority": 9,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -249,13 +290,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/tunceli/merkez/",
       "group": "district",
       "priority": 10,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -267,13 +315,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/bartin/ulus/",
       "group": "district",
       "priority": 11,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -285,13 +340,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/hatay/iskenderun/",
       "group": "district",
       "priority": 12,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -303,13 +365,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/erzurum/palandoken/",
       "group": "district",
       "priority": 13,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -321,13 +390,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/istanbul/esenyurt/",
       "group": "district",
       "priority": 14,
-      "status": "pending",
+      "status": "blocked",
       "focus": "Resmî sorumlu şube ve iletişim teyidi; ad benzerliğinden fiziksel şube çıkarımı yapılmaması; yerel fayda.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -339,13 +415,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/nevsehir/",
       "group": "province",
       "priority": 15,
-      "status": "pending",
+      "status": "blocked",
       "focus": "İlçelerin gerçek hizmet dağılımı ve sorumlu şubelere uygun yönlendirme.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -357,13 +440,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB iletişim araması ve ildeki şube sorgularına erişim sonuçlandırılamadı. Güncel hizmet dağılımı doğrulanmadan il rehberi derinleştirilmedi.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/izmir/",
       "group": "province",
       "priority": 16,
-      "status": "pending",
+      "status": "blocked",
       "focus": "İlçelerin gerçek hizmet dağılımı ve sorumlu şubelere uygun yönlendirme.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -375,13 +465,20 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB iletişim araması ve ildeki şube sorgularına erişim sonuçlandırılamadı. Güncel hizmet dağılımı doğrulanmadan il rehberi derinleştirilmedi.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/askerlik-subeleri/istanbul/",
       "group": "province",
       "priority": 17,
-      "status": "pending",
+      "status": "blocked",
       "focus": "İlçelerin gerçek hizmet dağılımı ve sorumlu şubelere uygun yönlendirme.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -393,61 +490,121 @@
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "MSB iletişim araması ve ildeki şube sorgularına erişim sonuçlandırılamadı. Güncel hizmet dağılımı doğrulanmadan il rehberi derinleştirilmedi.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.msb.gov.tr/askeralma",
+        "result": "inconclusive"
+      },
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
     },
     {
       "path": "/konu/tuketici-hakem-heyeti-kararina-itiraz/",
       "group": "other",
       "priority": 18,
-      "status": "pending",
+      "status": "blocked",
       "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-13",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
+      "evidence": [
+        {
+          "url": "https://ticaret.gov.tr/tuketici/tuketici-hakem-heyetleri/tuketici-hakem-heyetlerine-iliskin-bilgilendirme-metni",
+          "checkedAt": "2026-09-22",
+          "scope": "Bakanlık uygulama açıklaması; tek başına pilotun hukuki incelemesini tamamlamıyor."
+        }
+      ],
       "changeSummary": null,
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "blockedReason": "Ticaret Bakanlığının güncel uygulama metni okundu; 6502 sayılı Kanunun güncel resmî metnine erişilemedi. Süre, mahkeme yetkisi, harç/gider ve kesinlik birlikte yeniden doğrulanmadan hukuki derinleştirme yapılmadı.",
+      "reviewAttempt": {
+        "checkedAt": "2026-09-22",
+        "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+        "result": "inconclusive"
+      }
     },
     {
       "path": "/konu/kayip-calinti-telefon-imei-kapatma/",
       "group": "other",
       "priority": 19,
-      "status": "pending",
+      "status": "ready",
       "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-14",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
-      "changeSummary": null,
+      "evidence": [
+        {
+          "url": "https://tuketici.btk.gov.tr/kayip-calinti-islemleri",
+          "checkedAt": "2026-09-22",
+          "scope": "Yasal hat sahibi, ihbar ve aynı kanaldan iptal; BTK'nın cihazı bulma görevi bulunmaması."
+        },
+        {
+          "url": "https://static.turkiye.gov.tr/downloads/kurumlar/btk/BTK_KayipCalintiIhbarBildirimi_Kilavuz.pdf",
+          "checkedAt": "2026-09-22",
+          "scope": "IMEI/SIM işlemi ayrımı, e-Devlet formu ve ek ücret alınmaması."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/btk-kayip-calinti-ihbar-bildirimi",
+          "checkedAt": "2026-09-22",
+          "scope": "Canlı ihbar hizmeti."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/btk-kayip-calinti-ihbar-sorgulama-iptal",
+          "checkedAt": "2026-09-22",
+          "scope": "Canlı sorgulama/iptal hizmeti."
+        }
+      ],
+      "changeSummary": "Yanlış işletmeci/hakem heyeti yerel yönlendirmesi düzeltildi; IMEI, SIM ve kolluk ayrıldı. Telefon ihbarı e-Devlet iptaline gönderilmiyor. Ücret ayrı applicationCost alanından kaynaklandırıldı.",
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "verificationLimit": "5809 sayılı Kanun güncel metin erişimi sonuçlandırılamadı; yeni kanuni süre veya yaptırım yorumu eklenmedi.",
+      "reviewedAt": "2026-09-22"
     },
     {
       "path": "/konu/cimer-cimer-basvurusu-nereye-basvurulur/",
       "group": "other",
       "priority": 20,
-      "status": "pending",
+      "status": "ready",
       "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
       "baseline": {
         "reportDate": "2026-09-18",
         "lastCrawl": "2026-09-15",
         "coverage": "crawled-currently-not-indexed"
       },
-      "evidence": [],
-      "changeSummary": null,
+      "evidence": [
+        {
+          "url": "https://www.cimer.gov.tr/",
+          "checkedAt": "2026-09-22",
+          "scope": "Başvuru/sorgulama ekranı, ALO 150, acil 112 ve taklit sosyal medya hesabı uyarısı."
+        },
+        {
+          "url": "https://www.cimer.gov.tr/50sorudacimer.pdf",
+          "checkedAt": "2026-09-22",
+          "scope": "Resmî dosya doğrudan indirilerek okundu: başvuru türü, ön izleme, numara, sevk ve cevap takibi; genel cevap süreleri."
+        },
+        {
+          "url": "https://www.turkiye.gov.tr/cumhurbaskanligi-iletisim-merkezi",
+          "checkedAt": "2026-09-22",
+          "scope": "Canlı resmî kimlik doğrulama/giriş köprüsü."
+        }
+      ],
+      "changeSummary": "Genel şablon yerine somut talep, ön izleme, gönderim, sevk edilen kurum ve cevap takibi yazıldı; ALO 150 eklendi. Acil ihbar, yargı ve CİMER kapsamı ayrıldı; sürekli işlem tipi tanımlandı.",
       "publishedAt": null,
       "publishedCommit": null,
       "observationDue": [],
-      "observations": []
+      "observations": [],
+      "verificationLimit": "Güncel mevzuat metnine erişilemedi; rehberdeki genel cevap süreleri özel itiraz/dava sürelerine dönüştürülmedi.",
+      "reviewedAt": "2026-09-22"
     }
   ]
 }

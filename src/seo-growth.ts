@@ -73,6 +73,11 @@ function linkTerms(route: RouteRecord): Set<string> {
 }
 
 export function relatedRouteLinks(route: RouteRecord, limit = 6): RouteRecord[] {
+  // IMEI blocking and SIM-line handling are separate, related actions. The broad
+  // utilities category must not fill this pilot's cards with gas/water routes.
+  if (route.intentKey === "telecom.lost-stolen-imei-block") {
+    return publishedRoutes.filter(candidate => candidate.slug === "telefon-internet-numara-hat-islemleri-nereye-basvurulur").slice(0, limit);
+  }
   const routeTerms = linkTerms(route);
   return publishedRoutes.filter(candidate => candidate.slug !== route.slug).map(candidate => {
     const sameCategory = candidate.category === route.category;

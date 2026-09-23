@@ -12,7 +12,12 @@ const expectedPhysicalMilitaryBranches = 397;
 const publishedSlugs = new Set(publishedRoutes.map(route => route.slug));
 const pathKeys = new Set(routes.map(route => route.pathKey));
 const slugs = new Set(routes.map(route => route.slug));
-const allowedAuditDates = new Set(["2026-08-21", "2026-08-23", "2026-09-05", "2026-09-09", "2026-09-13", "2026-09-19"]);
+const allowedAuditDates = new Set(["2026-08-21", "2026-08-23", "2026-09-05", "2026-09-09", "2026-09-13", "2026-09-19", "2026-09-22"]);
+const september22ReviewedSlugs = new Set([
+  "milli-savunma-universitesi-ikinci-secim-asamalari-nereye-basvurulur",
+  "kayip-calinti-telefon-imei-kapatma",
+  "cimer-cimer-basvurusu-nereye-basvurulur"
+]);
 const staleSourceFragments = [
   "/mevzuatmetin/1.5.213.pdf",
   "/mevzuatmetin/1.5.2644.pdf",
@@ -44,6 +49,7 @@ for (const route of routes) {
   assert(route.legalBasis.length > 0, `Hukuki dayanak eksik: ${route.pathKey}`);
   assert(route.sources.length > 0, `Resmî kaynak eksik: ${route.pathKey}`);
   assert(allowedAuditDates.has(route.lastVerified), `Bilinmeyen son doğrulama tarihi: ${route.pathKey}`);
+  if (route.lastVerified === "2026-09-22") assert(september22ReviewedSlugs.has(route.slug), `22 Eylül kaynak incelemesi dışında doğrulama tarihi değişmiş: ${route.pathKey}`);
   assert(route.intentKey && route.parentHub && route.canonicalIntent, `Niyet modeli eksik: ${route.pathKey}`);
   assert(route.evidenceChecklist.length > 0, `Kanıt kontrol listesi eksik: ${route.pathKey}`);
   assert(["normal", "time-limited", "urgent"].includes(route.urgency), `Aciliyet değeri geçersiz: ${route.pathKey}`);
