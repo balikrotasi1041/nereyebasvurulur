@@ -224,3 +224,84 @@ for (const item of supplementalAnnouncements) {
 }
 assert(directAnnouncementLinks > 0, "Ek duyurular yalnız arama köprüleriyle bırakıldı.");
 console.log(`Canlı giriş noktası: ${supplementalAnnouncements.length} duyuruda ${directAnnouncementLinks} güvenli rehber bağlantısı doğrulandı.`);
+
+// 22 September: scoped pilot content and a recurring result update.
+const secondSelection = publishedRoutes.find(route => route.slug === "milli-savunma-universitesi-ikinci-secim-asamalari-nereye-basvurulur");
+assert(secondSelection);
+assert(secondSelection.applicationChannels.every(channel => !channel.url?.includes("ais.osym")), "İkinci seçim ilk ÖSYM sınavına gönderildi.");
+assert(!/20\/B|14 Temmuz|7 Ağustos/.test(secondSelection.currentCycleNote || ""), "Eski sınav/çağrı bilgisi güncel MSB seçimi gibi sunuldu.");
+assert(secondSelection.steps.some(step => step.includes("kişilik testi")));
+assert(secondSelection.currentCycleNote?.includes("erişim hatası"));
+assert(relatedRouteLinks(secondSelection).some(route => route.slug === msuPreference.slug));
+assert(!/İlk merci abone|yerleşim yeri veya işlemin/.test(lostPhone.locationLogic), "IMEI ihbarı genel tüketici başvurusuna döndü.");
+assert(lostPhone.steps.some(step => step.includes("telefon ihbarını 120")), "Telefon ihbarı yanlış iptal kanalına gönderildi.");
+assert(lostPhone.steps.some(step => step.includes("IMEI ihbarı hattı kapatmaz")), "SIM ve cihaz kapatma karıştırıldı.");
+const phoneRelations = relatedRouteLinks(lostPhone);
+equal(phoneRelations.length, 1, "İlgisiz konularla kart sayısı dolduruldu.");
+equal(phoneRelations[0].slug, "telefon-internet-numara-hat-islemleri-nereye-basvurulur");
+assert(lostPhone.applicationCost?.sourceUrls.includes("https://static.turkiye.gov.tr/downloads/kurumlar/btk/BTK_KayipCalintiIhbarBildirimi_Kilavuz.pdf"));
+equal(cimer.applicationTiming, "continuous");
+assert(cimer.applicationChannels.some(channel => channel.type === "phone" && channel.label.includes("150")));
+assert(cimer.summary.includes("112") && cimer.steps.some(step => step.includes("sevk")));
+for (const route of [secondSelection, lostPhone, cimer]) {
+  equal(route.lastVerified, "2026-09-22");
+  equal(route.verificationStatus, "local-check");
+  assert(!route.steps.some(step => step.startsWith("İşlemin kapsamını ve yerel yetkiyi")));
+  const path = `/konu/${route.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`), `Pilot canonical değişti: ${path}`);
+  assert(!/name="robots" content="[^"]*noindex/.test(body), `Pilot yanlışlıkla noindex oldu: ${path}`);
+  const faq = [...body.matchAll(/<script type="application\/ld\+json">(.*?)<\/script>/gs)].map(match => JSON.parse(match[1])).find(value => value["@type"] === "FAQPage");
+  assert(faq?.mainEntity.length === 4, `Pilot SSS schema eksik: ${path}`);
+  const escape = (value: string) => value.replace(/[&<>"']/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[char]!));
+  for (const question of faq.mainEntity) {
+    assert(body.includes(`<summary>${escape(question.name)}</summary>`));
+    assert(body.includes(`<p>${escape(question.acceptedAnswer.text)}</p>`), "Görünür SSS ve schema ayrıştı.");
+  }
+}
+match(yurt.title, /21 Eylül/);
+assert(yurt.sources.some(source => source.url.includes("21092026-tarihli")));
+assert(!yurt.sources.some(source => source.url.includes("/302961/18092026-")), "Güncellenen resmî olayın eski URL'si güncel kaynak olarak kaldı.");
+equal(yurt.verifiedAt, "2026-09-19", "Kısmi sonuç kontrolü bütün duyurunun kaynaklarını yeniden doğrulamış sayıldı.");
+equal(yurt.lastModified, "2026-09-22");
+assert(!yurt.startsAt && !yurt.deadlineAt && !yurt.deadlineDate, "Kişisel yurt sonucundan genel başvuru dönemi üretildi.");
+console.log("22 Eylül: 3 pilot, görünür SSS/canonical, IMEI kanal ayrımı ve tek yurt sonuç kaydı doğrulandı.");
+
+// 23 September: publication date is never an application start; each operation has its own window.
+const september23Slugs = ["2026-kpss-dhbt-basvurulari", "2026-ozyes-tercihleri", "2026-2027-gsb-yurt-ek-kontenjan-basvuru-duyurusu", "2026-meb-ogretmen-veli-telefonla-randevu", "2026-kpss-alan-bilgisi-kitapcik-goruntuleme"];
+const september23Items = september23Slugs.map(slug => {
+  const item = supplementalAnnouncements.find(item => item.slug === slug);
+  assert(item, `23 Eylül kaydı eksik: ${slug}`);
+  return item;
+});
+const [dhbt, ozyes, extraDormitory, schoolAppointment, kpssBooklet] = september23Items;
+equal(dhbt.startsAt, "2026-09-22T10:40:00+03:00");
+equal(dhbt.deadlineAt, "2026-09-30T23:59:00+03:00");
+assert(dhbt.details.some(text => text.includes("1 Ekim") && text.includes("30 Eylül")), "DHBT ödeme günü başvuru süresine karıştı.");
+equal(announcementState(dhbt, new Date("2026-10-01T12:00:00+03:00")).className, "archive");
+equal(announcementState(ozyes, new Date("2026-09-23T12:00:00+03:00")).label, "Başvuru henüz başlamadı");
+equal(announcementState(ozyes, new Date("2026-09-24T14:59:59+03:00")).className, "guide");
+equal(announcementState(ozyes, new Date("2026-09-24T15:00:00+03:00")).className, "open");
+equal(announcementState(ozyes, new Date("2026-10-01T00:00:00+03:00")).className, "archive");
+equal(ozyes.relatedPathKeys.length, 0, "ÖZYES ayrı aşaması genel YKS dönemini açtı.");
+equal(extraDormitory.kind, "guide");
+assert(!extraDormitory.startsAt && !extraDormitory.deadlineAt && !extraDormitory.deadlineDate);
+assert(extraDormitory.summary.includes("başlama veya bitiş tarihi yok"));
+equal(announcementState(extraDormitory, new Date("2026-09-23T12:00:00+03:00")).className, "guide");
+assert(schoolAppointment.summary.includes("444 0 632") && schoolAppointment.details.some(text => text.includes("öğretmenlerin her saatte")));
+equal(kpssBooklet.kind, "guide");
+equal(announcementState(kpssBooklet, new Date("2026-09-24T00:00:00+03:00")).className, "archive");
+assert(kpssBooklet.summary.includes("itiraz süresi değildir"));
+for (const item of september23Items) {
+  equal(item.verifiedAt, "2026-09-23");
+  const path = `/duyuru/${item.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`));
+  assert(body.includes('href="/duyurular/"'));
+  assert(!/name="robots" content="[^"]*noindex/.test(body));
+}
+console.log("23 Eylül: 5 yeni duyuru, ÖZYES başlangıcı, DHBT ödeme ayrımı, belirsiz KYGM takvimi ve arşiv geçişleri doğrulandı.");

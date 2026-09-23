@@ -1,6 +1,7 @@
 import type { MenuNode, RouteRecord } from "./data";
 import { buildRouteCatalog as buildBaseRouteCatalog, linkVerifiedRoutes as linkBaseVerifiedRoutes } from "./route-catalog-base";
 import { applyMsuPilotContent } from "./msu-pilot-content";
+import { applySeptember22PilotContent } from "./quality-pilot-20260922";
 import { yksExtraGuide, yksExtraSource } from "./official-updates-20260919";
 export type { RouteDraft } from "./route-catalog-base";
 
@@ -85,7 +86,7 @@ function applyDailyOfficialUpdates(routes: RouteRecord[]): RouteRecord[] {
 
 export function buildRouteCatalog(nodes: MenuNode[]): { routes: RouteRecord[] } {
   const built = buildBaseRouteCatalog(nodes);
-  return { routes: applyDailyOfficialUpdates(built.routes).map(applyMsuPilotContent) };
+  return { routes: applyDailyOfficialUpdates(built.routes).map(applyMsuPilotContent).map(applySeptember22PilotContent) };
 }
 
 export function linkVerifiedRoutes(nodes: MenuNode[], routes: RouteRecord[], path: string[] = []): MenuNode[] {

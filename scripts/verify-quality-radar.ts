@@ -14,7 +14,7 @@ const consumer = firstWave.filter(route => route.parentHub === "tuketici-haklari
 assert(consumer.length === 25, "25 tüketici rotası kalite radarında bulunamadı.");
 assert(firstWave.length === 29, "İlk dalganın 40 problemini karşılayan 29 kanonik rota bulunamadı.");
 assert(firstWave.every(route => assessRouteQuality(route, "2026-08-23").length === 0), "İlk dalga rotalarında kalite eksiği var.");
-assert(firstWave.every(route => route.lastVerified === "2026-08-23"), "İlk dalga son doğrulama tarihi tutarsız.");
+assert(firstWave.every(route => route.lastVerified === (route.intentKey === "telecom.lost-stolen-imei-block" ? "2026-09-22" : "2026-08-23")), "İlk dalga son doğrulama tarihi kaynaklı inceleme kaydıyla tutarsız.");
 
 for (const route of firstWave) {
   assert(route.intentKey && route.parentHub && route.canonicalIntent, `Niyet modeli eksik: ${route.slug}`);
