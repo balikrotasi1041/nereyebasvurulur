@@ -30,7 +30,13 @@ const requiredSlugs = new Set([
   "2026-ozyes-tercihleri",
   "2026-2027-gsb-yurt-ek-kontenjan-basvuru-duyurusu",
   "2026-meb-ogretmen-veli-telefonla-randevu",
-  "2026-kpss-alan-bilgisi-kitapcik-goruntuleme"
+  "2026-kpss-alan-bilgisi-kitapcik-goruntuleme",
+  "2026-muhendislik-tamamlama-tercihleri",
+  "2026-eus-sts-eczacilik-basvurulari",
+  "2026-jandarma-sozlesmeli-ucak-pilotu-temini",
+  "2026-kpss-on-lisans-sinava-giris-belgeleri",
+  "2026-e-yds-10-ingilizce-sinava-giris-belgeleri",
+  "2026-sgk-bilisim-yerlesen-aday-belge-teslimi"
 ]);
 
 for (const item of supplementalAnnouncements) {

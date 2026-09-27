@@ -30,17 +30,17 @@ export const officialAnnouncementsSeptember23: Announcement[] = [
   },
   {
     slug: "2026-ozyes-tercihleri",
-    title: "2026 ÖZYES tercihleri 24 Eylül saat 15.00'te başlayacak",
-    authority: "ÖSYM", kind: "application", publishedAt: "2026-09-22", verifiedAt: checked, lastModified: checked,
-    startsAt: "2026-09-24T15:00:00+03:00", deadlineAt: "2026-09-30T23:59:00+03:00",
-    deadlineLabel: "24 Eylül 2026 15.00 - 30 Eylül 2026 23.59",
-    summary: "Spor bilimleri programları için 2026 ÖZYES sonuçlarına dayalı tercihler AİS'te 24 Eylül saat 15.00-30 Eylül saat 23.59 arasında alınacak. 22 Eylül'deki duyuru ve ön bilgi kılavuzu yayını tercih penceresini açmıyor.",
-    details: ["Aday tercihini T.C. kimlik numarası ve aday şifresiyle AİS'ten bireysel olarak bildirir. Bu işlem, genel YKS ek yerleştirme tercihinden ayrı bir ÖZYES aşamasıdır.", "Yayımlanan tercih kılavuzu ön bilgi niteliğindedir. Tercih süresi içinde ÖSYM'nin yayımladığı güncel sürümü ve program koşullarını yeniden kontrol edin; önceki yılın taban puanını bu yıl için hak kazanma garantisi saymayın."],
-    actions: ["Başlangıçtan önce resmî ön bilgi kılavuzunu inceleyin; tarih gelmeden tercih kaydı yapılabileceğini varsaymayın.", "24 Eylül 15.00'ten sonra güncel kılavuzla AİS'teki listenizi oluşturun; 30 Eylül 23.59'dan önce kaydedilmiş tercihlerinizi tekrar kontrol edin."],
+    title: "2026 ÖZYES tercihleri: kesin başlangıç 24 Eylül 15.30, son gün 30 Eylül",
+    authority: "ÖSYM", kind: "application", publishedAt: "2026-09-22", verifiedAt: "2026-09-25", lastModified: "2026-09-25",
+    startsAt: "2026-09-24T15:30:00+03:00", deadlineAt: "2026-09-30T23:59:00+03:00",
+    deadlineLabel: "24 Eylül 2026 15.30 - 30 Eylül 2026 23.59",
+    summary: "ÖSYM'nin 24 Eylül kesin duyurusu ve AİS, ÖZYES tercihlerinin 15.30'da başladığını gösteriyor. Ön duyurudaki 15.00 yerine bu saat esas alındı. Spor bilimleri tercihleri 30 Eylül 23.59'da sona erecek; genel YKS ek tercihinden ayrı bir işlemdir.",
+    details: ["Aday tercihini T.C. kimlik numarası ve aday şifresiyle AİS'ten bireysel olarak bildirir. 22 Eylül'deki ön bilgi yayını başvuru başlangıcı değildir; 24 Eylül kesin duyurusu ve güncel kılavuzu kullanılır.", "Kılavuzun URL'sinde on-bilgi ifadesi kalmasına rağmen ÖSYM bu dosyayı 24 Eylül tarihli tercih kılavuzu olarak bağlıyor. Program koşullarını güncel dosyadan kontrol edin. Tercihlerin ÖSYM'ye bildirildiğini gösteren son onayı görüp kayıtlı listenizi saklayın; önceki yılın puanları yerleşme garantisi değildir."],
+    actions: ["24 Eylül tarihli kesin tercih duyurusu ve kılavuzla uygun programları belirleyin.", "30 Eylül 23.59'dan önce AİS'te tercihlerinizi gönderin ve kaydedilmiş son listeyi kontrol edin."],
     actionUrl: ais.url, actionLabel: "ÖSYM AİS tercih ekranını kontrol et",
     // No general-YKS relation: its status card must not call the distinct ÖZYES window a general YKS opening.
     relatedPathKeys: [], relatedSearches: ["ÖZYES tercih", "spor bilimleri özel yetenek"],
-    sources: [source("ÖZYES tercih işlemleri duyurusu", "https://www.osym.gov.tr/2026-yks-kapsaminda-spor-bilimleri-icin-ozel-yetenek-sinavi-ozyes-tercih-islemleri"), source("2026 ÖZYES Tercih Kılavuzu (Ön Bilgi)", "https://dokuman.osym.gov.tr/web/2026/9/2026-ozyes-tercih-kilavuzu-on-bilgi-joy4tt-22144107.pdf")]
+    sources: [source("24 Eylül: ÖZYES tercihlerinin alınması", "https://www.osym.gov.tr/2026-yks-kapsaminda-spor-bilimleri-icin-ozel-yetenek-sinavi-ozyes-tercihlerin-alinmasi"), source("2026 ÖZYES Tercih Kılavuzu (24 Eylül bağlantısı)", "https://dokuman.osym.gov.tr/web/2026/9/2026-ozyes-tercih-kilavuzu-on-bilgi-joy4tt-22144107.pdf"), ais]
   },
   {
     slug: "2026-2027-gsb-yurt-ek-kontenjan-basvuru-duyurusu",

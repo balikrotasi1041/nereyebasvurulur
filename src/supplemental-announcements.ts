@@ -4,6 +4,8 @@ import { officialAnnouncementsSeptember19, refreshSeptember19 } from "./official
 import { refreshSeptember20 } from "./official-updates-20260920";
 import { refreshSeptember22 } from "./official-updates-20260922";
 import { officialAnnouncementsSeptember23 } from "./official-updates-20260923";
+import { officialAnnouncementsSeptember24, refreshSeptember24 } from "./official-updates-20260924";
+import { officialAnnouncementsSeptember25, refreshSeptember25 } from "./official-updates-20260925";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
 const gsbCoachExamAnnouncement: Announcement = {
@@ -207,8 +209,10 @@ export const supplementalAnnouncements: Announcement[] = [
   newAnnouncement,
   ...refreshedPreviousAnnouncements,
   ...officialAnnouncementsSeptember19,
-  ...officialAnnouncementsSeptember23
-].map(refreshSeptember19).map(refreshSeptember20).map(refreshSeptember22).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
+  ...officialAnnouncementsSeptember23,
+  ...officialAnnouncementsSeptember24,
+  ...officialAnnouncementsSeptember25
+].map(refreshSeptember19).map(refreshSeptember20).map(refreshSeptember22).map(refreshSeptember24).map(refreshSeptember25).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
 

@@ -121,6 +121,14 @@ for (const item of queue.items) {
   assert(["pending", "blocked", "ready", "published", "observing", "reviewed"].includes(item.status));
   if (["published", "observing", "reviewed"].includes(item.status)) {
     assert(item.publishedAt && item.publishedCommit && item.evidence.length && item.changeSummary, `Yayın kanıtı eksik: ${item.path}`);
+    assert(/^[a-f0-9]{40}$/.test(item.publishedCommit), `Yayın SHA geçersiz: ${item.path}`);
+    assert(item.publicationEvidence?.pullRequest && item.publicationEvidence?.deploymentRun && item.publicationEvidence?.checkedAt, `PR/deploy/canlı kanıtı eksik: ${item.path}`);
+    assert(item.publicationEvidence.checkedAt.slice(0, 10) >= item.publishedAt, `Canlı kanıtı yayından önce: ${item.path}`);
+    equal(item.observationDue.length, 2);
+    for (const [index, days] of [14, 28].entries()) {
+      const due = new Date(Date.parse(`${item.publishedAt}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+      equal(item.observationDue[index], due, `Ölçüm günü yayın commit'i gününden türetilmedi: ${item.path}`);
+    }
   }
 }
 console.log(`İçerik anlamı doğrulandı: ücret/süre/aşama, SSS, ilgili yollar, ${checkedBranches} şube örneği ve 20 pilot URL.`);
@@ -261,11 +269,12 @@ for (const route of [secondSelection, lostPhone, cimer]) {
     assert(body.includes(`<p>${escape(question.acceptedAnswer.text)}</p>`), "Görünür SSS ve schema ayrıştı.");
   }
 }
-match(yurt.title, /21 Eylül/);
-assert(yurt.sources.some(source => source.url.includes("21092026-tarihli")));
+match(yurt.title, /23 Eylül/);
+assert(yurt.sources.some(source => source.url.includes("23092026-tarihli")));
+assert(!yurt.sources.some(source => source.url.includes("/302961/21092026-")), "Önceki yedek sonucu güncel kaynak olarak kaldı.");
 assert(!yurt.sources.some(source => source.url.includes("/302961/18092026-")), "Güncellenen resmî olayın eski URL'si güncel kaynak olarak kaldı.");
 equal(yurt.verifiedAt, "2026-09-19", "Kısmi sonuç kontrolü bütün duyurunun kaynaklarını yeniden doğrulamış sayıldı.");
-equal(yurt.lastModified, "2026-09-22");
+equal(yurt.lastModified, "2026-09-24");
 assert(!yurt.startsAt && !yurt.deadlineAt && !yurt.deadlineDate, "Kişisel yurt sonucundan genel başvuru dönemi üretildi.");
 console.log("22 Eylül: 3 pilot, görünür SSS/canonical, IMEI kanal ayrımı ve tek yurt sonuç kaydı doğrulandı.");
 
@@ -282,8 +291,9 @@ equal(dhbt.deadlineAt, "2026-09-30T23:59:00+03:00");
 assert(dhbt.details.some(text => text.includes("1 Ekim") && text.includes("30 Eylül")), "DHBT ödeme günü başvuru süresine karıştı.");
 equal(announcementState(dhbt, new Date("2026-10-01T12:00:00+03:00")).className, "archive");
 equal(announcementState(ozyes, new Date("2026-09-23T12:00:00+03:00")).label, "Başvuru henüz başlamadı");
-equal(announcementState(ozyes, new Date("2026-09-24T14:59:59+03:00")).className, "guide");
-equal(announcementState(ozyes, new Date("2026-09-24T15:00:00+03:00")).className, "open");
+equal(announcementState(ozyes, new Date("2026-09-24T15:00:00+03:00")).className, "guide");
+equal(announcementState(ozyes, new Date("2026-09-24T15:29:59+03:00")).className, "guide");
+equal(announcementState(ozyes, new Date("2026-09-24T15:30:00+03:00")).className, "open");
 equal(announcementState(ozyes, new Date("2026-10-01T00:00:00+03:00")).className, "archive");
 equal(ozyes.relatedPathKeys.length, 0, "ÖZYES ayrı aşaması genel YKS dönemini açtı.");
 equal(extraDormitory.kind, "guide");
@@ -295,7 +305,7 @@ equal(kpssBooklet.kind, "guide");
 equal(announcementState(kpssBooklet, new Date("2026-09-24T00:00:00+03:00")).className, "archive");
 assert(kpssBooklet.summary.includes("itiraz süresi değildir"));
 for (const item of september23Items) {
-  equal(item.verifiedAt, "2026-09-23");
+  equal(item.verifiedAt, item.slug === "2026-ozyes-tercihleri" ? "2026-09-25" : "2026-09-23");
   const path = `/duyuru/${item.slug}/`;
   const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
   equal(response.status, 200);
@@ -305,3 +315,90 @@ for (const item of september23Items) {
   assert(!/name="robots" content="[^"]*noindex/.test(body));
 }
 console.log("23 Eylül: 5 yeni duyuru, ÖZYES başlangıcı, DHBT ödeme ayrımı, belirsiz KYGM takvimi ve arşiv geçişleri doğrulandı.");
+
+// 24 September: preference/payment are separate; EUS and STS are not one exam;
+// a calendar-only opening in a guide is not an invented exact start or authenticated open claim.
+const september24Slugs = ["2026-muhendislik-tamamlama-tercihleri", "2026-eus-sts-eczacilik-basvurulari", "2026-jandarma-sozlesmeli-ucak-pilotu-temini"];
+const september24Items = september24Slugs.map(slug => {
+  const matches = supplementalAnnouncements.filter(item => item.slug === slug);
+  equal(matches.length, 1, `Eksik/tekrarlanan 24 Eylül kaydı: ${slug}`);
+  return matches[0];
+});
+const [engineering, pharmacy, contractPilot] = september24Items;
+equal(engineering.startsAt, "2026-09-23T14:30:00+03:00");
+equal(engineering.deadlineAt, "2026-09-29T23:59:00+03:00");
+equal(announcementState(engineering, new Date("2026-09-23T14:29:59+03:00")).className, "guide");
+equal(announcementState(engineering, new Date("2026-09-23T14:30:00+03:00")).className, "open");
+equal(announcementState(engineering, new Date("2026-09-30T12:00:00+03:00")).className, "archive");
+assert(engineering.details.some(text => text.includes("170 TL") && text.includes("30 Eylül") && text.includes("mesai bitimi")));
+equal(pharmacy.startsAt, "2026-09-23T10:30:00+03:00");
+equal(pharmacy.deadlineAt, "2026-10-01T23:59:00+03:00");
+equal(announcementState(pharmacy, new Date("2026-10-02T12:00:00+03:00")).className, "archive");
+assert(pharmacy.details.some(text => text.includes("birine yapılan başvuru diğerini karşılamaz")));
+assert(pharmacy.details.some(text => text.includes("8 Ekim") && text.includes("yüzde 50") && text.includes("aynı gün")));
+assert(pharmacy.sources.filter(source => source.url.endsWith(".pdf")).length === 2);
+equal(contractPilot.kind, "guide");
+assert(!contractPilot.startsAt, "Kılavuzdan sahte başlangıç saati üretildi.");
+equal(contractPilot.deadlineAt, "2026-10-11T23:59:00+03:00");
+equal(announcementState(contractPilot, new Date("2026-09-24T09:00:00+03:00")).className, "guide");
+equal(announcementState(contractPilot, new Date("2026-10-12T00:00:00+03:00")).className, "archive");
+equal(contractPilot.actionUrl, "https://personeltemin.jandarma.gov.tr/");
+assert(contractPilot.details.some(text => text.includes("Bilgilerim") && text.includes("tek başına başvuru değildir")));
+for (const item of september24Items) {
+  equal(item.verifiedAt, "2026-09-24");
+  equal(item.relatedPathKeys.length, 0, "Özel sınav/temin genel başvuru dönemini açtı.");
+  const path = `/duyuru/${item.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`));
+  assert(body.includes('href="/duyurular/"'));
+  assert(!/name="robots" content="[^"]*noindex/.test(body));
+}
+console.log("24 Eylül: 3 duyuru, ayrı ödeme süreleri, doğru başvuru kanalları ve tek yurt sonuç kaydı doğrulandı.");
+
+const september25Slugs = ["2026-kpss-on-lisans-sinava-giris-belgeleri", "2026-e-yds-10-ingilizce-sinava-giris-belgeleri", "2026-sgk-bilisim-yerlesen-aday-belge-teslimi"];
+const september25Items = september25Slugs.map(slug => {
+  const matches = supplementalAnnouncements.filter(item => item.slug === slug);
+  equal(matches.length, 1);
+  return matches[0];
+});
+const [kpssAssociate, eydsEnglish, sgkDocuments] = september25Items;
+equal(kpssAssociate.kind, "exam-call");
+equal(kpssAssociate.deadlineAt, "2026-10-04T10:00:00+03:00");
+assert(kpssAssociate.details.some(text => text.includes("23.59") && text.includes("ek süre vermez")));
+equal(eydsEnglish.kind, "exam-call");
+equal(eydsEnglish.deadlineAt, "2026-09-26T13:30:00+03:00");
+assert(eydsEnglish.details.some(text => text.includes("e-YDTS Türkçe") && text.includes("karıştırmayın")));
+assert(eydsEnglish.sources.some(source => source.url.includes("26-eylul-2026-cumartes")));
+equal(sgkDocuments.kind, "guide");
+equal(sgkDocuments.deadlineDate, "2026-10-09");
+assert(!sgkDocuments.startsAt && !sgkDocuments.deadlineAt, "SGK belge teslimi için sayısal saat uyduruldu.");
+assert(sgkDocuments.summary.includes("elden") && sgkDocuments.summary.includes("İl Müdürlüğü"));
+equal(announcementState(sgkDocuments, new Date("2026-10-10T00:00:00+03:00")).className, "archive");
+const injuryGuide = supplementalAnnouncements.find(item => item.slug === "3713-terorle-mucadelede-yaralananlar-e-devlet-basvurusu")!;
+equal(injuryGuide.kind, "guide");
+equal(injuryGuide.verifiedAt, "2026-09-01", "Yeni kılavuz bütün eski hukuki kaynakları yeniden doğrulamış sayıldı.");
+equal(injuryGuide.lastModified, "2026-09-25");
+assert(!injuryGuide.deadlineDate && !injuryGuide.deadlineAt && !injuryGuide.startsAt, "Korucu kılavuzundan ortak hak düşürücü süre üretildi.");
+assert(injuryGuide.details.some(text => text.includes("İnceleme gerekli") && text.includes("Kanun metnine erişilemedi")));
+assert(injuryGuide.sources.some(source => source.url.endsWith("GK_GKK.pdf")) && injuryGuide.sources.some(source => source.url.endsWith("JANDARMA.pdf")));
+const hmgs = supplementalAnnouncements.find(item => item.slug === "2026-hmgs-iyos-sinava-giris-belgeleri")!;
+assert(hmgs.sources.some(source => source.url.includes("27-eylul-2026-pazar")));
+equal(hmgs.verifiedAt, "2026-09-19");
+for (const slug of ["2026-kpss-alan-bilgisi-kitapcik-goruntuleme", "2026-dus-sts-dis-2-donem-basvurulari", "2026-sayistay-denetci-yardimcisi-eleme-basvurulari"]) {
+  const item = supplementalAnnouncements.find(item => item.slug === slug)!;
+  equal(announcementState(item, new Date("2026-09-25T00:00:00+03:00")).className, "archive", `Süresi geçen kayıt silinmedi/arşivlenmedi: ${slug}`);
+}
+for (const item of september25Items) {
+  equal(item.verifiedAt, "2026-09-25");
+  equal(item.relatedPathKeys.length, 0);
+  const path = `/duyuru/${item.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`));
+  assert(body.includes('href="/duyurular/"'));
+  assert(!/name="robots" content="[^"]*noindex/.test(body));
+}
+console.log("25 Eylül: ÖZYES kesin saati, sınav/erişim ayrımı, SGK elden teslim, 3713 kaynak sınırı ve arşivler doğrulandı.");
