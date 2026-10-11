@@ -1,3 +1,4 @@
+import { officialAnnouncementsSeptember23 } from "../src/official-updates-20260923";
 import queue from "../docs/seo-quality-pilot.json";
 import { publishedRoutes, routes, type RouteRecord } from "../src/data";
 import { militaryBranchPath, militaryProvinces } from "../src/military-branches";
@@ -121,6 +122,14 @@ for (const item of queue.items) {
   assert(["pending", "blocked", "ready", "published", "observing", "reviewed"].includes(item.status));
   if (["published", "observing", "reviewed"].includes(item.status)) {
     assert(item.publishedAt && item.publishedCommit && item.evidence.length && item.changeSummary, `Yayın kanıtı eksik: ${item.path}`);
+    assert(/^[a-f0-9]{40}$/.test(item.publishedCommit), `Yayın SHA geçersiz: ${item.path}`);
+    assert(item.publicationEvidence?.pullRequest && item.publicationEvidence?.deploymentRun && item.publicationEvidence?.checkedAt, `PR/deploy/canlı kanıtı eksik: ${item.path}`);
+    assert(item.publicationEvidence.checkedAt.slice(0, 10) >= item.publishedAt, `Canlı kanıtı yayından önce: ${item.path}`);
+    equal(item.observationDue.length, 2);
+    for (const [index, days] of [14, 28].entries()) {
+      const due = new Date(Date.parse(`${item.publishedAt}T00:00:00Z`) + days * 86400000).toISOString().slice(0, 10);
+      equal(item.observationDue[index], due, `Ölçüm günü yayın commit'i gününden türetilmedi: ${item.path}`);
+    }
   }
 }
 console.log(`İçerik anlamı doğrulandı: ücret/süre/aşama, SSS, ilgili yollar, ${checkedBranches} şube örneği ve 20 pilot URL.`);
@@ -261,11 +270,13 @@ for (const route of [secondSelection, lostPhone, cimer]) {
     assert(body.includes(`<p>${escape(question.acceptedAnswer.text)}</p>`), "Görünür SSS ve schema ayrıştı.");
   }
 }
-match(yurt.title, /21 Eylül/);
-assert(yurt.sources.some(source => source.url.includes("21092026-tarihli")));
+match(yurt.title, /9 Ekim/);
+assert(yurt.sources.some(source => source.url.includes("09102026-tarihli")));
+assert(!yurt.sources.some(source => source.url.includes("/302961/23092026-")), "Önceki yedek sonucu güncel kaynak olarak kaldı.");
+assert(!yurt.sources.some(source => source.url.includes("/302961/21092026-")), "Önceki yedek sonucu güncel kaynak olarak kaldı.");
 assert(!yurt.sources.some(source => source.url.includes("/302961/18092026-")), "Güncellenen resmî olayın eski URL'si güncel kaynak olarak kaldı.");
 equal(yurt.verifiedAt, "2026-09-19", "Kısmi sonuç kontrolü bütün duyurunun kaynaklarını yeniden doğrulamış sayıldı.");
-equal(yurt.lastModified, "2026-09-22");
+equal(yurt.lastModified, "2026-10-10");
 assert(!yurt.startsAt && !yurt.deadlineAt && !yurt.deadlineDate, "Kişisel yurt sonucundan genel başvuru dönemi üretildi.");
 console.log("22 Eylül: 3 pilot, görünür SSS/canonical, IMEI kanal ayrımı ve tek yurt sonuç kaydı doğrulandı.");
 
@@ -282,20 +293,27 @@ equal(dhbt.deadlineAt, "2026-09-30T23:59:00+03:00");
 assert(dhbt.details.some(text => text.includes("1 Ekim") && text.includes("30 Eylül")), "DHBT ödeme günü başvuru süresine karıştı.");
 equal(announcementState(dhbt, new Date("2026-10-01T12:00:00+03:00")).className, "archive");
 equal(announcementState(ozyes, new Date("2026-09-23T12:00:00+03:00")).label, "Başvuru henüz başlamadı");
-equal(announcementState(ozyes, new Date("2026-09-24T14:59:59+03:00")).className, "guide");
-equal(announcementState(ozyes, new Date("2026-09-24T15:00:00+03:00")).className, "open");
+equal(announcementState(ozyes, new Date("2026-09-24T15:00:00+03:00")).className, "guide");
+equal(announcementState(ozyes, new Date("2026-09-24T15:29:59+03:00")).className, "guide");
+equal(announcementState(ozyes, new Date("2026-09-24T15:30:00+03:00")).className, "open");
 equal(announcementState(ozyes, new Date("2026-10-01T00:00:00+03:00")).className, "archive");
 equal(ozyes.relatedPathKeys.length, 0, "ÖZYES ayrı aşaması genel YKS dönemini açtı.");
-equal(extraDormitory.kind, "guide");
-assert(!extraDormitory.startsAt && !extraDormitory.deadlineAt && !extraDormitory.deadlineDate);
-assert(extraDormitory.summary.includes("başlama veya bitiş tarihi yok"));
-equal(announcementState(extraDormitory, new Date("2026-09-23T12:00:00+03:00")).className, "guide");
+const originalDormitory = officialAnnouncementsSeptember23.find(item => item.slug === extraDormitory.slug)!;
+equal(originalDormitory.kind, "guide");
+assert(!originalDormitory.startsAt && !originalDormitory.deadlineAt && !originalDormitory.deadlineDate);
+assert(originalDormitory.summary.includes("başlama veya bitiş tarihi yok"));
+equal(announcementState(originalDormitory, new Date("2026-09-23T12:00:00+03:00")).className, "guide");
+equal(extraDormitory.kind, "application");
+equal(extraDormitory.deadlineAt, "2026-10-09T23:59:00+03:00");
+assert(!extraDormitory.startsAt, "Kaynakta olmayan başlangıç saati üretildi.");
+equal(announcementState(extraDormitory, new Date("2026-10-08T08:00:00+03:00")).className, "open");
+equal(announcementState(extraDormitory, new Date("2026-10-10T00:00:00+03:00")).className, "archive");
 assert(schoolAppointment.summary.includes("444 0 632") && schoolAppointment.details.some(text => text.includes("öğretmenlerin her saatte")));
 equal(kpssBooklet.kind, "guide");
 equal(announcementState(kpssBooklet, new Date("2026-09-24T00:00:00+03:00")).className, "archive");
 assert(kpssBooklet.summary.includes("itiraz süresi değildir"));
 for (const item of september23Items) {
-  equal(item.verifiedAt, "2026-09-23");
+  equal(item.verifiedAt, item.slug === extraDormitory.slug ? "2026-10-08" : item.slug === "2026-ozyes-tercihleri" ? "2026-09-25" : "2026-09-23");
   const path = `/duyuru/${item.slug}/`;
   const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
   equal(response.status, 200);
@@ -305,3 +323,282 @@ for (const item of september23Items) {
   assert(!/name="robots" content="[^"]*noindex/.test(body));
 }
 console.log("23 Eylül: 5 yeni duyuru, ÖZYES başlangıcı, DHBT ödeme ayrımı, belirsiz KYGM takvimi ve arşiv geçişleri doğrulandı.");
+
+// 24 September: preference/payment are separate; EUS and STS are not one exam;
+// a calendar-only opening in a guide is not an invented exact start or authenticated open claim.
+const september24Slugs = ["2026-muhendislik-tamamlama-tercihleri", "2026-eus-sts-eczacilik-basvurulari", "2026-jandarma-sozlesmeli-ucak-pilotu-temini"];
+const september24Items = september24Slugs.map(slug => {
+  const matches = supplementalAnnouncements.filter(item => item.slug === slug);
+  equal(matches.length, 1, `Eksik/tekrarlanan 24 Eylül kaydı: ${slug}`);
+  return matches[0];
+});
+const [engineering, pharmacy, contractPilot] = september24Items;
+equal(engineering.startsAt, "2026-09-23T14:30:00+03:00");
+equal(engineering.deadlineAt, "2026-09-29T23:59:00+03:00");
+equal(announcementState(engineering, new Date("2026-09-23T14:29:59+03:00")).className, "guide");
+equal(announcementState(engineering, new Date("2026-09-23T14:30:00+03:00")).className, "open");
+equal(announcementState(engineering, new Date("2026-09-30T12:00:00+03:00")).className, "archive");
+assert(engineering.details.some(text => text.includes("170 TL") && text.includes("30 Eylül") && text.includes("mesai bitimi")));
+equal(pharmacy.startsAt, "2026-09-23T10:30:00+03:00");
+equal(pharmacy.deadlineAt, "2026-10-01T23:59:00+03:00");
+equal(announcementState(pharmacy, new Date("2026-10-02T12:00:00+03:00")).className, "archive");
+assert(pharmacy.details.some(text => text.includes("birine yapılan başvuru diğerini karşılamaz")));
+assert(pharmacy.details.some(text => text.includes("8 Ekim") && text.includes("yüzde 50") && text.includes("aynı gün")));
+assert(pharmacy.sources.filter(source => source.url.endsWith(".pdf")).length === 2);
+equal(contractPilot.kind, "guide");
+assert(!contractPilot.startsAt, "Kılavuzdan sahte başlangıç saati üretildi.");
+equal(contractPilot.deadlineAt, "2026-10-11T23:59:00+03:00");
+equal(announcementState(contractPilot, new Date("2026-09-24T09:00:00+03:00")).className, "guide");
+equal(announcementState(contractPilot, new Date("2026-10-12T00:00:00+03:00")).className, "archive");
+equal(contractPilot.actionUrl, "https://personeltemin.jandarma.gov.tr/");
+assert(contractPilot.details.some(text => text.includes("Bilgilerim") && text.includes("tek başına başvuru değildir")));
+for (const item of september24Items) {
+  equal(item.verifiedAt, "2026-09-24");
+  equal(item.relatedPathKeys.length, 0, "Özel sınav/temin genel başvuru dönemini açtı.");
+  const path = `/duyuru/${item.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`));
+  assert(body.includes('href="/duyurular/"'));
+  assert(!/name="robots" content="[^"]*noindex/.test(body));
+}
+console.log("24 Eylül: 3 duyuru, ayrı ödeme süreleri, doğru başvuru kanalları ve tek yurt sonuç kaydı doğrulandı.");
+
+const september25Slugs = ["2026-kpss-on-lisans-sinava-giris-belgeleri", "2026-e-yds-10-ingilizce-sinava-giris-belgeleri", "2026-sgk-bilisim-yerlesen-aday-belge-teslimi"];
+const september25Items = september25Slugs.map(slug => {
+  const matches = supplementalAnnouncements.filter(item => item.slug === slug);
+  equal(matches.length, 1);
+  return matches[0];
+});
+const [kpssAssociate, eydsEnglish, sgkDocuments] = september25Items;
+equal(kpssAssociate.kind, "exam-call");
+equal(kpssAssociate.deadlineAt, "2026-10-04T10:00:00+03:00");
+assert(kpssAssociate.details.some(text => text.includes("23.59") && text.includes("ek süre vermez")));
+equal(eydsEnglish.kind, "exam-call");
+equal(eydsEnglish.deadlineAt, "2026-09-26T13:30:00+03:00");
+assert(eydsEnglish.details.some(text => text.includes("e-YDTS Türkçe") && text.includes("karıştırmayın")));
+assert(eydsEnglish.sources.some(source => source.url.includes("26-eylul-2026-cumartes")));
+equal(sgkDocuments.kind, "guide");
+equal(sgkDocuments.deadlineDate, "2026-10-09");
+assert(!sgkDocuments.startsAt && !sgkDocuments.deadlineAt, "SGK belge teslimi için sayısal saat uyduruldu.");
+assert(sgkDocuments.summary.includes("elden") && sgkDocuments.summary.includes("İl Müdürlüğü"));
+equal(announcementState(sgkDocuments, new Date("2026-10-10T00:00:00+03:00")).className, "archive");
+const injuryGuide = supplementalAnnouncements.find(item => item.slug === "3713-terorle-mucadelede-yaralananlar-e-devlet-basvurusu")!;
+equal(injuryGuide.kind, "guide");
+equal(injuryGuide.verifiedAt, "2026-09-01", "Yeni kılavuz bütün eski hukuki kaynakları yeniden doğrulamış sayıldı.");
+equal(injuryGuide.lastModified, "2026-09-25");
+assert(!injuryGuide.deadlineDate && !injuryGuide.deadlineAt && !injuryGuide.startsAt, "Korucu kılavuzundan ortak hak düşürücü süre üretildi.");
+assert(injuryGuide.details.some(text => text.includes("İnceleme gerekli") && text.includes("Kanun metnine erişilemedi")));
+assert(injuryGuide.sources.some(source => source.url.endsWith("GK_GKK.pdf")) && injuryGuide.sources.some(source => source.url.endsWith("JANDARMA.pdf")));
+const hmgs = supplementalAnnouncements.find(item => item.slug === "2026-hmgs-iyos-sinava-giris-belgeleri")!;
+assert(hmgs.sources.some(source => source.url.includes("27-eylul-2026-pazar")));
+equal(hmgs.verifiedAt, "2026-09-19");
+for (const slug of ["2026-kpss-alan-bilgisi-kitapcik-goruntuleme", "2026-dus-sts-dis-2-donem-basvurulari", "2026-sayistay-denetci-yardimcisi-eleme-basvurulari"]) {
+  const item = supplementalAnnouncements.find(item => item.slug === slug)!;
+  equal(announcementState(item, new Date("2026-09-25T00:00:00+03:00")).className, "archive", `Süresi geçen kayıt silinmedi/arşivlenmedi: ${slug}`);
+}
+for (const item of september25Items) {
+  equal(item.verifiedAt, "2026-09-25");
+  equal(item.relatedPathKeys.length, 0);
+  const path = `/duyuru/${item.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`));
+  assert(body.includes('href="/duyurular/"'));
+  assert(!/name="robots" content="[^"]*noindex/.test(body));
+}
+console.log("25 Eylül: ÖZYES kesin saati, sınav/erişim ayrımı, SGK elden teslim, 3713 kaynak sınırı ve arşivler doğrulandı.");
+
+// Different institutions and stages must not inherit each other's deadline/channel.
+const september27Slugs = ["2026-sgk-3713-yerlesen-aday-belge-teslimi", "2026-tarim-3713-yerlesen-aday-belge-teslimi", "2026-kygm-burs-kredi-bilgi-kontrolu-nakil", "2026-e-yds-10-ingilizce-sinav-sonuclari", "2026-dus-sts-dis-2-donem-gec-basvuru"];
+const september27Items = september27Slugs.map(slug => {
+  const matches = supplementalAnnouncements.filter(item => item.slug === slug);
+  equal(matches.length, 1);
+  return matches[0];
+});
+const [sgkPlaced, tarimPlaced, bursTransfer, eydsResult, dentistryLate] = september27Items;
+equal(sgkPlaced.deadlineDate, "2026-10-02");
+equal(tarimPlaced.deadlineDate, "2026-10-16");
+assert(sgkPlaced.summary.includes("elden") && tarimPlaced.summary.includes("posta yoluyla"));
+for (const item of [sgkPlaced, tarimPlaced]) {
+  equal(item.kind, "guide");
+  assert(!item.startsAt && !item.deadlineAt, "Atama belgelerine sahte başlangıç/kapanış saati eklendi.");
+}
+equal(announcementState(sgkPlaced, new Date("2026-10-03T00:00:00+03:00")).className, "archive");
+equal(announcementState(tarimPlaced, new Date("2026-10-17T00:00:00+03:00")).className, "archive");
+equal(bursTransfer.kind, "guide");
+assert(!bursTransfer.startsAt && !bursTransfer.deadlineAt && !bursTransfer.deadlineDate);
+equal(bursTransfer.actionUrl, "https://www.turkiye.gov.tr/kyk-kredi-burs-nakil-basvurusu");
+assert(bursTransfer.details.some(text => text.includes("ilk burs başvurusunun açıldığını göstermez")));
+equal(eydsResult.kind, "result");
+equal(eydsResult.actionUrl, "https://sonuc.osym.gov.tr/Sorgu.aspx?SonucID=10370");
+assert(!eydsResult.startsAt && !eydsResult.deadlineAt && !eydsResult.deadlineDate);
+equal(announcementState(eydsEnglish, new Date("2026-09-27T08:00:00+03:00")).className, "archive");
+equal(dentistryLate.startsAt, "2026-10-01T10:00:00+03:00");
+equal(dentistryLate.deadlineAt, "2026-10-01T23:59:00+03:00");
+equal(announcementState(dentistryLate, new Date("2026-10-01T09:59:59+03:00")).className, "guide");
+equal(announcementState(dentistryLate, new Date("2026-10-01T10:00:00+03:00")).className, "open");
+equal(announcementState(dentistryLate, new Date("2026-10-02T00:00:00+03:00")).className, "archive");
+for (const item of september27Items) {
+  const path = `/duyuru/${item.slug}/`;
+  const response = await liveHandler.fetch(new Request(`https://nereyebasvurulur.com${path}`), {} as Env, ctx);
+  equal(response.status, 200);
+  const body = await response.text();
+  assert(body.includes(`rel="canonical" href="https://nereyebasvurulur.com${path}"`));
+  assert(body.includes('href="/duyurular/"'));
+  assert(!/name="robots" content="[^"]*noindex/.test(body));
+}
+console.log("27 Eylül: kurum bazlı atama süre/kanalları, burs nakli, e-YDS sonucu ve DUS geç başvuru geçişleri doğrulandı.");
+
+const hmgsBooklet = supplementalAnnouncements.find(item => item.slug === "2026-hmgs-iyos-kitapcik-goruntuleme")!;
+equal(hmgsBooklet.kind, "guide");
+equal(hmgsBooklet.startsAt, "2026-09-27T13:40:00+03:00");
+equal(hmgsBooklet.deadlineAt, "2026-10-07T23:59:00+03:00");
+assert(hmgsBooklet.details.some(text => text.includes("Görüntüleme son günü itiraz süresi değildir")));
+equal(announcementState(hmgsBooklet, new Date("2026-09-28T08:00:00+03:00")).className, "guide");
+equal(announcementState(hmgsBooklet, new Date("2026-10-08T00:00:00+03:00")).className, "archive");
+equal(announcementState(hmgs, new Date("2026-09-28T08:00:00+03:00")).className, "archive");
+const coachCall = supplementalAnnouncements.find(item => item.slug === "2026-gsb-sozlesmeli-antrenor-sozlu-uygulamali-sinav")!;
+equal(coachCall.deadlineDate, "2026-09-25");
+assert(!coachCall.deadlineAt, "Kişisel sınav saati yerine ortak kapanış saati üretildi.");
+equal(coachCall.verifiedAt, "2026-09-08", "Arşiv metaverisi tüm içerik doğrulamasını yenileyemez.");
+equal(announcementState(coachCall, new Date("2026-09-26T00:00:00+03:00")).className, "archive");
+console.log("28 Eylül: HMGS/İYÖS kitapçık süresi ile itiraz ayrımı ve biten GSB sınav çağrısının arşivi doğrulandı.");
+
+// Late-September/October notices must preserve the candidate's actual stage.
+const currentNotice = (slug: string) => {
+  const items = supplementalAnnouncements.filter(item => item.slug === slug);
+  equal(items.length, 1, `Duyuru eksik veya tekrarlı: ${slug}`);
+  return items[0];
+};
+const ekYks = currentNotice("2026-yks-ek-yerlestirme-sonuclari-kayit");
+equal(ekYks.kind, "result");
+equal(ekYks.deadlineDate, "2026-10-09");
+assert(!ekYks.startsAt && !ekYks.deadlineAt);
+assert(ekYks.summary.includes("2–4 Ekim") && ekYks.summary.includes("2–9 Ekim"));
+assert(ekYks.actionUrl?.includes("SonucID=10372"));
+const trYos = currentNotice("2026-tr-yos-2-sinava-giris-belgeleri");
+equal(trYos.actionUrl, "https://tryos.osym.gov.tr/");
+assert(!trYos.deadlineAt, "Kişisel giriş saati yerine ortak saat üretildi.");
+const borc = currentNotice("2026-sgk-e-borcu-yoktur-sistem-guncellemesi");
+assert(!borc.startsAt && !borc.deadlineAt && !borc.deadlineDate);
+assert(borc.summary.includes("17 Eylül") && borc.details.some(text => text.includes("İnceleme gerekli")));
+const ailePlaced = currentNotice("2026-aile-3713-yerlesen-aday-belge-teslimi");
+equal(ailePlaced.deadlineDate, "2026-11-06");
+assert(!ailePlaced.startsAt && !ailePlaced.deadlineAt);
+assert(ailePlaced.summary.includes("şahsen") && ailePlaced.summary.includes("posta/kargo"));
+equal(announcementState(ailePlaced, new Date("2026-11-07T00:00:00+03:00")).className, "archive");
+const tusChoice = currentNotice("2026-tus-2-donem-tercihleri");
+equal(tusChoice.deadlineAt, "2026-10-07T23:59:00+03:00");
+const yds2 = currentNotice("2026-yds-2-basvurulari");
+equal(yds2.deadlineAt, "2026-10-08T23:59:00+03:00");
+assert(yds2.details.some(text => text.includes("9 Ekim") && text.includes("yeni normal başvuru süresi değildir")));
+equal(announcementState(yds2, new Date("2026-10-09T00:00:00+03:00")).className, "archive");
+const eyds11 = currentNotice("2026-e-yds-11-farsca-ingilizce-basvurulari");
+equal(announcementState(eyds11, new Date("2026-10-02T08:00:00+03:00")).className, "guide", "Kontenjan bilinmeden koşulsuz açık etiketi üretildi.");
+assert(eyds11.deadlineLabel?.includes("kontenjan dolarsa"));
+equal(eyds11.actionUrl, "https://sanalpos.osym.gov.tr/");
+const tircus = currentNotice("2026-tircus-e-devlet-e-imza-giris");
+assert(!tircus.startsAt && !tircus.deadlineAt && !tircus.deadlineDate, "Giriş kanalı duyurusundan dönem üretildi.");
+const ticaretResult = currentNotice("2026-ticaret-bilisim-basvuru-sonuclari-sinav-cagrisi");
+assert(!ticaretResult.startsAt && !ticaretResult.deadlineAt && !ticaretResult.deadlineDate);
+assert(ticaretResult.details.some(text => text.includes("nihai işe yerleşme sonucu değildir")));
+for (const slug of ["2026-ozyes-tercihleri", "2026-kpss-dhbt-basvurulari", "2026-eus-sts-eczacilik-basvurulari", "2026-dus-sts-dis-2-donem-gec-basvuru", "2828-2026-eylul-istihdam-tercihleri"]) {
+  equal(announcementState(currentNotice(slug), new Date("2026-10-02T08:00:00+03:00")).className, "archive", `Biten aşama aktif kaldı: ${slug}`);
+}
+console.log("30 Eylül–2 Ekim: kayıt/ödeme kanalları, kişisel çağrılar, kontenjan ve arşiv sınırları doğrulandı.");
+
+// October deadlines describe distinct actions, including already closed stages.
+assert(ekYks.summary.includes("sona erdi") && ekYks.summary.includes("sürüyor"));
+equal(ekYks.verifiedAt, "2026-09-30", "Takvim geçişi tüm kaynakları yeniden doğrulamış sayılmaz.");
+const dhbtLate = currentNotice("2026-kpss-dhbt-gec-basvuru");
+const pharmacyLate = currentNotice("2026-eus-sts-eczacilik-gec-basvuru");
+for (const [notice, day] of [[dhbtLate, "2026-10-05"], [pharmacyLate, "2026-10-08"]] as const) {
+  equal(announcementState(notice, new Date(`${day}T09:59:59+03:00`)).className, "guide");
+  equal(announcementState(notice, new Date(`${day}T10:00:00+03:00`)).className, "open");
+  equal(announcementState(notice, new Date(`${day}T23:59:01+03:00`)).className, "archive");
+}
+const kpssOnLisansBooklet = currentNotice("2026-kpss-on-lisans-kitapcik-goruntuleme");
+equal(kpssOnLisansBooklet.kind, "guide");
+equal(kpssOnLisansBooklet.deadlineAt, "2026-10-14T23:59:00+03:00");
+assert(kpssOnLisansBooklet.details.some(text => /itiraz/.test(text)));
+equal(announcementState(kpssOnLisansBooklet, new Date("2026-10-15T00:00:00+03:00")).className, "archive");
+const ykds = currentNotice("2026-yok-ykds-basvurulari");
+assert(ykds.summary.includes("bildirilen") && ykds.details.some(text => text.includes("banka/ATM kullanılmaz")));
+const denetmen = currentNotice("2026-sgk-denetmen-yardimcisi-belge-teslimi");
+equal(denetmen.deadlineAt, "2026-10-16T17:00:00+03:00");
+assert(denetmen.summary.includes("elden") && denetmen.details.some(text => text.includes("askerlik şubesi belgesi")));
+const youthExam = currentNotice("2026-gsb-yurt-yonetimi-genclik-calisani-sozlu-sinav");
+equal(youthExam.deadlineDate, "2026-10-16");
+assert(!youthExam.startsAt && !youthExam.deadlineAt);
+assert(youthExam.details.some(text => text.includes("kendi sınav gününe")));
+equal(announcementState(youthExam, new Date("2026-10-17T00:00:00+03:00")).className, "archive");
+const osymInterview = currentNotice("2026-osym-bilisim-personeli-mulakat-sonuclari");
+equal(osymInterview.kind, "result");
+assert(!osymInterview.startsAt && !osymInterview.deadlineAt && !osymInterview.deadlineDate);
+const latestYurt = currentNotice("2026-gsb-yurt-basvuru-sonuclari-sorgulama");
+assert(latestYurt.summary.includes("9 Ekim 2026"));
+assert(!latestYurt.deadlineAt && !latestYurt.deadlineDate);
+equal(latestYurt.verifiedAt, "2026-09-19", "Kısmi sonuç güncellemesi tüm yurt içeriğini yeniden doğrulayamaz.");
+console.log("3–6 Ekim: geç başvuru, kitapçık, kişisel çağrı, evrak ve yedek sonuç aşamaları doğrulandı.");
+
+const kpssLisansResult = currentNotice("2026-kpss-lisans-sinav-sonuclari");
+equal(kpssLisansResult.kind, "result");
+equal(kpssLisansResult.actionUrl, "https://sonuc.osym.gov.tr/Sorgu.aspx?SonucID=10376");
+assert(!kpssLisansResult.startsAt && !kpssLisansResult.deadlineAt && !kpssLisansResult.deadlineDate);
+const customsGuide = currentNotice("2026-gumruk-musavirligi-sinav-kilavuzu");
+equal(customsGuide.kind, "guide");
+equal(customsGuide.deadlineDate, "2026-10-30");
+assert(!customsGuide.startsAt && !customsGuide.deadlineAt, "Saat verilmeyen takvimden kesin zaman üretildi.");
+equal(announcementState(customsGuide, new Date("2026-10-07T09:00:00+03:00")).className, "guide");
+equal(announcementState(customsGuide, new Date("2026-10-31T00:00:00+03:00")).className, "archive");
+const teacherGrant = currentNotice("2026-2027-meb-ogretmenlik-bursu-sonuclari");
+equal(teacherGrant.kind, "result");
+assert(!teacherGrant.startsAt && !teacherGrant.deadlineAt && !teacherGrant.deadlineDate);
+assert(teacherGrant.actionUrl?.startsWith("https://akademi.meb.gov.tr/"));
+console.log("7 Ekim: KPSS sonuç aşaması, gümrük kayıt takvimi ve MEB burs sonuç kanalı doğrulandı.");
+
+// Updated records must keep result access, future registration and fee payment distinct.
+const ales3 = currentNotice("2026-ales-3-basvurulari");
+equal(announcementState(ales3, new Date("2026-10-07T15:59:59+03:00")).className, "guide");
+equal(announcementState(ales3, new Date("2026-10-07T16:00:00+03:00")).className, "open");
+equal(announcementState(ales3, new Date("2026-10-16T00:00:00+03:00")).className, "archive");
+assert(ales3.details.some(text => text.includes("16 Ekim ödeme günü yeni normal başvuru süresi değildir")));
+for (const slug of ["2026-muhendislik-tamamlama-yerlestirme-sonuclari-kayit", "2026-ozyes-yerlestirme-sonuclari-kayit"]) {
+  const record = currentNotice(slug);
+  equal(record.kind, "result");
+  assert(!record.startsAt && !record.deadlineAt, "Üniversite kaydına ortak saat uyduruldu.");
+  equal(announcementState(record, new Date("2026-10-08T08:00:00+03:00")).className, "result");
+}
+const socialPlacement = currentNotice("2828-2026-ekim-istihdam-yerlestirme-sonuclari");
+assert(!socialPlacement.startsAt && !socialPlacement.deadlineAt && !socialPlacement.deadlineDate);
+assert(socialPlacement.details.some(text => text.includes("3713")));
+assert(kpssLisansResult.details.some(text => text.includes("13.40") && text.includes("itiraz süresi değildir")));
+console.log("8 Ekim: ALES ödeme ayrımı, yurt açılışı, kişisel sonuçlar ve üniversite kayıt aşamaları doğrulandı.");
+
+// 9 Ekim: extension replaces the previous deadline, payment does not reopen registration.
+equal(ykds.deadlineAt, "2026-10-14T23:59:00+03:00");
+equal(announcementState(ykds, new Date("2026-10-09T08:00:00+03:00")).className, "open");
+equal(announcementState(ykds, new Date("2026-10-15T00:00:00+03:00")).className, "archive");
+assert(ykds.details.some(text => text.includes("15 Ekim") && text.includes("22 Ekim")));
+assert(!ykds.details.some(text => /8 Ekim saat 23|9 Ekim'e kadar|Geç başvuru 14/.test(text)));
+const vgmSchool = currentNotice("2026-2027-vgm-ortaogrenim-egitim-yardimi");
+const vgmUniversity = currentNotice("2026-2027-vgm-yuksekogrenim-burs-basvurulari");
+equal(announcementState(vgmSchool, new Date("2026-10-09T08:00:00+03:00")).className, "open");
+equal(announcementState(vgmUniversity, new Date("2026-10-09T08:00:00+03:00")).className, "guide");
+equal(announcementState(vgmUniversity, new Date("2026-10-22T10:00:00+03:00")).className, "open");
+equal(announcementState(vgmUniversity, new Date("2026-11-01T00:00:00+03:00")).className, "archive");
+for (const n of [vgmSchool, vgmUniversity]) assert(n.details.some(text => text.includes("başvuru ücreti değildir")));
+const tubitakBurs = currentNotice("2026-tubitak-2205-2210-2211-ikinci-donem-burs-cagrilari");
+assert(!tubitakBurs.startsAt, "Yalnız başlama günü biliniyorsa saat uydurulmaz.");
+equal(tubitakBurs.deadlineAt, "2026-10-27T17:30:00+03:00");
+equal(tubitakBurs.actionUrl, "https://tybs.tubitak.gov.tr/");
+const loanPayment = currentNotice("2026-kygm-ogrenim-kredisi-resmi-odeme-kanallari");
+equal(loanPayment.kind, "guide");
+assert(!loanPayment.startsAt && !loanPayment.deadlineAt && !loanPayment.deadlineDate);
+const tryosIdentity = currentNotice("2026-tr-yos-2-sinava-giris-belgeleri");
+equal(tryosIdentity.verifiedAt, "2026-09-30");
+assert(tryosIdentity.details.some(text => text.includes("08.00–11.00") && text.includes("uzatmaz")));
+console.log("9 Ekim: YÖK-YKDS uzatımı, ayrı burs takvimleri, ödeme kanalı ve kişisel sınav saati korundu.");

@@ -56,10 +56,33 @@
         "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/37",
         "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705",
         "checkedAt": "2026-09-20T05:28:00.698Z",
-        "checks": ["HTTP 200", "self-canonical", "updated pilot content", "visible verification limit", "FAQPage", "next MSU stage link"]
+        "checks": [
+          "HTTP 200",
+          "self-canonical",
+          "updated pilot content",
+          "visible verification limit",
+          "FAQPage",
+          "next MSU stage link"
+        ]
       },
-      "observationDue": ["2026-10-04", "2026-10-18"],
-      "observations": []
+      "observationDue": [
+        "2026-10-04",
+        "2026-10-18"
+      ],
+      "observations": [
+        {
+          "checkedAt": "2026-10-06",
+          "scheduledFor": "2026-10-04",
+          "windowDays": 14,
+          "status": "blocked",
+          "reason": "Güncel GSC URL denetimi ve tamamlanmış eşit dönem performans verisine erişilemiyor. 20 Eylül dosyası yayın öncesidir; yayın sonrası sonuç sayılmadı.",
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "position": null,
+          "indexStatus": null
+        }
+      ]
     },
     {
       "path": "/konu/milli-savunma-universitesi-harp-okullari-nereye-basvurulur/",
@@ -97,10 +120,33 @@
         "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/37",
         "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705",
         "checkedAt": "2026-09-20T05:28:00.698Z",
-        "checks": ["HTTP 200", "self-canonical", "updated pilot content", "visible verification limit", "FAQPage", "next MSU stage link"]
+        "checks": [
+          "HTTP 200",
+          "self-canonical",
+          "updated pilot content",
+          "visible verification limit",
+          "FAQPage",
+          "next MSU stage link"
+        ]
       },
-      "observationDue": ["2026-10-04", "2026-10-18"],
-      "observations": []
+      "observationDue": [
+        "2026-10-04",
+        "2026-10-18"
+      ],
+      "observations": [
+        {
+          "checkedAt": "2026-10-06",
+          "scheduledFor": "2026-10-04",
+          "windowDays": 14,
+          "status": "blocked",
+          "reason": "Güncel GSC URL denetimi ve tamamlanmış eşit dönem performans verisine erişilemiyor. 20 Eylül dosyası yayın öncesidir; yayın sonrası sonuç sayılmadı.",
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "position": null,
+          "indexStatus": null
+        }
+      ]
     },
     {
       "path": "/konu/milli-savunma-universitesi-msu-tercih-islemleri-nereye-basvurulur/",
@@ -138,16 +184,39 @@
         "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/37",
         "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35491384705",
         "checkedAt": "2026-09-20T05:28:00.698Z",
-        "checks": ["HTTP 200", "self-canonical", "updated pilot content", "visible verification limit", "FAQPage", "next MSU stage link"]
+        "checks": [
+          "HTTP 200",
+          "self-canonical",
+          "updated pilot content",
+          "visible verification limit",
+          "FAQPage",
+          "next MSU stage link"
+        ]
       },
-      "observationDue": ["2026-10-04", "2026-10-18"],
-      "observations": []
+      "observationDue": [
+        "2026-10-04",
+        "2026-10-18"
+      ],
+      "observations": [
+        {
+          "checkedAt": "2026-10-06",
+          "scheduledFor": "2026-10-04",
+          "windowDays": 14,
+          "status": "blocked",
+          "reason": "Güncel GSC URL denetimi ve tamamlanmış eşit dönem performans verisine erişilemiyor. 20 Eylül dosyası yayın öncesidir; yayın sonrası sonuç sayılmadı.",
+          "impressions": null,
+          "clicks": null,
+          "ctr": null,
+          "position": null,
+          "indexStatus": null
+        }
+      ]
     },
     {
       "path": "/konu/milli-savunma-universitesi-ikinci-secim-asamalari-nereye-basvurulur/",
       "group": "msu",
       "priority": 4,
-      "status": "ready",
+      "status": "published",
       "focus": "Aşamaya özgü merci, kanal, belge ve adımlar; ortak metnin ötesinde kaynaklı kullanıcı cevabı.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -167,12 +236,38 @@
         }
       ],
       "changeSummary": "İkinci seçim için kişisel MSB çağrısı, evrak hazırlığı ve aşama takibi yazıldı; ÖSYM ilk sınav kanalı ve bu aşamaya uygulanamayan sınav itiraz anlatımı çıkarıldı.",
-      "publishedAt": null,
-      "publishedCommit": null,
-      "observationDue": [],
-      "observations": [],
+      "publishedAt": "2026-09-23",
+      "publishedCommit": "15e06d5995e3c1f239f12c9362e82317dea16ea2",
+      "observationDue": [
+        "2026-10-07",
+        "2026-10-21"
+      ],
+      "observations": [
+        {
+          "checkedAt": "2026-10-08",
+          "scheduledFor": "2026-10-07",
+          "daysAfterPublication": 14,
+          "status": "blocked",
+          "reason": "Güncel GSC sorgu/URL Denetimi ve etkileşim verisine erişim yok; 20 Eylül dışa aktarımı yayın öncesidir. Eşit ve tamamlanmış yayın sonrası dönemler karşılaştırılamadı.",
+          "metrics": null
+        }
+      ],
       "verificationLimit": "MSB canlı çağrı/ek duyuruları erişim hatası; açık/kapalı dönem veya yeni çağrı ilan edilmiyor.",
-      "reviewedAt": "2026-09-22"
+      "reviewedAt": "2026-09-22",
+      "publicationEvidence": {
+        "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/40",
+        "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35908399473",
+        "checkedAt": "2026-09-24T05:14:59.882228+00:00",
+        "checks": [
+          "HTTP 200",
+          "self-canonical",
+          "updated pilot content",
+          "visible verification limit",
+          "visible FAQ/schema agreement",
+          "related stage/channel links",
+          "sitemap entry"
+        ]
+      }
     },
     {
       "path": "/askerlik-subeleri/agri/merkez/",
@@ -191,13 +286,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=A%C4%9ERI&ilce=MERKEZ",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/siirt/merkez/",
@@ -216,13 +363,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=S%C4%B0%C4%B0RT&ilce=MERKEZ",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/kilis/merkez/",
@@ -241,13 +440,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=K%C4%B0L%C4%B0S&ilce=MERKEZ",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/bartin/merkez/",
@@ -266,13 +517,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=MERKEZ",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/yozgat/merkez/",
@@ -291,13 +594,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=YOZGAT&ilce=MERKEZ",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/tunceli/merkez/",
@@ -316,13 +671,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=TUNCEL%C4%B0&ilce=MERKEZ",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/bartin/ulus/",
@@ -341,13 +748,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=BARTIN&ilce=ULUS",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/hatay/iskenderun/",
@@ -366,13 +825,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=HATAY&ilce=%C4%B0SKENDERUN",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/erzurum/palandoken/",
@@ -391,13 +902,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=ERZURUM&ilce=PALAND%C3%96KEN",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/istanbul/esenyurt/",
@@ -416,13 +979,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB il/ilçe sorumlu şube sorgusu 22 Eylül 2026 denemesinde 502/zaman aşımı verdi. Güncel şube/adres/telefon kanıtı yok; 21 Ağustos verisi yeni doğrulama sayılmadı.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
-        "source": "https://www.msb.gov.tr/askeralma",
+        "checkedAt": "2026-10-11",
+        "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/Askeralma/AsalAdresDetayMobil?il=%C4%B0STANBUL&ilce=ESENYURT",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/nevsehir/",
@@ -441,13 +1056,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB iletişim araması ve ildeki şube sorgularına erişim sonuçlandırılamadı. Güncel hizmet dağılımı doğrulanmadan il rehberi derinleştirilmedi.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
+        "checkedAt": "2026-10-11",
         "source": "https://www.msb.gov.tr/askeralma",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/izmir/",
@@ -466,13 +1133,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB iletişim araması ve ildeki şube sorgularına erişim sonuçlandırılamadı. Güncel hizmet dağılımı doğrulanmadan il rehberi derinleştirilmedi.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
+        "checkedAt": "2026-10-11",
         "source": "https://www.msb.gov.tr/askeralma",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/askerlik-subeleri/istanbul/",
@@ -491,13 +1210,65 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "MSB iletişim araması ve ildeki şube sorgularına erişim sonuçlandırılamadı. Güncel hizmet dağılımı doğrulanmadan il rehberi derinleştirilmedi.",
+      "blockedReason": "11 Ekim 2026: MSB sorumlu şube/iletişim kaynağı açılamadı; eski adres ve yerel yetki verisi yeni doğrulama sayılmadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
+        "checkedAt": "2026-10-11",
         "source": "https://www.msb.gov.tr/askeralma",
         "result": "inconclusive"
       },
-      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı."
+      "verificationLimit": "Ortak şablon düzeltmesi bu URL'nin özgün kaynak incelemesi olarak sayılmadı.",
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.msb.gov.tr/askeralma",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/konu/tuketici-hakem-heyeti-kararina-itiraz/",
@@ -515,6 +1286,16 @@
           "url": "https://ticaret.gov.tr/tuketici/tuketici-hakem-heyetleri/tuketici-hakem-heyetlerine-iliskin-bilgilendirme-metni",
           "checkedAt": "2026-09-22",
           "scope": "Bakanlık uygulama açıklaması; tek başına pilotun hukuki incelemesini tamamlamıyor."
+        },
+        {
+          "url": "https://ticaret.gov.tr/tuketici/tuketici-hakem-heyetleri/tuketici-hakem-heyetlerine-iliskin-bilgilendirme-metni",
+          "checkedAt": "2026-09-24",
+          "scope": "Bakanlığın itiraz açıklaması yeniden okundu; 25 Eylül kanun erişim denemesi de sonuçsuz. Tek kaynakla hukuki derinleştirme yapılmadı."
+        },
+        {
+          "url": "https://ticaret.gov.tr/tuketici/tuketici-hakem-heyetleri/tuketici-hakem-heyetlerine-iliskin-bilgilendirme-metni",
+          "checkedAt": "2026-09-26",
+          "scope": "Kurum açıklaması tekrar okundu; 26/27 Eylül kanun metni denemeleri sonuçlanmadığı için tam hukuki inceleme sayılmadı."
         }
       ],
       "changeSummary": null,
@@ -522,18 +1303,70 @@
       "publishedCommit": null,
       "observationDue": [],
       "observations": [],
-      "blockedReason": "Ticaret Bakanlığının güncel uygulama metni okundu; 6502 sayılı Kanunun güncel resmî metnine erişilemedi. Süre, mahkeme yetkisi, harç/gider ve kesinlik birlikte yeniden doğrulanmadan hukuki derinleştirme yapılmadı.",
+      "blockedReason": "11 Ekim 2026: Güncel 6502 metni zaman aşımı verdi; mevzuat ve uygulama kaynağı birlikte doğrulanamadı.",
       "reviewAttempt": {
-        "checkedAt": "2026-09-22",
+        "checkedAt": "2026-10-11",
         "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
         "result": "inconclusive"
-      }
+      },
+      "reviewAttempts": [
+        {
+          "checkedAt": "2026-09-22",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-24",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-25",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-26",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-27",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-09-28",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-08",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-09",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-10",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        },
+        {
+          "checkedAt": "2026-10-11",
+          "source": "https://www.mevzuat.gov.tr/MevzuatMetin/1.5.6502.pdf",
+          "result": "inconclusive"
+        }
+      ]
     },
     {
       "path": "/konu/kayip-calinti-telefon-imei-kapatma/",
       "group": "other",
       "priority": 19,
-      "status": "ready",
+      "status": "published",
       "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -563,18 +1396,44 @@
         }
       ],
       "changeSummary": "Yanlış işletmeci/hakem heyeti yerel yönlendirmesi düzeltildi; IMEI, SIM ve kolluk ayrıldı. Telefon ihbarı e-Devlet iptaline gönderilmiyor. Ücret ayrı applicationCost alanından kaynaklandırıldı.",
-      "publishedAt": null,
-      "publishedCommit": null,
-      "observationDue": [],
-      "observations": [],
+      "publishedAt": "2026-09-23",
+      "publishedCommit": "15e06d5995e3c1f239f12c9362e82317dea16ea2",
+      "observationDue": [
+        "2026-10-07",
+        "2026-10-21"
+      ],
+      "observations": [
+        {
+          "checkedAt": "2026-10-08",
+          "scheduledFor": "2026-10-07",
+          "daysAfterPublication": 14,
+          "status": "blocked",
+          "reason": "Güncel GSC sorgu/URL Denetimi ve etkileşim verisine erişim yok; 20 Eylül dışa aktarımı yayın öncesidir. Eşit ve tamamlanmış yayın sonrası dönemler karşılaştırılamadı.",
+          "metrics": null
+        }
+      ],
       "verificationLimit": "5809 sayılı Kanun güncel metin erişimi sonuçlandırılamadı; yeni kanuni süre veya yaptırım yorumu eklenmedi.",
-      "reviewedAt": "2026-09-22"
+      "reviewedAt": "2026-09-22",
+      "publicationEvidence": {
+        "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/40",
+        "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35908399473",
+        "checkedAt": "2026-09-24T05:14:59.882228+00:00",
+        "checks": [
+          "HTTP 200",
+          "self-canonical",
+          "updated pilot content",
+          "visible verification limit",
+          "visible FAQ/schema agreement",
+          "related stage/channel links",
+          "sitemap entry"
+        ]
+      }
     },
     {
       "path": "/konu/cimer-cimer-basvurusu-nereye-basvurulur/",
       "group": "other",
       "priority": 20,
-      "status": "ready",
+      "status": "published",
       "focus": "İlk merci/kanal ve adım tutarlılığı; ücret, kişisel süre ve ilgili iç bağlantılar.",
       "baseline": {
         "reportDate": "2026-09-18",
@@ -599,12 +1458,38 @@
         }
       ],
       "changeSummary": "Genel şablon yerine somut talep, ön izleme, gönderim, sevk edilen kurum ve cevap takibi yazıldı; ALO 150 eklendi. Acil ihbar, yargı ve CİMER kapsamı ayrıldı; sürekli işlem tipi tanımlandı.",
-      "publishedAt": null,
-      "publishedCommit": null,
-      "observationDue": [],
-      "observations": [],
+      "publishedAt": "2026-09-23",
+      "publishedCommit": "15e06d5995e3c1f239f12c9362e82317dea16ea2",
+      "observationDue": [
+        "2026-10-07",
+        "2026-10-21"
+      ],
+      "observations": [
+        {
+          "checkedAt": "2026-10-08",
+          "scheduledFor": "2026-10-07",
+          "daysAfterPublication": 14,
+          "status": "blocked",
+          "reason": "Güncel GSC sorgu/URL Denetimi ve etkileşim verisine erişim yok; 20 Eylül dışa aktarımı yayın öncesidir. Eşit ve tamamlanmış yayın sonrası dönemler karşılaştırılamadı.",
+          "metrics": null
+        }
+      ],
       "verificationLimit": "Güncel mevzuat metnine erişilemedi; rehberdeki genel cevap süreleri özel itiraz/dava sürelerine dönüştürülmedi.",
-      "reviewedAt": "2026-09-22"
+      "reviewedAt": "2026-09-22",
+      "publicationEvidence": {
+        "pullRequest": "https://github.com/balikrotasi1041/nereyebasvurulur/pull/40",
+        "deploymentRun": "https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35908399473",
+        "checkedAt": "2026-09-24T05:14:59.882228+00:00",
+        "checks": [
+          "HTTP 200",
+          "self-canonical",
+          "updated pilot content",
+          "visible verification limit",
+          "visible FAQ/schema agreement",
+          "related stage/channel links",
+          "sitemap entry"
+        ]
+      }
     }
   ]
 }

@@ -83,3 +83,19 @@ erişim döndükten sonra aynı değiştirilmemiş denetim yeniden çalıştır�
 Kuyruk: 3 published, 3 ready, 14 blocked. Üç yeni pilot henüz production kanıtı
 taşımıyor. Bu belge PR öncesi hazırlık kaydıdır; GitHub CI, merge ve canlı kontrol
 tamamlanınca yayın SHA'sı ve pilot yayın kanıtı ayrı kayıtla eklenecek.
+
+### Sonradan eklenen yayın doğrulaması (24 Eylül)
+
+[PR #40](https://github.com/balikrotasi1041/nereyebasvurulur/pull/40) squash merge edildi.
+İçerik main SHA: `15e06d5995e3c1f239f12c9362e82317dea16ea2`.
+[Production çalışması 35908399473](https://github.com/balikrotasi1041/nereyebasvurulur/actions/runs/35908399473)
+23 Eylül'de başarılı: Cloudflare sürümü `641ab7ec-9f07-4066-b739-ee4305a78ae2`,
+production smoke başarılı, IndexNow 1328 URL için HTTP 200. CI kaynak denetimi
+219 adres / 40 sonuçsuz erişim ile exit 0; yukarıdaki 65 yerel denetimin sonucudur.
+
+24 Eylül 05:14:59 UTC bağımsız canlı kontrolünde 19 URL geçti: üç pilotun güncel
+içeriği, görünür SSS/schema, doğrulama sınırları, self-canonical; duyuru akışı ve
+detayları, askerlik karşılıklı bağlantıları, sitemap, robots ve iki aramanın noindex
+durumu. KPSS Alan Bilgisi tam kitapçığı artık arşivde. Üç pilot `published` kaydı bu
+kanıtlarla tamamlandı; kaynak inceleme tarihi 22 Eylül olarak kaldı. Gözlem günleri
+7/21 Ekim. Doküman takip commit'i içerik yayın commit'i yerine geçmez.
