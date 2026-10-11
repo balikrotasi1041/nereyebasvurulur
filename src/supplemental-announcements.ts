@@ -1,3 +1,6 @@
+import { refreshOctober10 } from "./official-updates-20261010";
+import { officialAnnouncementsOctober9, refreshOctober9 } from "./official-updates-20261009";
+import { officialAnnouncementsOctober8, refreshOctober8 } from "./official-updates-20261008";
 import type { Announcement } from "./announcements";
 import { announcementState } from "./announcements";
 import { officialAnnouncementsSeptember19, refreshSeptember19 } from "./official-updates-20260919";
@@ -6,6 +9,13 @@ import { refreshSeptember22 } from "./official-updates-20260922";
 import { officialAnnouncementsSeptember23 } from "./official-updates-20260923";
 import { officialAnnouncementsSeptember24, refreshSeptember24 } from "./official-updates-20260924";
 import { officialAnnouncementsSeptember25, refreshSeptember25 } from "./official-updates-20260925";
+import { officialAnnouncementsSeptember27 } from "./official-updates-20260927";
+import { officialAnnouncementsSeptember28, refreshSeptember28 } from "./official-updates-20260928";
+import { officialAnnouncementsSeptember30, refreshSeptember30 } from "./official-updates-20260930";
+import { officialAnnouncementsOctober1 } from "./official-updates-20261001";
+import { officialAnnouncementsOctober2 } from "./official-updates-20261002";
+import { officialAnnouncementsOctober7 } from "./official-updates-20261007";
+import { officialAnnouncementsOctober6, refreshOctober6 } from "./official-updates-20261006";
 import { supplementalAnnouncements as previousAnnouncements } from "./supplemental-announcements-base";
 
 const gsbCoachExamAnnouncement: Announcement = {
@@ -211,8 +221,17 @@ export const supplementalAnnouncements: Announcement[] = [
   ...officialAnnouncementsSeptember19,
   ...officialAnnouncementsSeptember23,
   ...officialAnnouncementsSeptember24,
-  ...officialAnnouncementsSeptember25
-].map(refreshSeptember19).map(refreshSeptember20).map(refreshSeptember22).map(refreshSeptember24).map(refreshSeptember25).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
+  ...officialAnnouncementsSeptember25,
+  ...officialAnnouncementsSeptember27,
+  ...officialAnnouncementsSeptember28,
+  ...officialAnnouncementsSeptember30,
+  ...officialAnnouncementsOctober1,
+  ...officialAnnouncementsOctober2,
+  ...officialAnnouncementsOctober6,
+  ...officialAnnouncementsOctober7,
+  ...officialAnnouncementsOctober8,
+  ...officialAnnouncementsOctober9
+].map(refreshSeptember19).map(refreshSeptember20).map(refreshSeptember22).map(refreshSeptember24).map(refreshSeptember25).map(refreshSeptember28).map(refreshSeptember30).map(refreshOctober6).map(refreshOctober8).map(refreshOctober9).map(refreshOctober10).sort((a, b) => b.publishedAt.localeCompare(a.publishedAt) || b.slug.localeCompare(a.slug));
 
 export const supplementalAnnouncementBySlug = new Map(supplementalAnnouncements.map(item => [item.slug, item]));
 
